@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class EnadeConfig(AppConfig):
+class PaginaPrincipalConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'enade'
+    name = 'pagina_principal'
