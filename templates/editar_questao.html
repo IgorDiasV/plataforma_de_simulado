@@ -1,0 +1,173 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">   
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    
+    <title>Editar Questão</title>
+  </head>
+  <body>
+    
+    <div class="container">
+        
+        {% csrf_token %}
+        
+        <p>Nome do curso:</p>
+        <input id='nome_curso' type='text' value = '{{questao.curso}}'>
+        
+        <p>Tipo da Questão:</p>
+        <select  id="tipo_questao">
+            <option value="COMPONENTE ESPECÍFICO">COMPONENTE ESPECÍFICO</option>
+            <option value="FORMAÇÃO GERAL">FORMAÇÃO GERAL</option>
+        </select>
+        
+        <p>Nº da questão:</p>
+        <input id='n_questao' type='number' value={{questao.n_questao}}>
+        
+        <p>Pergunta: </p>
+        <div id="editor">
+        
+        </div>
+
+        <p>Alternativa A</p>
+        <div id="alternativa_a">
+        
+        </div>
+        <p>Alternativa B</p>
+        <div id="alternativa_b">
+        
+        </div>
+        <p>Alternativa C</p>
+        <div id="alternativa_c">
+        
+        </div>
+        <p>Alternativa D</p>
+        <div id="alternativa_d">
+        
+        </div>
+        <p>Alternativa E</p>
+        <div id="alternativa_e">
+        
+        </div>
+        <p>Alternativa Correta</p>
+        <select  id="alternativa_correta">
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+            <option value="D">D</option>
+            <option value="E">E</option>
+        </select>
+        
+        <button  class="btn btn-success" onclick="salvar()">Enviar</button>
+        
+
+    </div>
+    
+
+    </br>
+    
+    
+    
+    
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script src="{% static 'pagina_principal/js/utils.js'%}"></script>
+    <script src="{% static 'pagina_principal/js/image-resize.min.js'%}"></script>
+
+    <script>
+
+        var toolbarOptions = configuracao_toolbar()
+        
+        let definicao_quill = {
+            theme: 'snow',
+            modules: {
+                imageResize: {},
+                toolbar:{
+                    container: toolbarOptions,
+                }
+            },
+            placeholder: 'Digite a questão',
+        }
+        
+        var quill_questao = new Quill('#editor', definicao_quill)
+
+        var quill_alternativa_a = new Quill('#alternativa_a', definicao_quill)
+
+        var quill_alternativa_b = new Quill('#alternativa_b', definicao_quill)
+
+        var quill_alternativa_c = new Quill('#alternativa_c', definicao_quill)
+
+        var quill_alternativa_d = new Quill('#alternativa_d', definicao_quill)
+
+        var quill_alternativa_e = new Quill('#alternativa_e', definicao_quill)
+
+        
+        
+        quill_questao.root.innerHTML = '{{questao.pergunta | safe  }}'
+        
+
+        quill_alternativa_a.root.innerHTML = '{{questao.alternativa_a | safe  }}'
+        quill_alternativa_b.root.innerHTML = '{{questao.alternativa_b | safe  }}'
+        quill_alternativa_c.root.innerHTML = '{{questao.alternativa_c | safe  }}'
+        quill_alternativa_d.root.innerHTML = '{{questao.alternativa_d | safe  }}'
+        quill_alternativa_e.root.innerHTML = '{{questao.alternativa_e | safe  }}'
+    
+        tipo_questao = document.getElementById('tipo_questao')
+        tipo_questao.value = '{{questao.tipo_questao}}'
+
+        tipo_questao = document.getElementById('alternativa_correta')
+        tipo_questao.value = '{{questao.alternativa_correta}}'
+
+        function return_html()
+        {
+            return quill_questao.root.innerHTML
+        }
+
+        async function salvar()
+        {
+            var csrf_token = document.querySelector('[name=csrfmiddlewaretoken]').value
+            var pergunta = quill_questao.root.innerHTML
+
+            var alternativa_a = quill_alternativa_a.root.innerHTML
+            var alternativa_b = quill_alternativa_b.root.innerHTML
+            var alternativa_c = quill_alternativa_c.root.innerHTML
+            var alternativa_d = quill_alternativa_d.root.innerHTML
+            var alternativa_e = quill_alternativa_e.root.innerHTML
+
+            var nome_curso = document.getElementById('nome_curso').value
+
+            var tipo_questao = document.getElementById('tipo_questao').value
+            var n_questao = document.getElementById('n_questao').value
+            var alternativa_correta = document.getElementById('alternativa_correta').value
+            
+            const configuracao  = {
+                method: 'POST',
+                headers:{
+                    'X-CSRFToken': csrf_token
+                },
+                body: JSON.stringify({
+                                       'pergunta':pergunta,
+                                       'nome_curso':nome_curso,
+                                       'tipo_questao':tipo_questao,
+                                       'n_questao':n_questao,
+                                       'alternativa_a':alternativa_a,
+                                       'alternativa_b':alternativa_b,
+                                       'alternativa_c':alternativa_c,
+                                       'alternativa_d':alternativa_d,
+                                       'alternativa_e':alternativa_e,
+                                       'alternativa_correta':alternativa_correta,                     
+
+                                    })
+            }
+            const response = await fetch("{% url 'editar_questao' questao.id %}", configuracao)
+            location.href = "{% url 'lista_questoes' %}"
+        }
+    </script>
+  </body>
+</html>
