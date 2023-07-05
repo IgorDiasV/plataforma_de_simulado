@@ -22,6 +22,24 @@ def lista_questoes(request):
 
     return render(request, 'lista_questoes.html', {'questoes':questoes, 'assuntos':assuntos})
 
+def simulado(request):
+    questoes = Questao.objects.all()
+    if request.method == 'POST':
+        dados = json.loads(request.body)
+        resposta = []
+        for questao in dados: 
+            dados_questao = get_object_or_404(Questao, id = dados[questao]['id_questao'])
+
+            if dados_questao.alternativa_correta == dados[questao]['resposta']:
+
+                resposta.append({'status':'Resposta Correta', 'id_questao':dados[questao]['id_questao']})
+            else:
+                resposta.append({'status':'Resposta Errada', 'id_questao':dados[questao]['id_questao']})
+        return HttpResponse(json.dumps({'resultado':resposta}))
+        
+    
+    return render(request,'simulado.html', {'questoes':questoes})
+
 def cadastrar_questao(request):
     assuntos = Assunto.objects.all()
     if request.method == 'POST':
@@ -69,3 +87,4 @@ def editar_questao(request, questao_id):
             return HttpResponse('1')
             
     return render(request, 'editar_questao.html', {'questao': questao})
+
