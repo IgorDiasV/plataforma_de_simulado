@@ -9,6 +9,8 @@
     <h1>Hello world</h1>
     <a href="{% url 'cadastrar_questao' %}">Cadastrar Questão</a></br>
     <a href="{%url 'lista_questoes' %}">Listar Questões</a></br>
-    <a href="{%url 'simulado' %}">simulado</a>
+    {% comment %} <a href="{%url 'simulado' %}">simulado</a></br> {% endcomment %}
+    <a href="{% url 'lista_simulados' %}">Lista Simulados</a></br>
+    <a href="{%url 'criar_simulado' %}">Criar Simulado</a></br>
 </body>
 </html>

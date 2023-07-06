@@ -91,7 +91,7 @@
               body: JSON.stringify(respostas)
             }
             
-            const reposta = await fetch("{% url 'simulado' %}",configuracao)
+            const reposta = await fetch("{% url 'simulado' simulado.id %}",configuracao)
             const dados = await reposta.json()
 
             

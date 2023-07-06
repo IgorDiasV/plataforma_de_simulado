@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
-from .models import Questao, Assunto
+from .models import Questao, Assunto, Simulado
 import json
 
 def home(request):
@@ -22,8 +22,28 @@ def lista_questoes(request):
 
     return render(request, 'lista_questoes.html', {'questoes':questoes, 'assuntos':assuntos})
 
-def simulado(request):
-    questoes = Questao.objects.all()
+# def simulado(request):
+#     questoes = Questao.objects.all()
+#     if request.method == 'POST':
+#         dados = json.loads(request.body)
+#         resposta = []
+#         for questao in dados: 
+#             dados_questao = get_object_or_404(Questao, id = dados[questao]['id_questao'])
+
+#             if dados_questao.alternativa_correta == dados[questao]['resposta']:
+
+#                 resposta.append({'status':'Resposta Correta', 'id_questao':dados[questao]['id_questao']})
+#             else:
+#                 resposta.append({'status':'Resposta Errada', 'id_questao':dados[questao]['id_questao']})
+#         return HttpResponse(json.dumps({'resultado':resposta}))
+        
+    
+#     return render(request,'simulado.html', {'questoes':questoes})
+
+def simulado(request, simulado_id):
+
+    simulado =  get_object_or_404(Simulado, id = simulado_id)
+    questoes = simulado.questoes.all()
     if request.method == 'POST':
         dados = json.loads(request.body)
         resposta = []
@@ -38,7 +58,7 @@ def simulado(request):
         return HttpResponse(json.dumps({'resultado':resposta}))
         
     
-    return render(request,'simulado.html', {'questoes':questoes})
+    return render(request,'simulado.html', {'questoes':questoes, 'simulado':simulado})
 
 def cadastrar_questao(request):
     assuntos = Assunto.objects.all()
@@ -88,3 +108,14 @@ def editar_questao(request, questao_id):
             
     return render(request, 'editar_questao.html', {'questao': questao})
 
+def criar_simulado(request):
+    assuntos = Assunto.objects.all()
+
+    if request.method == 'POST':
+        teste = request.POST.getlist('assuntos')
+        print(teste)
+    return render(request, 'criar_simulado.html', {'assuntos':assuntos})
+    
+def lista_simulados(request):
+    simulados = Simulado.objects.all()
+    return render(request, 'lista_simulados.html', {'simulados':simulados})

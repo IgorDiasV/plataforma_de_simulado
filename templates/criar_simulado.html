@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Simulado</title>
+</head>
+<body>
+    Página para criar um simulado</br>
+
+    <a href="{% url 'home'%}">Página Inicial</a>
+    </br>
+</br>
+    
+    <form method="post">
+        {% csrf_token %}
+        <label for="qtd_questoes">Quantidade de Questões</label>
+        
+        <input type="number" id="qtd_questoes"></br></br>
+
+        
+        <select name="assuntos" multiple>
+          {% for assunto in assuntos%}
+            <option value="{{assunto.id}}">{{assunto.nome_assunto}}</option>
+          {% endfor %}
+        </select></br></br>
+        <select name="tipo_questao">
+          
+          <option value="COMPONENTE ESPECÍFICO">COMPONENTE ESPECÍFICO</option>
+          <option value="COMPONENTE GERAL">COMPONENTE GERAL</option>
+          <option value="" selected></option>
+         
+        </select></br>
+
+        <button type="submit">Gerar Simulado</button>
+
+    </form>
+</body>
+</html>
