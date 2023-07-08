@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from .models import Questao, Assunto, Simulado
 import json
-
+from random import sample
 def home(request):
     return render(request, 'home.html')
 
@@ -109,11 +109,28 @@ def editar_questao(request, questao_id):
     return render(request, 'editar_questao.html', {'questao': questao})
 
 def criar_simulado(request):
+    #TODO Verificar se todos os campos foram preenchidos para evitar erros
+    #TODO adicionar requerid no form
+    #TODO verificar se a quantiade de questões disponiveis é suficiente para criar o simulado ex: foi pedido para criar um simulado 
+    # com 10 questões, mas só tem 5 questões cadastradas
+    
     assuntos = Assunto.objects.all()
-
     if request.method == 'POST':
-        teste = request.POST.getlist('assuntos')
-        print(teste)
+        questoes = Questao.objects.all()
+
+        titulo = request.POST['titulo']
+        assuntos_ids = request.POST.getlist('assuntos')
+        qtd_questoes = int(request.POST['qtd_questoes'])
+        
+        if len(assuntos_ids) != 0:
+            questoes = questoes.filter(assuntos__id__in=assuntos_ids).distinct()
+        
+        indices_para_sorteio = list(range(0,len(questoes)))
+        indices_escolhidos = sample(indices_para_sorteio, qtd_questoes)
+        simulado = Simulado.objects.create(titulo=titulo)
+        for indice in indices_escolhidos:
+            simulado.questoes.add(questoes[indice])
+        return redirect('lista_simulados')
     return render(request, 'criar_simulado.html', {'assuntos':assuntos})
     
 def lista_simulados(request):
