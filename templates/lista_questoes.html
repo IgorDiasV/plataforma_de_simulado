@@ -44,15 +44,15 @@
             <hr>
             <br>
             <div class='ql-editor'>
-                <a href="{% url 'editar_questao' questao.id %}"><button>Editar</button></a>
+                <a href="{% url 'editar_questao' questao.id %}"><button>Editar</button></a> </br>
                 {{questao.pergunta | safe}}
                 </br>
                 
-                <p class='visualizar_alternativa'>a) {{questao.alternativa_a | safe}}</p>
-                <p class='visualizar_alternativa'>b) {{questao.alternativa_b | safe}}</p>
-                <p class='visualizar_alternativa'>c) {{questao.alternativa_c | safe}}</p>
-                <p class='visualizar_alternativa'>d) {{questao.alternativa_d | safe}}</p>
-                <p class='visualizar_alternativa'>e) {{questao.alternativa_e | safe}}</p>
+                <p class='visualizar_alternativa'>a) {{questao.alternativa_a | safe}}</p> </br>
+                <p class='visualizar_alternativa'>b) {{questao.alternativa_b | safe}}</p> </br>
+                <p class='visualizar_alternativa'>c) {{questao.alternativa_c | safe}}</p> </br>
+                <p class='visualizar_alternativa'>d) {{questao.alternativa_d | safe}}</p> </br>
+                <p class='visualizar_alternativa'>e) {{questao.alternativa_e | safe}}</p> </br>
             </div>
         {% endfor %}
     </div>
