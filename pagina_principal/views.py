@@ -22,24 +22,6 @@ def lista_questoes(request):
 
     return render(request, 'lista_questoes.html', {'questoes':questoes, 'assuntos':assuntos})
 
-# def simulado(request):
-#     questoes = Questao.objects.all()
-#     if request.method == 'POST':
-#         dados = json.loads(request.body)
-#         resposta = []
-#         for questao in dados: 
-#             dados_questao = get_object_or_404(Questao, id = dados[questao]['id_questao'])
-
-#             if dados_questao.alternativa_correta == dados[questao]['resposta']:
-
-#                 resposta.append({'status':'Resposta Correta', 'id_questao':dados[questao]['id_questao']})
-#             else:
-#                 resposta.append({'status':'Resposta Errada', 'id_questao':dados[questao]['id_questao']})
-#         return HttpResponse(json.dumps({'resultado':resposta}))
-        
-    
-#     return render(request,'simulado.html', {'questoes':questoes})
-
 def simulado(request, simulado_id):
 
     simulado =  get_object_or_404(Simulado, id = simulado_id)
@@ -113,7 +95,7 @@ def criar_simulado(request):
     #TODO adicionar requerid no form
     #TODO verificar se a quantiade de questões disponiveis é suficiente para criar o simulado ex: foi pedido para criar um simulado 
     # com 10 questões, mas só tem 5 questões cadastradas
-    
+
     assuntos = Assunto.objects.all()
     if request.method == 'POST':
         questoes = Questao.objects.all()
