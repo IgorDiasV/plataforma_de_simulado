@@ -115,6 +115,16 @@ def criar_simulado(request):
         return redirect('lista_simulados')
     return render(request, 'criar_simulado.html', {'assuntos':assuntos})
     
+def criar_simulado_manualmente(request):
+    questoes = Questao.objects.all()
+
+    if request.method == 'POST':
+        questoes_escolhidas = request.POST.getlist('questoes_escolhidas')
+        print(questoes_escolhidas)
+    return render(request, 'criar_simulado_manualmente.html', {'questoes': questoes})
+
 def lista_simulados(request):
     simulados = Simulado.objects.all()
     return render(request, 'lista_simulados.html', {'simulados':simulados})
+
+

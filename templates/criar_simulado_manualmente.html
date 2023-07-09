@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criando Simulado</title>
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+        
+        .conteudo_modal {
+            background-color: #fefefe;
+            margin: 20% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+        }
+        
+    </style>
+</head>
+<body>
+    <h1>Hello world!</h1>
+    <a href="{%url 'home' %}">Página Inicial</a>
+
+    <form method="post" >
+        {% csrf_token %}
+        <h2>Selecione as questões para o simulado:</h2>
+        <select  style='display:none' name="questoes_escolhidas" id="questoes_escolhidas" multiple ></select>
+        <div id='div_questoes_escolhidas'></div>
+        <button type="button" id="adicionar_questao">Adicionar Questão</button>
+        <button type="submit">Criar Simulado</button>
+    </form> 
+   
+
+
+    <div id="modal_questoes" class="modal">
+        <div class="conteudo_modal">
+            <h2>Selecione as questões adicionais:</h2>
+            {% for questao in questoes %}
+                <input id="questao_modal{{questao.id}}" type="checkbox" name="questoes_selecionadas" value="{{ questao.id }}">    
+                <label for="questao_modal{{questao.id}}">
+                    {{ questao.pergunta  | safe }}
+                </label>
+                <br>
+            {% endfor %}
+            <br>
+            <button  id="add_questoes_selecionadas">Adicionar Questões Selecionadas</button>
+            <button  onclick='fecharModal()'>Cancelar</button>
+        </div>
+    </div>
+   
+    <script>
+
+        function fecharModal()
+        {
+            var questionModal = document.getElementById('modal_questoes');
+            questionModal.style.display ='none'
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            var addQuestionBtn = document.getElementById('adicionar_questao');
+            var questionModal = document.getElementById('modal_questoes');
+            var addSelectedQuestionsBtn = document.getElementById('add_questoes_selecionadas');
+            var div_questoes = document.getElementById('div_questoes_escolhidas')
+            addQuestionBtn.addEventListener('click', function() {
+                questionModal.style.display = 'block';
+            });
+        
+            addSelectedQuestionsBtn.addEventListener('click', function() {
+                var selectedQuestions = [];
+                var checkboxes = document.querySelectorAll('input[name="questoes_selecionadas"]:checked');
+                var select_questoes_escolhidas = document.getElementById('questoes_escolhidas')
+                for (var i = 0; i < checkboxes.length; i++) {
+                    text_html = `<label for='questao${checkboxes[i].value}' >${checkboxes[i].labels[0].innerHTML}</label><input id='questao${checkboxes[i].value}' style="display:none" value=${checkboxes[i].value}></br>`
+                    div_questoes.innerHTML+=text_html
+                    
+                    var option = document.createElement("option");
+                    option.value = checkboxes[i].value;
+                    option.text = checkboxes[i].value;
+                    option.selected = true;
+                    select_questoes_escolhidas.add(option);
+                    checkboxes[i].checked = false
+                }               
+                
+                questionModal.style.display = 'none';
+            });
+        });
+        </script>
+        
+</body>
+</html>
