@@ -117,11 +117,14 @@ def criar_simulado(request):
     
 def criar_simulado_manualmente(request):
     questoes = Questao.objects.all()
-
+    assuntos = Assunto.objects.all()
     if request.method == 'POST':
-        questoes_escolhidas = request.POST.getlist('questoes_escolhidas')
-        print(questoes_escolhidas)
-    return render(request, 'criar_simulado_manualmente.html', {'questoes': questoes})
+        titulo = request.POST['titulo']
+        id_questoes_escolhidas = request.POST.getlist('questoes_escolhidas')
+        questoes_escolhidas = questoes.filter(id__in=id_questoes_escolhidas)
+        simulado = Simulado.objects.create(titulo=titulo)
+        simulado.questoes.set(questoes_escolhidas)
+    return render(request, 'criar_simulado_manualmente.html', {'questoes': questoes, 'assuntos':assuntos})
 
 def lista_simulados(request):
     simulados = Simulado.objects.all()
