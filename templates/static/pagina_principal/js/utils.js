@@ -39,8 +39,8 @@ function ocultarInput(){
     botao_adicionar.style.display = 'none';
     botao_cancelar.style.display = 'none';
 }
-function get_assuntos(){
-    select = document.getElementById('assuntos')
+function get_opcoes_escolhidas(id){
+    select = document.getElementById(id)
 
     var assuntos = [];
     for(let i = 0; i < select.options.length; i++)
