@@ -18,17 +18,8 @@
         {% csrf_token %}
         
         <p>Nome do curso:</p>
-        <input id='nome_curso' type='text' value = '{{questao.curso}}'>
-        
-        <p>Tipo da Questão:</p>
-        <select  id="tipo_questao">
-            <option value="COMPONENTE ESPECÍFICO">COMPONENTE ESPECÍFICO</option>
-            <option value="FORMAÇÃO GERAL">FORMAÇÃO GERAL</option>
-        </select>
-        
-        <p>Nº da questão:</p>
-        <input id='n_questao' type='number' value={{questao.n_questao}}>
-        
+        <input id='nome_curso' type='text' value = '{{questao.curso}}'>   
+       
         <p>Pergunta: </p>
         <div id="editor">
         

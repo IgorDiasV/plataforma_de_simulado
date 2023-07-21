@@ -30,13 +30,6 @@
               <option value="{{assunto.id}}">{{assunto.nome_assunto}}</option>
             {% endfor %}
           </select>
-          <select name="tipo_questao">
-            
-            <option value="COMPONENTE ESPECÍFICO">COMPONENTE ESPECÍFICO</option>
-            <option value="COMPONENTE GERAL">COMPONENTE GERAL</option>
-            <option value="" selected></option>
-           
-          </select>
           <button type="submit">Enviar</button>
         </form>
         {% for questao in questoes %}
