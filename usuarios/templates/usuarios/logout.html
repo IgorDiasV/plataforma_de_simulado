@@ -1,0 +1,10 @@
+<div class="login-message">
+    Óla, 
+    {{ request.user.first_name }}. 
+    Para sair da sua conta, precione o botão abaixo.
+    <form action="{% url 'usuarios:logout' %}" method='POST'>
+      {% csrf_token %}
+      <input type="hidden" name="username" value="{{ request.user.username }}">
+      <button type="submit">Sair</button>
+    </form>
+  </div>

@@ -4,6 +4,7 @@ from django.urls import reverse
 from django.http import Http404
 from usuarios.models import Usuario
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 
 
 def cadastro_view(request):
@@ -63,3 +64,16 @@ def realizar_login(request):
             login(request, usuario_autenticado)
 
     return redirect(reverse('home'))
+
+
+@login_required(login_url='usuarios:login', redirect_field_name='next')
+def logout_view(request):
+  
+    if request.method == 'GET':
+    
+        return render(request, 'usuarios/logout.html')
+    else:
+        if request.POST.get('username') != request.user.username:
+            return redirect('usuarios:login')
+        logout(request)
+        return redirect('usuarios:login')
