@@ -1,0 +1,27 @@
+
+    <h2>Cadastro</h2>
+
+    <form action="{{ form_action }}" method="POST">
+      {% csrf_token %}
+        {% for field in form %}
+            <div>
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{field}}
+                {% if field.help_text %}
+                <p>{{ field.help_text }}</p>
+                {% endif %}
+                {{ field.errors }}
+            </div>
+        {% endfor %}
+  
+      {% if form.errors %}
+        Existem dados incorretos ou ausentes. Por favor, tente novamente.
+      {% endif %}
+      <input type="radio" id="aluno" name="is_teacher" value=0>
+      <label for="aluno">Aluno</label><br>
+      <input type="radio" id="professor" name="is_teacher" value=1>
+      <label for="professor">Professor</label><br>
+
+      <button type="submit">Cadastrar</button>
+    </form>
+  </div>

@@ -14,7 +14,7 @@ def lista_questoes(request):
     assuntos = Assunto.objects.all()
 
     if request.method == 'POST':
-        assuntos_ids = request.POST.getlist('assuntos')       
+        assuntos_ids = request.POST.getlist('assuntos')
         if len(assuntos_ids) != 0:
             questoes = questoes.filter(assuntos__id__in=assuntos_ids)
 
@@ -29,8 +29,8 @@ def simulado(request, simulado_id):
     if request.method == 'POST':
         dados = json.loads(request.body)
         resposta = []
-        for questao in dados: 
-            dados_questao = get_object_or_404(Questao, 
+        for questao in dados:
+            dados_questao = get_object_or_404(Questao,
                                               id=dados[questao]['id_questao'])
 
             if dados_questao.alternativa_correta == dados[questao]['resposta']:
@@ -40,7 +40,7 @@ def simulado(request, simulado_id):
                 resposta.append({'status': 'Resposta Errada',
                                  'id_questao': dados[questao]['id_questao']})
         return HttpResponse(json.dumps({'resultado': resposta}))
-    
+
     return render(request, 'pagina_principal/simulado.html',
                   {'questoes': questoes, 'simulado': simulado})
 
@@ -50,9 +50,9 @@ def cadastrar_questao(request):
     if request.method == 'POST':
         dados = json.loads(request.body)
         assuntos_ids = dados['assuntos']
-        questao = Questao.objects.create(pergunta=dados['pergunta'], 
-                                         curso=dados['nome_curso'],  
-                                         alternativa_a=dados['alternativa_a'], 
+        questao = Questao.objects.create(pergunta=dados['pergunta'],
+                                         curso=dados['nome_curso'],
+                                         alternativa_a=dados['alternativa_a'],
                                          alternativa_b=dados['alternativa_b'],
                                          alternativa_c=dados['alternativa_c'],
                                          alternativa_d=dados['alternativa_d'],
@@ -70,7 +70,7 @@ def cadastrar_questao(request):
 
         assuntos_ids = list(map(int, assuntos_ids))
         assuntos = Assunto.objects.filter(id__in=assuntos_ids)
-        for assunto in assuntos: 
+        for assunto in assuntos:
             questao.assuntos.add(assunto)
 
     return render(request, 'pagina_principal/cadastrar_questao.html',
@@ -116,7 +116,7 @@ def criar_simulado(request):
         qtd_questoes = int(request.POST['qtd_questoes'])
         
         if len(assuntos_ids) != 0:
-            questoes = questoes.filter(assuntos__id__in=assuntos_ids).distinct()
+            questoes = questoes.filter(assuntos__id__in=assuntos_ids).distinct()  # noqa: E501
         
         indices_para_sorteio = list(range(0, len(questoes)))
         indices_escolhidos = sample(indices_para_sorteio, qtd_questoes)
