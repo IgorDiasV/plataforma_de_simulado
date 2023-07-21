@@ -3,8 +3,9 @@ from django.http import HttpResponse
 from .models import Questao, Assunto, Simulado
 import json
 from random import sample
+
 def home(request):
-    return render(request, 'home.html')
+    return render(request, 'pagina_principal/home.html')
 
 def lista_questoes(request):
     questoes = Questao.objects.all()
@@ -20,7 +21,7 @@ def lista_questoes(request):
         if tipo_questao != '':
             questoes = questoes.filter(tipo_questao=tipo_questao)
 
-    return render(request, 'lista_questoes.html', {'questoes':questoes, 'assuntos':assuntos})
+    return render(request, 'pagina_principal/lista_questoes.html', {'questoes':questoes, 'assuntos':assuntos})
 
 def simulado(request, simulado_id):
 
@@ -40,7 +41,7 @@ def simulado(request, simulado_id):
         return HttpResponse(json.dumps({'resultado':resposta}))
         
     
-    return render(request,'simulado.html', {'questoes':questoes, 'simulado':simulado})
+    return render(request,'pagina_principal/simulado.html', {'questoes':questoes, 'simulado':simulado})
 
 def cadastrar_questao(request):
     assuntos = Assunto.objects.all()
@@ -65,7 +66,7 @@ def cadastrar_questao(request):
         for assunto in assuntos: 
             questao.assuntos.add(assunto)
 
-    return render(request, 'cadastrar_questao.html', {'assuntos':assuntos})
+    return render(request, 'pagina_principal/cadastrar_questao.html', {'assuntos':assuntos})
 
 def editar_questao(request, questao_id):
     
@@ -88,7 +89,7 @@ def editar_questao(request, questao_id):
             
             return HttpResponse('1')
             
-    return render(request, 'editar_questao.html', {'questao': questao})
+    return render(request, 'pagina_principal/editar_questao.html', {'questao': questao})
 
 def criar_simulado(request):
     #TODO Verificar se todos os campos foram preenchidos para evitar erros
@@ -113,7 +114,7 @@ def criar_simulado(request):
         for indice in indices_escolhidos:
             simulado.questoes.add(questoes[indice])
         return redirect('lista_simulados')
-    return render(request, 'criar_simulado.html', {'assuntos':assuntos})
+    return render(request, 'pagina_principal/criar_simulado.html', {'assuntos':assuntos})
     
 def criar_simulado_manualmente(request):
     questoes = Questao.objects.all()
@@ -124,10 +125,10 @@ def criar_simulado_manualmente(request):
         questoes_escolhidas = questoes.filter(id__in=id_questoes_escolhidas)
         simulado = Simulado.objects.create(titulo=titulo)
         simulado.questoes.set(questoes_escolhidas)
-    return render(request, 'criar_simulado_manualmente.html', {'questoes': questoes, 'assuntos':assuntos})
+    return render(request, 'pagina_principal/criar_simulado_manualmente.html', {'questoes': questoes, 'assuntos':assuntos})
 
 def lista_simulados(request):
     simulados = Simulado.objects.all()
-    return render(request, 'lista_simulados.html', {'simulados':simulados})
+    return render(request, 'pagina_principal/lista_simulados.html', {'simulados':simulados})
 
 
