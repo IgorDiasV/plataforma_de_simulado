@@ -1,1 +1,0 @@
-from .form_cadastro import RegisterForm
