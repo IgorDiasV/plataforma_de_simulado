@@ -3,6 +3,8 @@ from django.http import HttpResponse
 from .models import Questao, Assunto, Simulado
 import json
 from random import sample
+from django.contrib.auth.decorators import login_required
+from usuarios.models import Usuario
 
 
 def home(request):
@@ -45,38 +47,48 @@ def simulado(request, simulado_id):
                   {'questoes': questoes, 'simulado': simulado})
 
 
+@login_required(login_url='usuarios:login', redirect_field_name='next')
 def cadastrar_questao(request):
-    assuntos = Assunto.objects.all()
-    if request.method == 'POST':
-        dados = json.loads(request.body)
-        assuntos_ids = dados['assuntos']
-        questao = Questao.objects.create(pergunta=dados['pergunta'],
-                                         curso=dados['nome_curso'],
-                                         alternativa_a=dados['alternativa_a'],
-                                         alternativa_b=dados['alternativa_b'],
-                                         alternativa_c=dados['alternativa_c'],
-                                         alternativa_d=dados['alternativa_d'],
-                                         alternativa_e=dados['alternativa_e'],
-                                         alternativa_correta=dados['alternativa_correta']  # noqa: E501
-                                         )
 
-        assuntos_aux = assuntos_ids.copy()
-        for assunto_pagina in assuntos_aux:
-            if 'novo_' in assunto_pagina:
-                assuntos_ids.remove(assunto_pagina)
-                assunto_pagina = assunto_pagina.replace('novo_', '')
-                assunto_novo = Assunto.objects.create(nome_assunto=assunto_pagina)  # noqa: E501
-                questao.assuntos.add(assunto_novo)
+    usuario = Usuario.objects.filter(user=request.user).first()
+    if usuario.is_teacher:
+        assuntos = Assunto.objects.all()
+        if request.method == 'POST':
+            dados = json.loads(request.body)
+            assuntos_ids = dados['assuntos']
+            questao = Questao.objects.create(pergunta=dados['pergunta'],
+                                             curso=dados['nome_curso'],
+                                             alternativa_a=dados['alternativa_a'],  # noqa: E501
+                                             alternativa_b=dados['alternativa_b'],  # noqa: E501
+                                             alternativa_c=dados['alternativa_c'],  # noqa: E501
+                                             alternativa_d=dados['alternativa_d'],  # noqa: E501
+                                             alternativa_e=dados['alternativa_e'],  # noqa: E501
+                                             alternativa_correta=dados['alternativa_correta']  # noqa: E501
+                                             )
 
-        assuntos_ids = list(map(int, assuntos_ids))
-        assuntos = Assunto.objects.filter(id__in=assuntos_ids)
-        for assunto in assuntos:
-            questao.assuntos.add(assunto)
+            assuntos_aux = assuntos_ids.copy()
+            for assunto_pagina in assuntos_aux:
+                if 'novo_' in assunto_pagina:
+                    assuntos_ids.remove(assunto_pagina)
+                    assunto_pagina = assunto_pagina.replace('novo_', '')
+                    assunto_novo = Assunto.objects.create(nome_assunto=assunto_pagina)  # noqa: E501
+                    questao.assuntos.add(assunto_novo)
 
-    return render(request, 'pagina_principal/cadastrar_questao.html',
-                  {'assuntos': assuntos})
+            assuntos_ids = list(map(int, assuntos_ids))
+            assuntos = Assunto.objects.filter(id__in=assuntos_ids)
+            for assunto in assuntos:
+                questao.assuntos.add(assunto)
+
+        return render(request, 'pagina_principal/cadastrar_questao.html',
+                      {'assuntos': assuntos})
+    else:
+        mensagem = ('Seu perfil é de aluno, '
+                    'Apenas professores podem cadastrar questões')
+        return render(request, 'global/pagina_de_erro.html', 
+                      {'mensagem': mensagem})       
 
 
+@login_required(login_url='usuarios:login', redirect_field_name='next')
 def editar_questao(request, questao_id):
     
     questao = get_object_or_404(Questao, id=questao_id)
@@ -100,45 +112,65 @@ def editar_questao(request, questao_id):
                   {'questao': questao})
 
 
+@login_required(login_url='usuarios:login', redirect_field_name='next')
 def criar_simulado(request):
     # TODO Verificar se todos os campos foram preenchidos para evitar erros
     # TODO adicionar requerid no form
     # TODO verificar se a quantiade de questões disponiveis é suficiente
     # para criar o simulado ex: foi pedido para criar um simulado
     # com 10 questões, mas só tem 5 questões cadastradas
+    
+    usuario = Usuario.objects.filter(user=request.user).first()
+    if usuario.is_teacher:
+        assuntos = Assunto.objects.all()
+        if request.method == 'POST':
+            questoes = Questao.objects.all()
 
-    assuntos = Assunto.objects.all()
-    if request.method == 'POST':
-        questoes = Questao.objects.all()
-
-        titulo = request.POST['titulo']
-        assuntos_ids = request.POST.getlist('assuntos')
-        qtd_questoes = int(request.POST['qtd_questoes'])
+            titulo = request.POST['titulo']
+            assuntos_ids = request.POST.getlist('assuntos')
+            qtd_questoes = int(request.POST['qtd_questoes'])
+            
+            if len(assuntos_ids) != 0:
+                questoes = questoes.filter(assuntos__id__in=assuntos_ids).distinct()  # noqa: E501
+            
+            indices_para_sorteio = list(range(0, len(questoes)))
+            indices_escolhidos = sample(indices_para_sorteio, qtd_questoes)
+            simulado = Simulado.objects.create(titulo=titulo)
+            for indice in indices_escolhidos:
+                simulado.questoes.add(questoes[indice])
+            return redirect('lista_simulados')
+        return render(request, 'pagina_principal/criar_simulado.html', 
+                      {'assuntos': assuntos})
+    else:
+        mensagem = ('Seu perfil é de aluno, '
+                    'Apenas professores podem criar simulados')
         
-        if len(assuntos_ids) != 0:
-            questoes = questoes.filter(assuntos__id__in=assuntos_ids).distinct()  # noqa: E501
-        
-        indices_para_sorteio = list(range(0, len(questoes)))
-        indices_escolhidos = sample(indices_para_sorteio, qtd_questoes)
-        simulado = Simulado.objects.create(titulo=titulo)
-        for indice in indices_escolhidos:
-            simulado.questoes.add(questoes[indice])
-        return redirect('lista_simulados')
-    return render(request, 'pagina_principal/criar_simulado.html', 
-                  {'assuntos': assuntos})
+        return render(request, 'global/pagina_de_erro.html', 
+                      {'mensagem': mensagem})
 
 
+@login_required(login_url='usuarios:login', redirect_field_name='next')
 def criar_simulado_manualmente(request):
-    questoes = Questao.objects.all()
-    assuntos = Assunto.objects.all()
-    if request.method == 'POST':
-        titulo = request.POST['titulo']
-        id_questoes_escolhidas = request.POST.getlist('questoes_escolhidas')
-        questoes_escolhidas = questoes.filter(id__in=id_questoes_escolhidas)
-        simulado = Simulado.objects.create(titulo=titulo)
-        simulado.questoes.set(questoes_escolhidas)
-    return render(request, 'pagina_principal/criar_simulado_manualmente.html',
-                  {'questoes': questoes, 'assuntos': assuntos})
+    
+    usuario = Usuario.objects.filter(user=request.user).first()
+    if usuario.is_teacher:
+        questoes = Questao.objects.all()
+        assuntos = Assunto.objects.all()
+        if request.method == 'POST':
+            titulo = request.POST['titulo']
+            id_questoes_escolhidas = request.POST.getlist('questoes_escolhidas')  # noqa: E501
+            questoes_escolhidas = questoes.filter(id__in=id_questoes_escolhidas)  # noqa: E501
+            simulado = Simulado.objects.create(titulo=titulo)
+            simulado.questoes.set(questoes_escolhidas)
+        return render(request, 'pagina_principal/criar_simulado_manualmente.html',  # noqa: E501
+                      {'questoes': questoes, 'assuntos': assuntos})
+
+    else:
+        mensagem = ('Seu perfil é de aluno, '
+                    'Apenas professores podem criar simulados')
+        
+        return render(request, 'global/pagina_de_erro.html', 
+                      {'mensagem': mensagem})
 
 
 def lista_simulados(request):
