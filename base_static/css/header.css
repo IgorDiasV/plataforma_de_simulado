@@ -57,16 +57,3 @@ header h1 {
 }
 
 
-.login-button button {
-  background-color: #00aa00;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  padding: 8px 16px;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-.login-button button:hover {
-  background-color: #008800; 
-}
