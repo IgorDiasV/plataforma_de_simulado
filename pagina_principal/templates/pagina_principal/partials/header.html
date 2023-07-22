@@ -1,0 +1,19 @@
+<header>
+    <div class="header-title">
+        <h1>Nome da Página</h1>
+    </div>
+    {% if user.is_authenticated %}
+    <div class="profile-icon" onmouseenter="mostrarMenu()" onmouseleave="ocultarMenu()">
+        <i class="fas fa-user"></i>
+        <div class="profile-menu" id="profileMenu">
+            <ul>
+                <li><a href="{%url 'usuarios:logout'%}">Sair da conta</a></li>
+            </ul>
+        </div>
+    </div>
+    {% else %}
+        <div class="login-button">
+            <a href="{%url 'usuarios:login'%}"><button >Fazer Login</button></a>
+        </div>
+    {% endif %}
+</header>
