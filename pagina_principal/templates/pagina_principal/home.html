@@ -7,18 +7,16 @@
     <title>Página Principal</title>
     <link href="{% static 'css/global.css' %}" rel='stylesheet'>
     <link href="{% static 'css/header.css' %}" rel='stylesheet'>
+    <link href="{% static 'css/menu.css' %}" rel='stylesheet'>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <script src="{% static 'pagina_principal/js/utils.js'%}"></script>
 </head>
 <body>
     {% include 'pagina_principal/partials/header.html' %}
-    <h1>Hello world</h1>
-    <a href="{% url 'cadastrar_questao' %}">Cadastrar Questão</a></br>
-    <a href="{%url 'lista_questoes' %}">Listar Questões</a></br>
-    <a href="{% url 'lista_simulados' %}">Lista Simulados</a></br>
-    <a href="{%url 'criar_simulado' %}">Criar Simulado</a></br>
-    <a href="{%url 'criar_simulado_manualmente' %}">Criar Simulado Manualmente</a></br>
+    {% include 'pagina_principal/partials/menu.html' %}
+
+
     
 </body>
 </html>
