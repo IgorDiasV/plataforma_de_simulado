@@ -77,3 +77,11 @@ function configuracao_toolbar(){
 
     return toolbarOptions
 }
+
+function mostrarMenu() {
+    document.getElementById("profileMenu").style.display = "block";
+}
+
+function ocultarMenu() {
+    document.getElementById("profileMenu").style.display = "none";
+}
