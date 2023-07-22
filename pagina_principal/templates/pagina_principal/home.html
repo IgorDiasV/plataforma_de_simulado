@@ -1,17 +1,24 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Página Principal</title>
+    <link href="{% static 'css/global.css' %}" rel='stylesheet'>
+    <link href="{% static 'css/header.css' %}" rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <script src="{% static 'pagina_principal/js/utils.js'%}"></script>
 </head>
 <body>
+    {% include 'pagina_principal/partials/header.html' %}
     <h1>Hello world</h1>
     <a href="{% url 'cadastrar_questao' %}">Cadastrar Questão</a></br>
     <a href="{%url 'lista_questoes' %}">Listar Questões</a></br>
-    {% comment %} <a href="{%url 'simulado' %}">simulado</a></br> {% endcomment %}
     <a href="{% url 'lista_simulados' %}">Lista Simulados</a></br>
     <a href="{%url 'criar_simulado' %}">Criar Simulado</a></br>
     <a href="{%url 'criar_simulado_manualmente' %}">Criar Simulado Manualmente</a></br>
+    
 </body>
 </html>

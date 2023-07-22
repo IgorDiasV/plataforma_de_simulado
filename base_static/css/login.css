@@ -1,3 +1,9 @@
+main{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
 .container {
     background-color: #fff;
     border-radius: 8px;
