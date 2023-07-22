@@ -10,7 +10,7 @@
 </head>
 <body>
   <main>
-  <div class="container">
+  <div class="container_login">
 
     <form action="{{ form_action }}" method="POST" class="login-form">
       {% csrf_token %}
@@ -27,7 +27,7 @@
             {{ field.errors }}
           
         {% endfor %}
-          <button type="submit">Entrar</button>
+          <button class='green-button' type="submit">Entrar</button>
 
     </form>
   </div>
