@@ -1,22 +1,5 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página Principal</title>
-    <link href="{% static 'css/global.css' %}" rel='stylesheet'>
-    <link href="{% static 'css/header.css' %}" rel='stylesheet'>
-    <link href="{% static 'css/menu.css' %}" rel='stylesheet'>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
-    <script src="{% static 'pagina_principal/js/utils.js'%}"></script>
-</head>
-<body>
-    {% include 'pagina_principal/partials/header.html' %}
-    {% include 'pagina_principal/partials/menu.html' %}
-
-
-    
-</body>
-</html>
+{% extends 'global/pages/base.html' %}
+{% block titulo %} Página Principal{% endblock titulo %}
+{% block conteudo%}
+    <h1>Página principal</h1>
+{% endblock conteudo%}
