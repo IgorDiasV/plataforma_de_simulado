@@ -63,7 +63,8 @@ def cadastrar_questao(request):
                                              alternativa_c=dados['alternativa_c'],  # noqa: E501
                                              alternativa_d=dados['alternativa_d'],  # noqa: E501
                                              alternativa_e=dados['alternativa_e'],  # noqa: E501
-                                             alternativa_correta=dados['alternativa_correta']  # noqa: E501
+                                             alternativa_correta=dados['alternativa_correta'],  # noqa: E501
+                                             autor=usuario
                                              )
 
             assuntos_aux = assuntos_ids.copy()
