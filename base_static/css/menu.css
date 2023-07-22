@@ -1,6 +1,7 @@
   
   .menu {
     background-color: #333;
+    padding: 10px;
   }
   
   .menu ul {
@@ -22,7 +23,7 @@
     padding: 10px 15px;
   }
   
-  .menu li:hover {
+  .menu a:hover {
     background-color: #555;
     border-radius: 4px;
   }
