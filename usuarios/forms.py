@@ -4,9 +4,12 @@ from django.core.exceptions import ValidationError
 
 
 class FormLogin(forms.Form):
-    email = forms.EmailField()
+    email = forms.EmailField(
+        label='E-mail'
+    )
     password = forms.CharField(
-        widget=forms.PasswordInput()
+        widget=forms.PasswordInput(),
+        label='Senha'
     )
 
 

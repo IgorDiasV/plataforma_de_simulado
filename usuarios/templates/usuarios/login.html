@@ -1,15 +1,21 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <link href={%static 'css/global.css'%} rel='stylesheet'>
+  <link href={%static 'css/login.css'%} rel='stylesheet'>
+</head>
+<body>
+  <div class="container">
 
-<div>
-    <h2>Login</h2>
-</div>
-
-
-
-    <form action="{{ form_action }}" method="POST">
+    <form action="{{ form_action }}" method="POST" class="login-form">
       {% csrf_token %}
-
+      <h2>Login</h2>
         {% for field in form %}
-          <div>
+          
             <label for="{{ field.id_for_label }}">{{ field.label }}</label>
             {{field}}
   
@@ -18,11 +24,11 @@
             {% endif %}
   
             {{ field.errors }}
-          </div>
+          
         {% endfor %}
-   
+          <button type="submit">Entrar</button>
 
-        <div >
-          <button type="submit">Logar</button>
-      </div>
     </form>
+  </div>  
+</body>
+</html>
