@@ -68,9 +68,7 @@ def realizar_login(request):
 
 @login_required(login_url='usuarios:login', redirect_field_name='next')
 def logout_view(request):
-  
     if request.method == 'GET':
-    
         return redirect('home')
     else:
         if request.POST.get('username') != request.user.username:

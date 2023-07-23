@@ -136,7 +136,7 @@ def criar_simulado(request):
             
             indices_para_sorteio = list(range(0, len(questoes)))
             indices_escolhidos = sample(indices_para_sorteio, qtd_questoes)
-            simulado = Simulado.objects.create(titulo=titulo)
+            simulado = Simulado.objects.create(titulo=titulo, autor=usuario)
             for indice in indices_escolhidos:
                 simulado.questoes.add(questoes[indice])
             return redirect('lista_simulados')
@@ -161,7 +161,7 @@ def criar_simulado_manualmente(request):
             titulo = request.POST['titulo']
             id_questoes_escolhidas = request.POST.getlist('questoes_escolhidas')  # noqa: E501
             questoes_escolhidas = questoes.filter(id__in=id_questoes_escolhidas)  # noqa: E501
-            simulado = Simulado.objects.create(titulo=titulo)
+            simulado = Simulado.objects.create(titulo=titulo, autor=usuario)
             simulado.questoes.set(questoes_escolhidas)
         return render(request, 'pagina_principal/criar_simulado_manualmente.html',  # noqa: E501
                       {'questoes': questoes, 'assuntos': assuntos})
