@@ -46,14 +46,20 @@ header h1 {
   padding: 8px;
 }
 
-.profile-menu a {
+.profile-menu button {
   text-decoration: none;
   color: #333;
   font-size: 12px;
+  border:none;
+  background-color: #fff;
+  padding: 10px ;
+  
 }
 
-.profile-menu a:hover {
+.profile-menu button:hover {
   background-color: #f0f0f0;
+  cursor: pointer;
+  
 }
 
 

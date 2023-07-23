@@ -71,7 +71,7 @@ def logout_view(request):
   
     if request.method == 'GET':
     
-        return render(request, 'usuarios/logout.html')
+        return redirect('home')
     else:
         if request.POST.get('username') != request.user.username:
             return redirect('usuarios:login')
