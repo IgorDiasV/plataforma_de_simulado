@@ -34,3 +34,8 @@ main{
     border: 1px solid #ccc;
     border-radius: 4px;
   }
+
+.criar_conta{
+  text-align: right;
+  font-size: 12px;
+}
