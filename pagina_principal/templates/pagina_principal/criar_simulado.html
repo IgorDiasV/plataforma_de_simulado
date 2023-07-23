@@ -1,17 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Criar Simulado</title>
-</head>
-<body>
-    Página para criar um simulado</br>
+{% extends 'global/pages/base.html' %}
 
-    <a href="{% url 'home'%}">Página Inicial</a>
-    </br>
-</br>
-    
+{% block conteudo %}
     <form method="post">
         {% csrf_token %}
 
@@ -30,5 +19,4 @@
         <button type="submit">Gerar Simulado</button>
 
     </form>
-</body>
-</html>
+    {% endblock conteudo %}

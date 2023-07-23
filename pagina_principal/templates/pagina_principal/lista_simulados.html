@@ -1,16 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Simulados</title>
-</head>
-<body>
-    <a href="{% url 'home' %}">Página Principal</a></br></br>
-    
+{% extends 'global/pages/base.html' %}
+{% block titulo %}Lista de Simulados{% endblock titulo %}
 
-    {% for simulado in simulados%}
-        <a href="{% url 'simulado' simulado.id %}">{{simulado.titulo}}</a></br>
-    {% endfor%}
-</body>
-</html>
+
+{% block conteudo %}
+    <div class="simulados">
+        {% for simulado in simulados%}
+            <a href="{% url 'simulado' simulado.id %}">{{simulado.titulo}}</a></br>
+        {% endfor%}
+    </div>
+{% endblock conteudo %}
