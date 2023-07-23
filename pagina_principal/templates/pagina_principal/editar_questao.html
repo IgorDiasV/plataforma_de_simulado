@@ -1,18 +1,15 @@
+{% extends 'global/pages/base.html' %}
 {% load static %}
-<!doctype html>
-<html lang="en">
-  
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">   
+{% block css %}
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+{% endblock css %}
+{% block titulo %}
+    Editar questão
+{% endblock titulo %}
     
-    <title>Editar Questão</title>
-  </head>
-  <body>
-    
+
+{% block conteudo %}
     <div class="container">
         
         {% csrf_token %}
@@ -21,28 +18,28 @@
         <input id='nome_curso' type='text' value = '{{questao.curso}}'>   
        
         <p>Pergunta: </p>
-        <div id="editor">
+        <div id="editor" class='editor_quill'>
         
         </div>
 
         <p>Alternativa A</p>
-        <div id="alternativa_a">
+        <div id="alternativa_a" class='editor_quill'>
         
         </div>
         <p>Alternativa B</p>
-        <div id="alternativa_b">
+        <div id="alternativa_b" class='editor_quill'>
         
         </div>
         <p>Alternativa C</p>
-        <div id="alternativa_c">
+        <div id="alternativa_c" class='editor_quill'>
         
         </div>
         <p>Alternativa D</p>
-        <div id="alternativa_d">
+        <div id="alternativa_d" class='editor_quill'>
         
         </div>
         <p>Alternativa E</p>
-        <div id="alternativa_e">
+        <div id="alternativa_e" class='editor_quill'>
         
         </div>
         <p>Alternativa Correta</p>
@@ -54,7 +51,7 @@
             <option value="E">E</option>
         </select>
         
-        <button  class="btn btn-success" onclick="salvar()">Enviar</button>
+        <button  class="green-button" onclick="salvar()">Enviar</button>
         
 
     </div>
@@ -65,8 +62,6 @@
     
     
     
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <script src="{% static 'pagina_principal/js/utils.js'%}"></script>
     <script src="{% static 'pagina_principal/js/image-resize.min.js'%}"></script>
@@ -160,5 +155,4 @@
             location.href = "{% url 'lista_questoes' %}"
         }
     </script>
-  </body>
-</html>
+    {% endblock conteudo %}    
