@@ -1,52 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+{% extends 'global/pages/base.html' %}
+{% load static %}
+{% block css %}
+  <link href="{% static 'pagina_principal/css/simulado.css' %}" rel='stylesheet'>
+{% endblock css %}
+{% block conteudo %}
 
-    <style>
-        body {
-          font-family: Arial, sans-serif;
-          background-color: #f4f4f4;
-          margin: 0;
-          padding: 20px;
-        }
-        
-        .question {
-          margin-bottom: 20px;
-        }
-        
-        .option {
-          margin-bottom: 10px;
-        }
-        
-        .option-radio {
-          display: none;
-        }
-        
-        .option-label {
-          display: inline-block;
-          padding: 10px 20px;
-          background-color: #eaeaea;
-          border-radius: 5px;
-          cursor: pointer;
-          font-size: 16px;
-          color: #333;
-          transition: background-color 0.3s ease;
-        }
-        
-        .option-radio:checked + .option-label {
-          background-color: #337ab7;
-          color: #fff;
-        }
-        .option p {
-            display: inline;
-        }
-      </style>
-  </head>
-  <body>
-    <a href="{%url 'home' %}">Página Principal</a>
     {% csrf_token %}
     {% for questao in questoes%}
       <div class="question">
@@ -76,7 +34,7 @@
             </div>
         </div>
       {% endfor %}
-      <button onclick='enviar_resposta()'>ENVIAR</button>
+      <button onclick='enviar_resposta()' class='green-button'>ENVIAR</button>
       
     <script>
         async function enviar_resposta(){
@@ -135,5 +93,6 @@
 
         }
     </script>
-  </body>
-</html>
+
+
+{% endblock conteudo %}

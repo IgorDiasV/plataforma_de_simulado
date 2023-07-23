@@ -1,0 +1,32 @@
+.question {
+    margin-bottom: 20px;
+}
+
+.option {
+    margin-bottom: 10px;
+}
+
+.option-radio {
+    display: none;
+}
+
+.option-label {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #eaeaea;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    color: #333;
+    transition: background-color 0.3s ease;
+    border: 1px solid black;
+}
+
+.option-radio:checked+.option-label {
+    background-color: #337ab7;
+    color: #fff;
+}
+
+.option p {
+    display: inline;
+}
