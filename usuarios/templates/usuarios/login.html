@@ -1,14 +1,10 @@
+{% extends 'global/pages/base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login</title>
-  <link href={%static 'css/global.css'%} rel='stylesheet'>
+
+{% block css %}
   <link href={%static 'css/login.css'%} rel='stylesheet'>
-</head>
-<body>
+  {% endblock css %}
+{% block conteudo %}
   <main>
   <div class="container_login">
 
@@ -33,5 +29,5 @@
     <p class='criar_conta'><a href="{% url 'usuarios:cadastro'%}">Criar conta</a></p>
   </div>
 </main>  
-</body>
-</html>
+
+{% endblock conteudo %}
