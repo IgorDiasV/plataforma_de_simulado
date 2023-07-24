@@ -12,11 +12,11 @@
   <main>
   <div class="container_login">
 
-    <form action="{{ form_action }}" method="POST" class="login-form">
+    <form action="{{ form_action }}" method="POST" class="login_form">
       {% csrf_token %}
       <h2>Login</h2>
         {% for field in form %}
-          
+              
             <label for="{{ field.id_for_label }}">{{ field.label }}</label>
             {{field}}
   
