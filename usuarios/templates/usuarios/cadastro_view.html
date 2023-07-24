@@ -1,10 +1,17 @@
-
-    <h2>Cadastro</h2>
-
-    <form action="{{ form_action }}" method="POST">
+{% extends 'global/pages/base.html' %}
+{% load static %}
+{% block css %}<link href={%static 'css/register.css'%} rel='stylesheet'>{% endblock css %}
+{% block conteudo %}
+<main>
+  <div class="container_register">
+    <form action="{{ form_action }}" method="POST" class="register_form">
       {% csrf_token %}
+      <h2>Cadastro</h2>
         {% for field in form %}
-            <div>
+            {% if field.id_for_label  == 'id_first_name' %}
+             <div class="fullname">
+            {% endif %}
+            <div class= "{{ field.id_for_label }}">
                 <label for="{{ field.id_for_label }}">{{ field.label }}</label>
                 {{field}}
                 {% if field.help_text %}
@@ -12,16 +19,29 @@
                 {% endif %}
                 {{ field.errors }}
             </div>
+            {% if field.id_for_label == 'id_last_name' %}
+              </div>
+            {% endif %}
         {% endfor %}
-  
+      
       {% if form.errors %}
         Existem dados incorretos ou ausentes. Por favor, tente novamente.
       {% endif %}
-      <input type="radio" id="aluno" name="is_teacher" value=0>
-      <label for="aluno">Aluno</label><br>
-      <input type="radio" id="professor" name="is_teacher" value=1>
-      <label for="professor">Professor</label><br>
 
-      <button type="submit">Cadastrar</button>
+
+    
+    <div>
+      <label>Tipo de Usuário:</label>
+      <div class="user-type">
+        <input type="radio" id="aluno" name="is_teacher" value=0>
+        <label for="aluno">Aluno</label>
+        <input type="radio" id="professor" name="is_teacher" value=1>
+        <label for="professor">Professor</label>
+      </div>
+    </div>
+
+      <button type="submit" class='green-button'>Cadastrar</button>
     </form>
   </div>
+</main>
+  {% endblock conteudo %}
