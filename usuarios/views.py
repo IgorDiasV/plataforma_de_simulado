@@ -5,6 +5,7 @@ from django.http import Http404
 from usuarios.models import Usuario
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 
 def cadastro_view(request):
@@ -31,11 +32,12 @@ def salvar_cadastro(request):
         usuario.set_password(usuario.password)
         usuario.save()
         Usuario.objects.create(user=usuario, is_teacher=POST['is_teacher'])
-        # messages.success(request, 'Your user is created, please log in.')
+        messages.success(request, 'Usuario criado com sucesso')
 
         del (request.session['cadastro_armazenado'])
         return redirect(reverse('home'))
-
+    else:
+        messages.error(request, 'Ocorreu um erro ao tentar criar seu usuario, tente novamente')
     return redirect('usuarios:cadastro')
 
 
@@ -62,7 +64,10 @@ def realizar_login(request):
         if usuario_autenticado is not None:
 
             login(request, usuario_autenticado)
-
+            messages.success(request, "Login realizado com sucesso")
+        else:
+            messages.error(request, 'O nome do usuario ou a senha está incorreta, tente novamente')
+            return redirect('usuarios:login')
     return redirect(reverse('home'))
 
 
