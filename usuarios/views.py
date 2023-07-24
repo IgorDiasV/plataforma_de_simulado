@@ -37,7 +37,9 @@ def salvar_cadastro(request):
         del (request.session['cadastro_armazenado'])
         return redirect(reverse('home'))
     else:
-        messages.error(request, 'Ocorreu um erro ao tentar criar seu usuario, tente novamente')
+        mensagem = ('Ocorreu um erro ao tentar criar '
+                    'seu usuario, tente novamente')
+        messages.error(request, mensagem)
     return redirect('usuarios:cadastro')
 
 
@@ -66,7 +68,9 @@ def realizar_login(request):
             login(request, usuario_autenticado)
             messages.success(request, "Login realizado com sucesso")
         else:
-            messages.error(request, 'O nome do usuario ou a senha está incorreta, tente novamente')
+            messagem = ('O nome do usuario ou a senha está' 
+                        'incorreta, tente novamente')
+            messages.error(request, messagem)
             return redirect('usuarios:login')
     return redirect(reverse('home'))
 

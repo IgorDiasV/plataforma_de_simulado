@@ -5,6 +5,7 @@ import json
 from random import sample
 from django.contrib.auth.decorators import login_required
 from usuarios.models import Usuario
+from django.contrib import messages
 
 
 def home(request):
@@ -85,13 +86,12 @@ def cadastrar_questao(request):
     else:
         mensagem = ('Seu perfil é de aluno, '
                     'Apenas professores podem cadastrar questões')
-        return render(request, 'global/pagina_de_erro.html', 
-                      {'mensagem': mensagem})       
+        messages.error(request, mensagem)
+        return redirect('home')
 
 
 @login_required(login_url='usuarios:login', redirect_field_name='next')
 def editar_questao(request, questao_id):
-    
     questao = get_object_or_404(Questao, id=questao_id)
 
     if request.method == 'POST':
@@ -106,10 +106,8 @@ def editar_questao(request, questao_id):
         questao.alternativa_correta = dados['alternativa_correta']
 
         questao.save()
-        
         return HttpResponse('1')
-            
-    return render(request, 'pagina_principal/editar_questao.html', 
+    return render(request, 'pagina_principal/editar_questao.html',
                   {'questao': questao})
 
 
@@ -120,7 +118,6 @@ def criar_simulado(request):
     # TODO verificar se a quantiade de questões disponiveis é suficiente
     # para criar o simulado ex: foi pedido para criar um simulado
     # com 10 questões, mas só tem 5 questões cadastradas
-    
     usuario = Usuario.objects.filter(user=request.user).first()
     if usuario.is_teacher:
         assuntos = Assunto.objects.all()
@@ -130,29 +127,27 @@ def criar_simulado(request):
             titulo = request.POST['titulo']
             assuntos_ids = request.POST.getlist('assuntos')
             qtd_questoes = int(request.POST['qtd_questoes'])
-            
+
             if len(assuntos_ids) != 0:
                 questoes = questoes.filter(assuntos__id__in=assuntos_ids).distinct()  # noqa: E501
-            
+
             indices_para_sorteio = list(range(0, len(questoes)))
             indices_escolhidos = sample(indices_para_sorteio, qtd_questoes)
             simulado = Simulado.objects.create(titulo=titulo, autor=usuario)
             for indice in indices_escolhidos:
                 simulado.questoes.add(questoes[indice])
             return redirect('lista_simulados')
-        return render(request, 'pagina_principal/criar_simulado.html', 
+        return render(request, 'pagina_principal/criar_simulado.html',
                       {'assuntos': assuntos})
     else:
         mensagem = ('Seu perfil é de aluno, '
                     'Apenas professores podem criar simulados')
-        
-        return render(request, 'global/pagina_de_erro.html', 
-                      {'mensagem': mensagem})
+        messages.error(request, mensagem)
+        return redirect('home')
 
 
 @login_required(login_url='usuarios:login', redirect_field_name='next')
 def criar_simulado_manualmente(request):
-    
     usuario = Usuario.objects.filter(user=request.user).first()
     if usuario.is_teacher:
         questoes = Questao.objects.all()
@@ -169,14 +164,11 @@ def criar_simulado_manualmente(request):
     else:
         mensagem = ('Seu perfil é de aluno, '
                     'Apenas professores podem criar simulados')
-        
-        return render(request, 'global/pagina_de_erro.html', 
-                      {'mensagem': mensagem})
+        messages.error(request, mensagem)
+        return redirect('home')
 
 
 def lista_simulados(request):
     simulados = Simulado.objects.all()
     return render(request, 'pagina_principal/lista_simulados.html',
                   {'simulados': simulados})
-
-
