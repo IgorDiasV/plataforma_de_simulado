@@ -36,6 +36,10 @@ header h1 {
   width: 120px;
 }
 
+.profile-menu a{
+  text-decoration: none;
+  color: #333;
+}
 .profile-menu ul {
   list-style: none;
   margin: 0;
@@ -44,22 +48,21 @@ header h1 {
 
 .profile-menu li {
   padding: 8px;
+  font-size: 12px;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .profile-menu button {
-  text-decoration: none;
-  color: #333;
-  font-size: 12px;
+  
+
   border:none;
   background-color: #fff;
   padding: 10px ;
-  
-}
-
-.profile-menu button:hover {
-  background-color: #f0f0f0;
+  color: #333;
   cursor: pointer;
   
 }
+
 
 

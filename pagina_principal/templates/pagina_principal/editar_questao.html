@@ -103,13 +103,16 @@
         quill_alternativa_c.root.innerHTML = '{{questao.alternativa_c | safe  }}'
         quill_alternativa_d.root.innerHTML = '{{questao.alternativa_d | safe  }}'
         quill_alternativa_e.root.innerHTML = '{{questao.alternativa_e | safe  }}'
-    
-        tipo_questao = document.getElementById('tipo_questao')
-        tipo_questao.value = '{{questao.tipo_questao}}'
 
-        tipo_questao = document.getElementById('alternativa_correta')
-        tipo_questao.value = '{{questao.alternativa_correta}}'
 
+        let select_alternativa_correta = document.getElementById('alternativa_correta')
+        for (let i=0; i<select_alternativa_correta.options.length; i++)
+        {
+            if(select_alternativa_correta.options[i].value == "{{questao.alternativa_correta}}")
+            {
+                select_alternativa_correta.options[i].selected = true;
+            }
+        }
         function return_html()
         {
             return quill_questao.root.innerHTML
@@ -128,8 +131,6 @@
 
             var nome_curso = document.getElementById('nome_curso').value
 
-            var tipo_questao = document.getElementById('tipo_questao').value
-            var n_questao = document.getElementById('n_questao').value
             var alternativa_correta = document.getElementById('alternativa_correta').value
             
             const configuracao  = {
@@ -139,9 +140,7 @@
                 },
                 body: JSON.stringify({
                                        'pergunta':pergunta,
-                                       'nome_curso':nome_curso,
-                                       'tipo_questao':tipo_questao,
-                                       'n_questao':n_questao,
+                                       'nome_curso':nome_curso,                                       
                                        'alternativa_a':alternativa_a,
                                        'alternativa_b':alternativa_b,
                                        'alternativa_c':alternativa_c,

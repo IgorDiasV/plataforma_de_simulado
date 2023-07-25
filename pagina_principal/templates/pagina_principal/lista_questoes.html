@@ -28,7 +28,9 @@
         <hr>
         <br>
         <div class='div_questao'>
-            <a href="{% url 'editar_questao' questao.id %}"><button>Editar</button></a> </br>
+            {% if editavel %}
+                <a href="{% url 'editar_questao' questao.id %}"><button>Editar</button></a> </br>
+            {% endif %}
             {{questao.pergunta | safe}}
             </br>
 
@@ -38,6 +40,11 @@
             <p class='visualizar_alternativa'>d) {{questao.alternativa_d | safe}}</p> </br>
             <p class='visualizar_alternativa'>e) {{questao.alternativa_e | safe}}</p> </br>
         </div>
+        {% empty%}
+        <div class='container_center'>
+            <h2>Não foi encontrado questões para serem exibidas</h2>
+        </div>
         {% endfor %}
+        
     </div>
   {% endblock conteudo %}

@@ -25,6 +25,22 @@ def lista_questoes(request):
                   {'questoes': questoes, 'assuntos': assuntos})
 
 
+@login_required(login_url='usuarios:login', redirect_field_name='next')
+def lista_questoes_usuario(request):
+    assuntos = Assunto.objects.all()
+    usuario = Usuario.objects.filter(user=request.user).first()
+    questoes = Questao.objects.filter(autor=usuario)
+
+    if request.method == 'POST':
+        assuntos_ids = request.POST.getlist('assuntos')
+        if len(assuntos_ids) != 0:
+            questoes = questoes.filter(assuntos__id__in=assuntos_ids)
+
+    return render(request, 'pagina_principal/lista_questoes.html',
+                  {'questoes': questoes, 'assuntos': assuntos,
+                   'editavel': True})
+
+
 def simulado(request, simulado_id):
 
     simulado = get_object_or_404(Simulado, id=simulado_id)
@@ -93,22 +109,28 @@ def cadastrar_questao(request):
 @login_required(login_url='usuarios:login', redirect_field_name='next')
 def editar_questao(request, questao_id):
     questao = get_object_or_404(Questao, id=questao_id)
+    usuario = Usuario.objects.filter(user=request.user).first()
 
-    if request.method == 'POST':
-        dados = json.loads(request.body)
-        questao.pergunta = dados['pergunta']
-        questao.curso = dados['nome_curso']
-        questao.alternativa_a = dados['alternativa_a']
-        questao.alternativa_b = dados['alternativa_b']
-        questao.alternativa_c = dados['alternativa_c']
-        questao.alternativa_d = dados['alternativa_d']
-        questao.alternativa_e = dados['alternativa_e']
-        questao.alternativa_correta = dados['alternativa_correta']
+    if questao.autor == usuario:
+        if request.method == 'POST':
+            dados = json.loads(request.body)
+            questao.pergunta = dados['pergunta']
+            questao.curso = dados['nome_curso']
+            questao.alternativa_a = dados['alternativa_a']
+            questao.alternativa_b = dados['alternativa_b']
+            questao.alternativa_c = dados['alternativa_c']
+            questao.alternativa_d = dados['alternativa_d']
+            questao.alternativa_e = dados['alternativa_e']
+            questao.alternativa_correta = dados['alternativa_correta']
 
-        questao.save()
-        return HttpResponse('1')
-    return render(request, 'pagina_principal/editar_questao.html',
-                  {'questao': questao})
+            questao.save()
+            return HttpResponse('1')
+        return render(request, 'pagina_principal/editar_questao.html',
+                      {'questao': questao})
+    else:
+        mensagem = ('Apenas o autor dessa questão pode altera-la')
+        messages.error(request, mensagem)
+        return redirect('home')
 
 
 @login_required(login_url='usuarios:login', redirect_field_name='next')

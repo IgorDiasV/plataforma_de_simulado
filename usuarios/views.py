@@ -68,7 +68,7 @@ def realizar_login(request):
             login(request, usuario_autenticado)
             messages.success(request, "Login realizado com sucesso")
         else:
-            messagem = ('O nome do usuario ou a senha está' 
+            messagem = ('O nome do usuario ou a senha está '
                         'incorreta, tente novamente')
             messages.error(request, messagem)
             return redirect('usuarios:login')

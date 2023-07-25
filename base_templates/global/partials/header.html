@@ -7,6 +7,9 @@
         <i class="fas fa-user"></i>
         <div class="profile-menu" id="profileMenu">
             <ul>
+                <li>
+                    <a href="{%url 'lista_questoes_usuario'%}">Minhas Questões</a>
+                </li>
                 <li><form action="{% url 'usuarios:logout' %}" method='POST'>
                     {% csrf_token %}
                     <input type="hidden" name="username" value="{{ request.user.username }}">
