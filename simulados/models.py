@@ -22,6 +22,9 @@ class SimuladoCompartilhado(models.Model):
     simulado = models.OneToOneField(Simulado, on_delete=models.CASCADE)
     link = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
 
+    def __str__(self) -> str:
+        return f"compartilhado o simulado ({self.simulado.titulo})"
+
 
 class RespostaSimulado(models.Model):
     id = models.AutoField(primary_key=True)
