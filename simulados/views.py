@@ -35,8 +35,10 @@ def responder_simulado(request):
         return HttpResponse(json.dumps({'resultado': resposta}))
 
 
+@login_required(login_url='usuarios:login', redirect_field_name='next')
 def lista_simulados(request):
-    simulados = Simulado.objects.all()
+    usuario = Usuario.objects.filter(user=request.user).first()
+    simulados = Simulado.objects.filter(autor=usuario)
     return render(request, 'simulados/lista_simulados.html',
                   {'simulados': simulados})
 
