@@ -3,7 +3,9 @@ from . import views
 
 app_name = 'simulados'
 urlpatterns = [
-    path('simulado/<int:simulado_id>', views.simulado, name='simulado'),
+    path('simulado/', views.simulado, name='simulado'),
+    path('simulado/responder_simulado',
+         views.responder_simulado, name='responder_simulado'),
     path('lista_simulado/', views.lista_simulados, name='lista_simulados'),
     path('criar_simulado/', views.criar_simulado, name='criar_simulado'),
     path('criar_simulado_manualmente/',

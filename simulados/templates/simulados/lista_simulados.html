@@ -3,9 +3,16 @@
 
 
 {% block conteudo %}
-    <div class="simulados">
-        {% for simulado in simulados%}
-            <a href="{% url 'simulados:simulado' simulado.id %}">{{simulado.titulo}}</a></br>
-        {% endfor%}
-    </div>
+    <main class="container">
+        <div class="simulados">
+            
+            {% for simulado in simulados%}           
+                <form method='POST' action="{% url 'simulados:simulado' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="simulado_id" value="{{ simulado.id }}">
+                    <button type="submit"> {{ simulado.titulo }} </button>
+                </form>
+            {% endfor%}
+        </div>
+    </main>
 {% endblock conteudo %}

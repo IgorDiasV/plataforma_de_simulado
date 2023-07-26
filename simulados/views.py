@@ -9,10 +9,16 @@ from usuarios.models import Usuario
 from django.contrib import messages
 
 
-def simulado(request, simulado_id):
-
+def simulado(request):
+    simulado_id = request.POST['simulado_id']
     simulado = get_object_or_404(Simulado, id=simulado_id)
     questoes = simulado.questoes.all()
+
+    return render(request, 'simulados/simulado.html',
+                  {'questoes': questoes, 'simulado': simulado})
+
+
+def responder_simulado(request):
     if request.method == 'POST':
         dados = json.loads(request.body)
         resposta = []
@@ -28,8 +34,11 @@ def simulado(request, simulado_id):
                                  'id_questao': dados[questao]['id_questao']})
         return HttpResponse(json.dumps({'resultado': resposta}))
 
-    return render(request, 'simulados/simulado.html',
-                  {'questoes': questoes, 'simulado': simulado})
+
+def lista_simulados(request):
+    simulados = Simulado.objects.all()
+    return render(request, 'simulados/lista_simulados.html',
+                  {'simulados': simulados})
 
 
 @login_required(login_url='usuarios:login', redirect_field_name='next')
@@ -87,9 +96,3 @@ def criar_simulado_manualmente(request):
                     'Apenas professores podem criar simulados')
         messages.error(request, mensagem)
         return redirect('home')
-
-
-def lista_simulados(request):
-    simulados = Simulado.objects.all()
-    return render(request, 'simulados/lista_simulados.html',
-                  {'simulados': simulados})
