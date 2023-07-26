@@ -1,18 +1,75 @@
 {% extends 'global/pages/base.html' %}
+{% load static %}
 {% block titulo %}Lista de Simulados{% endblock titulo %}
+{% block css %}<link href="{% static 'simulados/css/lista_simulados.css'%}" rel='stylesheet'>{% endblock css %}
 
+{% block script %}
+    <script>
+        async function gerar_link(id_simulado)
+        {
+            
+            
+                var csrf_token = document.querySelector('[name=csrfmiddlewaretoken]').value
+                const configuracao = {
+                    method : 'POST',
+                    headers:{
+                        "Content-Type":'application/json',
+                        'X-CSRFToken': csrf_token
+                },
+                  body: JSON.stringify({'id_simulado':id_simulado})
+                }
+                
+                const reposta = await fetch("{% url 'simulados:gerar_link'%}",configuracao)
+                const link = await reposta.json()
+                                         
+                var inputLink = document.getElementById('link'+id_simulado)
+                inputLink.setAttribute("value", link.link);
+                inputLink.style.display = 'inline-block'
+
+                var botaoGerar = document.getElementById('botaoGerar'+id_simulado)
+                botaoGerar.remove()
+                var botaoCopiar = document.getElementById('botaoCopiar'+id_simulado)
+                botaoCopiar.style.display = 'block'
+          
+        }
+
+        function copiarLink(id_simulado) {
+            let textoCopiado = document.getElementById(id_simulado);
+            textoCopiado.select();
+            document.execCommand("copy");
+        }
+    </script>
+{% endblock script %}
 
 {% block conteudo %}
     <main class="container">
         <div class="simulados">
-            
+           
             {% for simulado in simulados%}           
+                
                 <form method='POST' action="{% url 'simulados:simulado' %}">
                     {% csrf_token %}
-                    <input type="hidden" name="simulado_id" value="{{ simulado.id }}">
-                    <button type="submit"> {{ simulado.titulo }} </button>
+                    <div class='container_simulado'>
+                        <h2 > {{simulado.simulado.titulo}}</h2>
+                        <input type="hidden" name="simulado_id" value="{{ simulado.simulado.id }}">
+                        
+                        {% if simulado.link %}
+                            <input type="text"  id="link{{simulado.simulado.id}}" placeholder="Digite alguma coisa" value="{{simulado.link}}" readonly/>
+                            <button type='button' id="botaoCopiar{{simulado.simulado.id}}" onclick="copiarLink('link{{simulado.simulado.id}}')" class="green-button"> Copiar Link</button>
+                        {% else %}
+                            <input type="text" style='display: none' id="link{{simulado.simulado.id}}" placeholder="Digite alguma coisa" value="" readonly/>
+                            <button style='display: none' type='button' onclick="copiarLink('link{{simulado.simulado.id}}')"  id="botaoCopiar{{simulado.simulado.id}}" class="green-button"> Copiar Link</button>
+                            <button type='button' id="botaoGerar{{simulado.simulado.id}}" onclick="gerar_link({{simulado.simulado.id}})" class="green-button"> Gerar Link</button>
+                        {% endif %}
+                        
+                       
+                        <button class="green-button" type="submit"> Visualizar</button>
+
+                    </div>
                 </form>
             {% endfor%}
         </div>
     </main>
+
+    
 {% endblock conteudo %}

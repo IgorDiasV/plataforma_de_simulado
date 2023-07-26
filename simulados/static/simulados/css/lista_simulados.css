@@ -1,0 +1,16 @@
+.container_simulado{
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    
+}
+
+.container_simulado h2 {
+    flex: 1;
+}
+.container_simulado button{
+    margin-left: 5px;
+}
