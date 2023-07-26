@@ -29,15 +29,3 @@ class Questao(models.Model):
 
     def __str__(self):
         return str(self.id)
-
-
-class Simulado(models.Model):
-    id = models.AutoField(primary_key=True)
-    titulo = models.CharField(max_length=300)
-    questoes = models.ManyToManyField(Questao)
-    autor = models.ForeignKey(
-        Usuario, on_delete=models.SET_NULL, null=True
-    )
-
-    def __str__(self):
-        return self.titulo

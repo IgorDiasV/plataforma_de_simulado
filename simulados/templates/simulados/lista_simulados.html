@@ -5,7 +5,7 @@
 {% block conteudo %}
     <div class="simulados">
         {% for simulado in simulados%}
-            <a href="{% url 'simulado' simulado.id %}">{{simulado.titulo}}</a></br>
+            <a href="{% url 'simulados:simulado' simulado.id %}">{{simulado.titulo}}</a></br>
         {% endfor%}
     </div>
 {% endblock conteudo %}

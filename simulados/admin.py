@@ -1,3 +1,6 @@
 from django.contrib import admin
+from .models import Simulado
 
-# Register your models here.
+
+admin.site.register(Simulado)
+

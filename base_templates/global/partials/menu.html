@@ -2,8 +2,8 @@
     <ul><li><a href="{% url 'home' %}">Inicio</a></li>
         <li><a href="{% url 'cadastrar_questao' %}">Cadastrar Questão</a></li>
         <li><a href="{%url 'lista_questoes' %}">Listar Questões</a></li>
-        <li><a href="{% url 'lista_simulados' %}">Lista Simulados</a></li>
-        <li><a href="{%url 'criar_simulado' %}">Criar Simulado</a></li>
-        <li><a href="{%url 'criar_simulado_manualmente' %}">Criar Simulado Manualmente</a></li>
+        <li><a href="{% url 'simulados:lista_simulados' %}">Lista Simulados</a></li>
+        <li><a href="{%url 'simulados:criar_simulado' %}">Criar Simulado</a></li>
+        <li><a href="{%url 'simulados:criar_simulado_manualmente' %}">Criar Simulado Manualmente</a></li>
     </ul>
 </nav>
