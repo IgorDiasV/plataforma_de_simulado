@@ -4,7 +4,7 @@
   <link href="{% static 'simulados/css/simulado.css' %}" rel='stylesheet'>
 {% endblock css %}
 {% block conteudo %}
-  <main class="container">
+
     {% csrf_token %}
     {% for questao in questoes%}
       <div class="question">
@@ -35,7 +35,7 @@
         </div>
       {% endfor %}
       <button onclick='enviar_resposta()' class='green-button'>ENVIAR</button>
-    </main>
+      
     <script>
         async function enviar_resposta(){
             let respostas = obter_respostas()
@@ -46,10 +46,10 @@
                     "Content-Type":'application/json',
                     'X-CSRFToken': csrf_token
             },
-              body: JSON.stringify(respostas)
+              body: JSON.stringify({"link":"{{link}}", "questoes": respostas})
             }
             
-            const reposta = await fetch("{% url 'simulados:responder_simulado'%}",configuracao)
+            const reposta = await fetch("{% url 'simulados:resposta_do_simulado'  %}",configuracao)
             const dados = await reposta.json()
 
             
@@ -77,7 +77,6 @@
             var questoes = document.querySelectorAll('.question');
 
             var respostas = {};
-            
             questoes.forEach(function(questao) {
               var inputMarcado = questao.querySelector('input:checked');
               if (inputMarcado) {

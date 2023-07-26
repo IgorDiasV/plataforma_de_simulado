@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from pagina_principal.models import Questao, Assunto
 from .models import Simulado, SimuladoCompartilhado
+from .models import RespostaSimulado, RespostaQuestaoSimulado
 import json
 from random import sample
 from django.contrib.auth.decorators import login_required
@@ -27,9 +28,10 @@ def gerar_link(request):
         simulado = Simulado.objects.filter(id=id_simulado).first()
         simulado_compartilhado = SimuladoCompartilhado.objects.create(simulado=simulado)  # noqa: E501
         link = str(simulado_compartilhado.link)
+        print(reverse('simulados:responder_simulado'))
         link = (f"{request.scheme}://"
                 f"{request.get_host()}"
-                f"{request.get_full_path()}"
+                f"{reverse('simulados:responder_simulado')}"
                 f"{link}"
                 )
         link = str(link)
@@ -39,21 +41,40 @@ def gerar_link(request):
         return Http404()
 
 
-def responder_simulado(request):
-    if request.method == 'POST':
-        dados = json.loads(request.body)
-        resposta = []
-        for questao in dados:
-            dados_questao = get_object_or_404(Questao,
-                                              id=dados[questao]['id_questao'])
+@login_required(login_url='usuarios:login', redirect_field_name='next')
+def responder_simulado(request, simulado_link):
+    simulado = get_object_or_404(SimuladoCompartilhado,
+                                 link=simulado_link).simulado
+    questoes = simulado.questoes.all()
 
-            if dados_questao.alternativa_correta == dados[questao]['resposta']:
-                resposta.append({'status': 'Resposta Correta',
-                                 'id_questao': dados[questao]['id_questao']})
-            else:
-                resposta.append({'status': 'Resposta Errada',
-                                 'id_questao': dados[questao]['id_questao']})
-        return HttpResponse(json.dumps({'resultado': resposta}))
+    return render(request, 'simulados/simulado.html',
+                  {'questoes': questoes,
+                   'simulado': simulado,
+                   'link': simulado_link})
+
+
+@login_required(login_url='usuarios:login', redirect_field_name='next')
+def resposta_do_simulado(request):
+    dados = json.loads(request.body)
+    link = dados['link']
+    dados_questoes = dados['questoes']
+    simulado_compartilhado = get_object_or_404(SimuladoCompartilhado,
+                                               link=link)
+
+    usuario = Usuario.objects.filter(user=request.user).first()
+    resposta_simulado = RespostaSimulado.objects.create(
+                                    simulado_respondido=simulado_compartilhado,
+                                    usuario=usuario
+                                    )
+    for dado_questao in dados_questoes:
+        id_questao = int(dados_questoes[dado_questao]['id_questao'])
+        questao = get_object_or_404(Questao, id=id_questao)
+        resposta = dados_questoes[dado_questao]['resposta']
+        RespostaQuestaoSimulado.objects.create(resposta_simulado=resposta_simulado,  # noqa: E501
+                                               questao=questao,
+                                               resposta=resposta)
+
+    return HttpResponse('1')
 
 
 @login_required(login_url='usuarios:login', redirect_field_name='next')
@@ -61,20 +82,20 @@ def lista_simulados(request):
     usuario = Usuario.objects.filter(user=request.user).first()
     simulados = Simulado.objects.filter(autor=usuario)
     simulados_e_link = []
+
     for simulado in simulados:
-        simulado_compartilhado = SimuladoCompartilhado.objects.filter(simulado=simulado).first()
-        aux={}
+        simulado_compartilhado = SimuladoCompartilhado.objects.filter(simulado=simulado).first()   # noqa: E501
+        aux = {}
         aux['simulado'] = simulado
+
         if simulado_compartilhado is not None:
             link = simulado_compartilhado.link
             url_completa = (f"{request.scheme}://"
                             f"{request.get_host()}"
-                            f"{request.get_full_path()}"
-                            f"{link}"
+                            f"{reverse('simulados:responder_simulado', args=[link])}"  # noqa: E501
                             )
             aux['link'] = url_completa
         simulados_e_link.append(aux)
-
     return render(request, 'simulados/lista_simulados.html',
                   {'simulados': simulados_e_link})
 
