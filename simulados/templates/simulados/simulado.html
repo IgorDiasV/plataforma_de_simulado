@@ -49,7 +49,7 @@
               body: JSON.stringify({"link":"{{link}}", "questoes": respostas})
             }
             
-            const reposta = await fetch("{% url 'simulados:resposta_do_simulado'  %}",configuracao)
+            const reposta = await fetch("{% url 'simulados:salvar_resposta'  %}",configuracao)
             const dados = await reposta.json()
 
             

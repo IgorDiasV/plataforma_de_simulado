@@ -1,0 +1,11 @@
+{% extends 'global/pages/base.html' %}
+
+{% block conteudo %}
+<p> Alunos que responderam: </p>
+{% for aluno in alunos %}
+    <p><a href="#">{{aluno.nome}}</a></p>
+{% empty%}
+<p>Esse simulado nao teve nenhuma resposta até o momento</p>
+{% endfor %}
+{% endblock conteudo %}
+

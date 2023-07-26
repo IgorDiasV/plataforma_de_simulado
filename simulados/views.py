@@ -28,14 +28,11 @@ def gerar_link(request):
         simulado = Simulado.objects.filter(id=id_simulado).first()
         simulado_compartilhado = SimuladoCompartilhado.objects.create(simulado=simulado)  # noqa: E501
         link = str(simulado_compartilhado.link)
-        print(reverse('simulados:responder_simulado'))
         link = (f"{request.scheme}://"
                 f"{request.get_host()}"
-                f"{reverse('simulados:responder_simulado')}"
-                f"{link}"
+                f"{reverse('simulados:responder_simulado', args=[link])}"
                 )
         link = str(link)
-        print(link)
         return HttpResponse(json.dumps({'link': link}))
     else:
         return Http404()
@@ -54,7 +51,7 @@ def responder_simulado(request, simulado_link):
 
 
 @login_required(login_url='usuarios:login', redirect_field_name='next')
-def resposta_do_simulado(request):
+def salvar_resposta(request):
     dados = json.loads(request.body)
     link = dados['link']
     dados_questoes = dados['questoes']
@@ -75,6 +72,22 @@ def resposta_do_simulado(request):
                                                resposta=resposta)
 
     return HttpResponse('1')
+
+
+@login_required(login_url='usuarios:login', redirect_field_name='next')
+def respostas_do_simulado(request):
+    if request.method == 'POST':
+        id_simulado = request.POST['id_simulado']
+        respostas = RespostaSimulado.objects.filter(simulado_respondido__simulado__id=id_simulado)   # noqa: E501
+        alunos_que_responderam = []
+        for resposta in respostas:
+            alunos_que_responderam.append({'id_resposta': resposta.id,
+                                           'nome': resposta.usuario.user.first_name})   # noqa: E501
+
+        return render(request, 'simulados/respostas_do_simulado.html',
+                      {'alunos': alunos_que_responderam})
+    else:
+        return Http404()
 
 
 @login_required(login_url='usuarios:login', redirect_field_name='next')

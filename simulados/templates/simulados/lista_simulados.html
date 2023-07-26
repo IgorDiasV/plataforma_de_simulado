@@ -20,8 +20,7 @@
                 }
                 
                 const reposta = await fetch("{% url 'simulados:gerar_link'%}",configuracao)
-                const link = await reposta.json()
-                                         
+                const link = await reposta.json()                       
                 var inputLink = document.getElementById('link'+id_simulado)
                 inputLink.setAttribute("value", link.link);
                 inputLink.style.display = 'inline-block'
@@ -47,12 +46,11 @@
            
             {% for simulado in simulados%}           
                 
-                <form method='POST' action="{% url 'simulados:simulado' %}">
-                    {% csrf_token %}
+
                     <div class='container_simulado'>
+
                         <h2 > {{simulado.simulado.titulo}}</h2>
-                        <input type="hidden" name="simulado_id" value="{{ simulado.simulado.id }}">
-                        
+                                                
                         {% if simulado.link %}
                             <input type="text"  id="link{{simulado.simulado.id}}" placeholder="Digite alguma coisa" value="{{simulado.link}}" readonly/>
                             <button type='button' id="botaoCopiar{{simulado.simulado.id}}" onclick="copiarLink('link{{simulado.simulado.id}}')" class="green-button"> Copiar Link</button>
@@ -62,11 +60,18 @@
                             <button type='button' id="botaoGerar{{simulado.simulado.id}}" onclick="gerar_link({{simulado.simulado.id}})" class="green-button"> Gerar Link</button>
                         {% endif %}
                         
-                       
-                        <button class="green-button" type="submit"> Visualizar</button>
-
+                        <form method='POST' action="{% url 'simulados:simulado' %}">
+                            {% csrf_token %} 
+                            <input type="hidden" name="simulado_id" value="{{ simulado.simulado.id }}"> 
+                            <button class="green-button" type="submit"> Visualizar Simulado</button>
+                        </form>
+                        <form method='POST' action="{% url 'simulados:respostas_do_simulado' %}">
+                            {% csrf_token %} 
+                            <input type="hidden" name="id_simulado" value="{{ simulado.simulado.id }}"> 
+                            <button class="green-button" type="submit"> Visualizar Respostas</button>
+                        </form>
                     </div>
-                </form>
+                
             {% endfor%}
         </div>
     </main>
