@@ -1,11 +1,18 @@
 {% extends 'global/pages/base.html' %}
 
 {% block conteudo %}
-<p> Alunos que responderam: </p>
-{% for aluno in alunos %}
-    <p><a href="#">{{aluno.nome}}</a></p>
-{% empty%}
-<p>Esse simulado nao teve nenhuma resposta até o momento</p>
-{% endfor %}
+<main class="container">
+    <p> Alunos que responderam: </p>
+    {% for aluno in alunos %}
+        <form action="{% url 'simulados:resposta_aluno'%}" method='POST'>
+            {% csrf_token %}
+            <input type="hidden" name='id_resposta' value={{aluno.id_resposta}}>
+            <button class='plain-button' type='submit'>{{aluno.nome}}</button>
+        </form>    
+
+    {% empty%}
+    <p>Esse simulado nao teve nenhuma resposta até o momento</p>
+    {% endfor %}
+</main>
 {% endblock conteudo %}
 

@@ -91,6 +91,29 @@ def respostas_do_simulado(request):
 
 
 @login_required(login_url='usuarios:login', redirect_field_name='next')
+def resposta_aluno(request):
+    if request.method == 'POST':
+        id = request.POST['id_resposta']
+        respostas_questoes = RespostaQuestaoSimulado.objects.filter(resposta_simulado__id=id)  # noqa: E501
+
+        dados_questao = []
+
+        for resposta_questao in respostas_questoes:
+
+            classe = "wrong_answer"
+            if resposta_questao.resposta == resposta_questao.questao.alternativa_correta:  # noqa: E501
+                classe = "right_answer"
+
+            dados_questao.append({'questao': resposta_questao.questao,
+                                  f'classe_alternativa_{resposta_questao.resposta.lower()}': classe})   # noqa: E501
+
+        return render(request, 'simulados/exibir_resultado.html',
+                      {'dados_questoes': dados_questao})
+    else:
+        return Http404()
+
+
+@login_required(login_url='usuarios:login', redirect_field_name='next')
 def lista_simulados(request):
     usuario = Usuario.objects.filter(user=request.user).first()
     simulados = Simulado.objects.filter(autor=usuario)

@@ -14,5 +14,6 @@ urlpatterns = [
     path('lista_simulado/', views.lista_simulados, name='lista_simulados'),
     path('criar_simulado/', views.criar_simulado, name='criar_simulado'),
     path('criar_simulado_manualmente/',
-         views.criar_simulado_manualmente, name='criar_simulado_manualmente')
+         views.criar_simulado_manualmente, name='criar_simulado_manualmente'),
+    path('resposta_aluno/', views.resposta_aluno, name='resposta_aluno')
 ]

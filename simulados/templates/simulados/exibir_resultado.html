@@ -1,0 +1,41 @@
+{% extends 'global/pages/base.html' %}
+{% load static %}
+{% block css %}
+  <link href="{% static 'simulados/css/simulado.css' %}" rel='stylesheet'>
+{% endblock css %}
+{% block conteudo %}
+
+    {% csrf_token %}
+    
+    <main class='container'>
+        
+        {% for dados in dados_questoes %}
+        
+        <div class="question">
+            <h3>Questão {{forloop.counter}}:</h3>
+            <p>{{dados.questao.pergunta | safe}}</p>
+            <div class="option">
+                <label  class="option-label {{dados.classe_alternativa_a}}">A) {{dados.questao.alternativa_a | safe}}</label>
+            </div>
+        
+            <div class="option">
+                <label  class="option-label {{dados.classe_alternativa_b}}">B) {{dados.questao.alternativa_b | safe}}</label>
+            </div>
+        
+            <div class="option">
+                <label  class="option-label {{dados.classe_alternativa_c}}">C) {{dados.questao.alternativa_c | safe}}</label>
+            </div>
+            <div class="option">
+                <label class="option-label {{dados.classe_alternativa_d}}">D) {{dados.questao.alternativa_d | safe}}</label>
+                </div>
+            <div class="option">
+                <label class="option-label {{dados.classe_alternativa_e}}">E) {{dados.questao.alternativa_e | safe}}</label>
+            </div>
+        </div>
+        {% endfor %}
+        
+    </main>
+ 
+
+
+{% endblock conteudo %}

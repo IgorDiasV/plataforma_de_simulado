@@ -57,3 +57,12 @@ body {
 .message-success {
   background-color: #57BB8A; 
 }
+
+.plain-button{
+  border: 0.5px solid #ccc;
+  background-color: #f0f0f0;
+  padding: 10px ;
+  color: #333;
+  cursor: pointer;
+  margin: 1px;
+}
