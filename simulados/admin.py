@@ -3,4 +3,3 @@ from .models import Simulado
 
 
 admin.site.register(Simulado)
-
