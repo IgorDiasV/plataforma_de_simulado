@@ -24,7 +24,7 @@
                         {% else %}
                             <input type="text" style='display: none' id="link{{simulado.simulado.id}}" placeholder="Digite alguma coisa" value="" readonly/>
                             <button style='display: none' type='button' onclick="copiarLink('link{{simulado.simulado.id}}')"  id="botaoCopiar{{simulado.simulado.id}}" class="green-button"> Copiar Link</button>
-                            <button type='button' id="botaoGerar{{simulado.simulado.id}}" onclick="gerar_link({{simulado.simulado.id}})" class="green-button"> Gerar Link</button>
+                            <button type='button' id="botaoGerar{{simulado.simulado.id}}" onclick="gerar_link({{simulado.simulado.id}}, '{% url 'simulados:gerar_link' %}')" class="green-button"> Gerar Link</button>
                         {% endif %}
                         
                         <form method='POST' action="{% url 'simulados:simulado' %}">

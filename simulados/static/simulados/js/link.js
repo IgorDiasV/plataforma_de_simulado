@@ -1,6 +1,5 @@
-async function gerar_link(id_simulado)
+async function gerar_link(id_simulado, url)
 {
-    
     
         var csrf_token = document.querySelector('[name=csrfmiddlewaretoken]').value
         const configuracao = {
@@ -12,8 +11,9 @@ async function gerar_link(id_simulado)
           body: JSON.stringify({'id_simulado':id_simulado})
         }
         
-        const reposta = await fetch("{% url 'simulados:gerar_link'%}",configuracao)
-        const link = await reposta.json()                       
+        const reposta = await fetch(url,configuracao)
+        const link = await reposta.json()        
+                      
         var inputLink = document.getElementById('link'+id_simulado)
         inputLink.setAttribute("value", link.link);
         inputLink.style.display = 'inline-block'

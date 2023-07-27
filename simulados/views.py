@@ -23,9 +23,13 @@ def simulado(request):
 
 
 def gerar_link(request):
+    print('here')
     if request.method == 'POST':
+
+        print('here')
         dados = json.loads(request.body)
         id_simulado = dados['id_simulado']
+        print(id_simulado)
         simulado = Simulado.objects.filter(id=id_simulado).first()
         simulado_compartilhado = SimuladoCompartilhado.objects.create(simulado=simulado)  # noqa: E501
         link = str(simulado_compartilhado.link)
@@ -34,6 +38,8 @@ def gerar_link(request):
                 f"{reverse('simulados:responder_simulado', args=[link])}"
                 )
         link = str(link)
+        print('chegou ')
+        print(link)
         return HttpResponse(json.dumps({'link': link}))
     else:
         return Http404()
@@ -53,9 +59,17 @@ def responder_simulado(request, simulado_link):
 
 @login_required(login_url='usuarios:login', redirect_field_name='next')
 def salvar_resposta(request):
-    dados = json.loads(request.body)
-    link = dados['link']
-    dados_questoes = dados['questoes']
+    link = ""
+    dados_questoes = []
+    for name, value in request.POST.items():
+        if name == "link":
+            link = value
+        elif name != 'csrfmiddlewaretoken':
+            aux = {}
+            aux['id_questao'] = name
+            aux['resposta'] = value
+            dados_questoes.append(aux)
+    
     simulado_compartilhado = get_object_or_404(SimuladoCompartilhado,
                                                link=link)
 
@@ -65,14 +79,15 @@ def salvar_resposta(request):
                                     usuario=usuario
                                     )
     for dado_questao in dados_questoes:
-        id_questao = int(dados_questoes[dado_questao]['id_questao'])
+        
+        id_questao = int(dado_questao['id_questao'])
         questao = get_object_or_404(Questao, id=id_questao)
-        resposta = dados_questoes[dado_questao]['resposta']
+        resposta = dado_questao['resposta']
         RespostaQuestaoSimulado.objects.create(resposta_simulado=resposta_simulado,  # noqa: E501
                                                questao=questao,
                                                resposta=resposta)
-
-    return HttpResponse('1')
+    messages.success(request, "Respotas Salva")
+    return redirect('home')
 
 
 @login_required(login_url='usuarios:login', redirect_field_name='next')

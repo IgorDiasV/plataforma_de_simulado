@@ -5,93 +5,38 @@
 {% endblock css %}
 {% block conteudo %}
 
-    {% csrf_token %}
-    {% for questao in questoes%}
-      <div class="question">
-          <h3>Questão {{forloop.counter}}:</h3>
-          <p>{{questao.pergunta | safe}}</p>
-          <div class="option">
-            <input type="radio" id="q{{forloop.counter}}-option1" name="q{{forloop.counter}}" class="option-radio" value="A" id_questao={{questao.id}}>
-            <label for="q{{forloop.counter}}-option1" class="option-label">A) {{questao.alternativa_a | safe}}</label>
-          </div>
-      
-          <div class="option">
-            <input type="radio" id="q{{forloop.counter}}-option2" name="q{{forloop.counter}}" class="option-radio" value="B" id_questao={{questao.id}}>
-            <label for="q{{forloop.counter}}-option2" class="option-label">B) {{questao.alternativa_b | safe}}</label>
-          </div>
-      
-          <div class="option">
-            <input type="radio" id="q{{forloop.counter}}-option3" name="q{{forloop.counter}}" class="option-radio" value="C" id_questao={{questao.id}}>
-            <label for="q{{forloop.counter}}-option3" class="option-label">C) {{questao.alternativa_c | safe}}</label>
-          </div>
-          <div class="option">
-              <input type="radio" id="q{{forloop.counter}}-option4" name="q{{forloop.counter}}" class="option-radio" value="D" id_questao={{questao.id}}>
-              <label for="q{{forloop.counter}}-option4" class="option-label">D) {{questao.alternativa_d | safe}}</label>
+    
+    <form action="{% url 'simulados:salvar_resposta'%}" method='POST'>
+        {% csrf_token %}
+        <input type="hidden" name='link' value="{{link}}">
+      {% for questao in questoes%}
+        <div class="question">
+            <h3>Questão {{forloop.counter}}:</h3>
+            <p>{{questao.pergunta | safe}}</p>
+            <div class="option">
+              <input type="radio" id="q{{forloop.counter}}-option1" name="{{questao.id}}" class="option-radio" value="A" id_questao={{questao.id}}>
+              <label for="q{{forloop.counter}}-option1" class="option-label">A) {{questao.alternativa_a | safe}}</label>
+            </div>
+        
+            <div class="option">
+              <input type="radio" id="q{{forloop.counter}}-option2" name="{{questao.id}}" class="option-radio" value="B" id_questao={{questao.id}}>
+              <label for="q{{forloop.counter}}-option2" class="option-label">B) {{questao.alternativa_b | safe}}</label>
+            </div>
+        
+            <div class="option">
+              <input type="radio" id="q{{forloop.counter}}-option3" name="{{questao.id}}" class="option-radio" value="C" id_questao={{questao.id}}>
+              <label for="q{{forloop.counter}}-option3" class="option-label">C) {{questao.alternativa_c | safe}}</label>
             </div>
             <div class="option">
-              <input type="radio" id="q{{forloop.counter}}-option5" name="q{{forloop.counter}}" class="option-radio" value="E" id_questao={{questao.id}}>
-              <label for="q{{forloop.counter}}-option5" class="option-label">E) {{questao.alternativa_e | safe}}</label>
-            </div>
-        </div>
-      {% endfor %}
-      <button onclick='enviar_resposta()' class='green-button'>ENVIAR</button>
-      
-    <script>
-        async function enviar_resposta(){
-            let respostas = obter_respostas()
-            var csrf_token = document.querySelector('[name=csrfmiddlewaretoken]').value
-            const configuracao = {
-                method : 'POST',
-                headers:{
-                    "Content-Type":'application/json',
-                    'X-CSRFToken': csrf_token
-            },
-              body: JSON.stringify({"link":"{{link}}", "questoes": respostas})
-            }
-            
-            const reposta = await fetch("{% url 'simulados:salvar_resposta'  %}",configuracao)
-            const dados = await reposta.json()
-
-            
-            dados['resultado'].forEach(function(questao){
-                query = '[id_questao="' + questao['id_questao'] + '"] '
-                let alternativas = document.querySelectorAll(query)
-                for(let i=0;i<alternativas.length;i++)
-                {
-                  if (alternativas[i].checked)
-                  {
-                     if(questao['status']=='Resposta Correta')
-                     {
-                                            
-                        alternativas[i].labels[0].style.background='green'
-                     }else{
-                        alternativas[i].labels[0].style.background='red'
-                     }
-                  }
-                }
-            })
-            
-        }
-        
-        function obter_respostas(){
-            var questoes = document.querySelectorAll('.question');
-
-            var respostas = {};
-            questoes.forEach(function(questao) {
-              var inputMarcado = questao.querySelector('input:checked');
-              if (inputMarcado) {
-                let aux = {}
-                aux['id_questao'] = inputMarcado.getAttribute('id_questao')
-                aux['resposta'] = inputMarcado.value
-
-                respostas[inputMarcado.name]=aux
-                            
-              }
-            });
-            return respostas
-
-        }
-    </script>
-
-
+                <input type="radio" id="q{{forloop.counter}}-option4" name="{{questao.id}}" class="option-radio" value="D" id_questao={{questao.id}}>
+                <label for="q{{forloop.counter}}-option4" class="option-label">D) {{questao.alternativa_d | safe}}</label>
+              </div>
+              <div class="option">
+                <input type="radio" id="q{{forloop.counter}}-option5" name="{{questao.id}}" class="option-radio" value="E" id_questao={{questao.id}}>
+                <label for="q{{forloop.counter}}-option5" class="option-label">E) {{questao.alternativa_e | safe}}</label>
+              </div>
+          </div>
+        {% endfor %}
+        <button  class='green-button'>ENVIAR</button>
+    </form>
 {% endblock conteudo %}
