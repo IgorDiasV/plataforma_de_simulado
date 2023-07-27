@@ -1,36 +1,19 @@
 {% extends 'global/pages/base.html' %}
+{% load static %}
 {% block css %}
-<style>
-    table {
-        border-collapse: collapse;
-        width: 100%;
-    }
-
-    th,
-    td {
-        border: 1px solid black;
-        padding: 8px;
-        text-align: left;
-    }
-
-    th {
-        background-color: #a0a0a0;
-    }
-    .td-button{
-        text-align: center;
-    }
-</style>
+<link rel="stylesheet" href="{% static 'simulados/css/respostas_do_simulado.css' %}">
 {% endblock css %}
 
 {% block conteudo %}
 <main class="container">
     <h1> Alunos que responderam: </h1>
     {% if alunos %}
-        <table>
+        <table class='respostas_alunos'>
             <thead>
                 <tr>
                     <th>Nome</th>
                     <th>Email</th>
+                    <th class='desempenho'>Desempenho</th>
                     <th></th>
                 </tr>
             </thead>
@@ -39,6 +22,7 @@
             <tr>
                 <td>{{aluno.nome}} </td>
                 <td>{{aluno.email}}</td>
+                <td class='desempenho'>{{aluno.desempenho}}</td>
                 <td class='td-button'>
                     <form action="{% url 'simulados:resposta_aluno'%}" method='POST'>
                         {% csrf_token %}

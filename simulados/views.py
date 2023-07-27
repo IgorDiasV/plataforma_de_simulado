@@ -10,6 +10,7 @@ from usuarios.models import Usuario
 from django.contrib import messages
 from django.http.response import Http404
 from django.urls import reverse
+from utils.utils import qtd_perguntas, qtd_acertos
 
 
 def simulado(request):
@@ -79,13 +80,17 @@ def respostas_do_simulado(request):
     if request.method == 'POST':
         id_simulado = request.POST['id_simulado']
         respostas = RespostaSimulado.objects.filter(simulado_respondido__simulado__id=id_simulado)   # noqa: E501
+        qtd_perguntas_simulado = qtd_perguntas(id_simulado)
         alunos_que_responderam = []
         for resposta in respostas:
+            qtd_acertos_aluno = qtd_acertos(resposta.id)
+            desempenho = f'{qtd_acertos_aluno}/{qtd_perguntas_simulado}'
             nome = f'{resposta.usuario.user.first_name} {resposta.usuario.user.last_name}'   # noqa: E501
             email = resposta.usuario.user.email
             alunos_que_responderam.append({'id_resposta': resposta.id,
                                            'nome': nome,
-                                           'email': email})
+                                           'email': email,
+                                           'desempenho': desempenho})
 
         return render(request, 'simulados/respostas_do_simulado.html',
                       {'alunos': alunos_que_responderam})
