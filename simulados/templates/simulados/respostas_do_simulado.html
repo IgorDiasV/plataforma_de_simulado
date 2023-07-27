@@ -1,18 +1,61 @@
 {% extends 'global/pages/base.html' %}
+{% block css %}
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th,
+    td {
+        border: 1px solid black;
+        padding: 8px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #a0a0a0;
+    }
+    .td-button{
+        text-align: center;
+    }
+</style>
+{% endblock css %}
 
 {% block conteudo %}
 <main class="container">
-    <p> Alunos que responderam: </p>
-    {% for aluno in alunos %}
-        <form action="{% url 'simulados:resposta_aluno'%}" method='POST'>
-            {% csrf_token %}
-            <input type="hidden" name='id_resposta' value={{aluno.id_resposta}}>
-            <button class='plain-button' type='submit'>{{aluno.nome}}</button>
-        </form>    
+    <h1> Alunos que responderam: </h1>
+    {% if alunos %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for aluno in alunos %}
+            <tr>
+                <td>{{aluno.nome}} </td>
+                <td>{{aluno.email}}</td>
+                <td class='td-button'>
+                    <form action="{% url 'simulados:resposta_aluno'%}" method='POST'>
+                        {% csrf_token %}
+                        <input type="hidden" name='id_resposta' value={{aluno.id_resposta}}>
+                        <button class='green-button' type='submit'>Ver Prova</button>
+                    </form>
+                </td>    
+            </tr>
+        {% endfor %}
+        
+        </tbody>
+    </table>
+    {% else %}
+        <p>Esse simulado nao teve nenhuma resposta até o momento</p>
+    {% endif %}
 
-    {% empty%}
-    <p>Esse simulado nao teve nenhuma resposta até o momento</p>
-    {% endfor %}
+    
 </main>
 {% endblock conteudo %}
 

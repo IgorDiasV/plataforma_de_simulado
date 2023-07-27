@@ -81,8 +81,11 @@ def respostas_do_simulado(request):
         respostas = RespostaSimulado.objects.filter(simulado_respondido__simulado__id=id_simulado)   # noqa: E501
         alunos_que_responderam = []
         for resposta in respostas:
+            nome = f'{resposta.usuario.user.first_name} {resposta.usuario.user.last_name}'   # noqa: E501
+            email = resposta.usuario.user.email
             alunos_que_responderam.append({'id_resposta': resposta.id,
-                                           'nome': resposta.usuario.user.first_name})   # noqa: E501
+                                           'nome': nome,
+                                           'email': email})
 
         return render(request, 'simulados/respostas_do_simulado.html',
                       {'alunos': alunos_que_responderam})
