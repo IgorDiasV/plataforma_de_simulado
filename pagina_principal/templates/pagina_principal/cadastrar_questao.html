@@ -10,65 +10,75 @@
 {% block conteudo %}
 
     <div class="container">
+        <form action="{% url 'cadastrar_questao'%}" method='POST' id='form_cadastrar_questao'>
+            {% csrf_token %}
+            
+            <p>Nome do curso:</p>
+            <input id='nome_curso' name='nome_curso' type='text'>
+            </br>
+            <label for="assuntos">Assuntos:</label></br>
+            
+            <select  name="assuntos" id="assuntos" multiple>
+                {% for assunto in assuntos %}
+                <option value="{{ assunto.id }}">{{ assunto.nome_assunto }}</option>
+                {% endfor %}
+            </select>
+            <button type="button" onclick="mostrarInputAssunto()">+</button></br>
+            <input id='input_novo_assunto' style='display:none'/>
+            <button id='botao_novo_assunto'  style='display:none' type="button" onclick="adicionarAssunto()" >adicionar</button>
+            <button id='botao_cancelar'  style='display:none' type="button" onclick="ocultarInput()" >cancelar</button>
+            <p>Pergunta: </p>
+            
+            <div id="editor" class='editor_quill'>
+                    
+            </div>
+            </br>
         
-        {% csrf_token %}
-        
-        <p>Nome do curso:</p>
-        <input id='nome_curso' type='text'>
-        </br>
-        <label for="assuntos">Assuntos:</label></br>
-        <select  name="assuntos" id="assuntos" multiple>
-            {% for assunto in assuntos %}
-            <option value="{{ assunto.id }}">{{ assunto.nome_assunto }}</option>
-            {% endfor %}
-        </select>
-          <button type="button" onclick="mostrarInputAssunto()">+</button></br>
-          <input id='input_novo_assunto' style='display:none'/>
-          <button id='botao_novo_assunto'  style='display:none' type="button" onclick="adicionarAssunto()" >adicionar</button>
-          <button id='botao_cancelar'  style='display:none' type="button" onclick="ocultarInput()" >cancelar</button>
-        <p>Pergunta: </p>
-        
-        <div id="editor" class='editor_quill'>
-                
-        </div>
-        </br>
-    
 
-        <p>Alternativa A</p>
-        <div id="alternativa_a" class='editor_quill'>
+            <p>Alternativa A</p>
+            <div id="alternativa_a" class='editor_quill'>
+            
+            </div>
+            <p>Alternativa B</p>
+            <div id="alternativa_b" class='editor_quill'>
+            
+            </div>
+            <p>Alternativa C</p>
+            <div id="alternativa_c" class='editor_quill'>
+            
+            </div>
+            <p>Alternativa D</p>
+            <div id="alternativa_d" class='editor_quill'>
+            
+            </div>
+            <p>Alternativa E</p>
+            <div id="alternativa_e" class='editor_quill'>
+            
+            </div>
         
-        </div>
-        <p>Alternativa B</p>
-        <div id="alternativa_b" class='editor_quill'>
-        
-        </div>
-        <p>Alternativa C</p>
-        <div id="alternativa_c" class='editor_quill'>
-        
-        </div>
-        <p>Alternativa D</p>
-        <div id="alternativa_d" class='editor_quill'>
-        
-        </div>
-        <p>Alternativa E</p>
-        <div id="alternativa_e" class='editor_quill'>
-        
-        </div>
-        <p>Alternativa Correta</p>
-        <select  id="alternativa_correta">
-            <option value="A">A</option>
-            <option value="B">B</option>
-            <option value="C">C</option>
-            <option value="D">D</option>
-            <option value="E">E</option>
-        </select>
-        
-        <button  class="green-button" onclick="salvar()">Enviar</button>
-        
-        
+            <input type="hidden" name="pergunta" id="input_pergunta">
+            <input type="hidden" name="alternativa_a" id="input_alternativa_a">
+            <input type="hidden" name="alternativa_b" id="input_alternativa_b">
+            <input type="hidden" name="alternativa_c" id="input_alternativa_c">
+            <input type="hidden" name="alternativa_d" id="input_alternativa_d">
+            <input type="hidden" name="alternativa_e" id="input_alternativa_e">
+            <p>Alternativa Correta</p>
+            <select  id="alternativa_correta" name='resposta'>
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+                <option value="D">D</option>
+                <option value="E">E</option>
+            </select>
+            
+            
+        </form>
+
         <br>
-        <hr>
-        <br>
+   
+        <button  class="green-button" onclick='salvar()' >Salvar</button>
+        
+        
 
     </div>
     
@@ -106,53 +116,26 @@
         var quill_alternativa_d = new Quill('#alternativa_d', definicao_quill)
 
         var quill_alternativa_e = new Quill('#alternativa_e', definicao_quill)
-
-
-        function return_html()
-        {
-            console.log(quill_questao.root.innerHTML)
-            return quill_questao.root.innerHTML
-        }
-
-        async function salvar()
-        {
-            var csrf_token = document.querySelector('[name=csrfmiddlewaretoken]').value
+        function salvar()
+        {            
             var pergunta = quill_questao.root.innerHTML
-
             var alternativa_a = quill_alternativa_a.root.innerHTML
             var alternativa_b = quill_alternativa_b.root.innerHTML
             var alternativa_c = quill_alternativa_c.root.innerHTML
             var alternativa_d = quill_alternativa_d.root.innerHTML
             var alternativa_e = quill_alternativa_e.root.innerHTML
-
-            var nome_curso = document.getElementById('nome_curso').value
-
-            var alternativa_correta = document.getElementById('alternativa_correta').value
-
-            var assuntos = get_opcoes_escolhidas('assuntos')
-            const configuracao = {
-                method: 'POST',
-                redirect: 'manual',
-                headers:{
-                    'X-CSRFToken': csrf_token
-                },
-                body: JSON.stringify({
-                                       'pergunta':pergunta,
-                                       'nome_curso':nome_curso,
-                                       'assuntos':assuntos,
-                                       'alternativa_a':alternativa_a,
-                                       'alternativa_b':alternativa_b,
-                                       'alternativa_c':alternativa_c,
-                                       'alternativa_d':alternativa_d,
-                                       'alternativa_e':alternativa_e,
-                                       'alternativa_correta':alternativa_correta,                     
-
-                                    }),
-                
-            }
-            const response = await fetch("{% url 'cadastrar_questao' %}",configuracao)
-            location.href='/'
             
+            
+            document.getElementById('input_pergunta').value = pergunta
+            let value_alternativa = [alternativa_a, alternativa_b, alternativa_c, alternativa_d, alternativa_e]
+            let letras_alternativa = ['a', 'b', 'c', 'd', 'e']
+            
+            for(let i=0;i<letras_alternativa.length; i++){
+                let id_input = 'input_alternativa_' + letras_alternativa[i]
+                document.getElementById(id_input).value = value_alternativa[i]
+            }
+            
+            document.getElementById('form_cadastrar_questao').submit()
         }
     </script>
     {% endblock conteudo %}    

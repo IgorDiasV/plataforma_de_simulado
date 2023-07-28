@@ -42,21 +42,27 @@ def lista_questoes_usuario(request):
 
 @login_required(login_url='usuarios:login', redirect_field_name='next')
 def cadastrar_questao(request):
-
     usuario = Usuario.objects.filter(user=request.user).first()
     if usuario.is_teacher:
         assuntos = Assunto.objects.all()
         if request.method == 'POST':
-            dados = json.loads(request.body)
-            assuntos_ids = dados['assuntos']
-            questao = Questao.objects.create(pergunta=dados['pergunta'],
-                                             curso=dados['nome_curso'],
-                                             alternativa_a=dados['alternativa_a'],  # noqa: E501
-                                             alternativa_b=dados['alternativa_b'],  # noqa: E501
-                                             alternativa_c=dados['alternativa_c'],  # noqa: E501
-                                             alternativa_d=dados['alternativa_d'],  # noqa: E501
-                                             alternativa_e=dados['alternativa_e'],  # noqa: E501
-                                             alternativa_correta=dados['alternativa_correta'],  # noqa: E501
+            nome_curso = request.POST['nome_curso']
+            assuntos_ids = request.POST.getlist('assuntos')
+            pergunta = request.POST['pergunta']
+            alternativa_a = request.POST['alternativa_a']
+            alternativa_b = request.POST['alternativa_b']
+            alternativa_c = request.POST['alternativa_c']
+            alternativa_d = request.POST['alternativa_d']
+            alternativa_e = request.POST['alternativa_e']
+            resposta = request.POST['resposta']
+            questao = Questao.objects.create(pergunta=pergunta,
+                                             curso=nome_curso,
+                                             alternativa_a=alternativa_a,
+                                             alternativa_b=alternativa_b,
+                                             alternativa_c=alternativa_c,
+                                             alternativa_d=alternativa_d,
+                                             alternativa_e=alternativa_e,
+                                             alternativa_correta=resposta,
                                              autor=usuario
                                              )
 
@@ -69,9 +75,12 @@ def cadastrar_questao(request):
                     questao.assuntos.add(assunto_novo)
 
             assuntos_ids = list(map(int, assuntos_ids))
-            assuntos = Assunto.objects.filter(id__in=assuntos_ids)
-            for assunto in assuntos:
+            assuntos_escolhidos = Assunto.objects.filter(id__in=assuntos_ids)
+            for assunto in assuntos_escolhidos:
                 questao.assuntos.add(assunto)
+
+            messages.success(request, "Questão Cadastrada com Sucesso")
+            return redirect('home')
 
         return render(request, 'pagina_principal/cadastrar_questao.html',
                       {'assuntos': assuntos})
