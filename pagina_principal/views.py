@@ -1,7 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
 from .models import Questao, Assunto
-import json
 from django.contrib.auth.decorators import login_required
 from usuarios.models import Usuario
 from django.contrib import messages
@@ -93,25 +91,53 @@ def cadastrar_questao(request):
 
 @login_required(login_url='usuarios:login', redirect_field_name='next')
 def editar_questao(request, questao_id):
+    # TODO
+    # adicionar novos assuntos
+    # remover assuntos
+    # cadastrar novos assuntos
+
     questao = get_object_or_404(Questao, id=questao_id)
     usuario = Usuario.objects.filter(user=request.user).first()
+    assuntos_geral = Assunto.objects.all()
+
+    assuntos_questao = questao.assuntos.all()
+    assuntos = []
+    for assunto in assuntos_geral:
+        aux = {}
+
+        aux['id'] = assunto.id
+        aux['nome_assunto'] = assunto.nome_assunto
+
+        if assunto in assuntos_questao:
+            aux['status'] = 'selected'
+
+        assuntos.append(aux)
 
     if questao.autor == usuario:
         if request.method == 'POST':
-            dados = json.loads(request.body)
-            questao.pergunta = dados['pergunta']
-            questao.curso = dados['nome_curso']
-            questao.alternativa_a = dados['alternativa_a']
-            questao.alternativa_b = dados['alternativa_b']
-            questao.alternativa_c = dados['alternativa_c']
-            questao.alternativa_d = dados['alternativa_d']
-            questao.alternativa_e = dados['alternativa_e']
-            questao.alternativa_correta = dados['alternativa_correta']
+            nome_curso = request.POST['nome_curso']
+            pergunta = request.POST['pergunta']
+            alternativa_a = request.POST['alternativa_a']
+            alternativa_b = request.POST['alternativa_b']
+            alternativa_c = request.POST['alternativa_c']
+            alternativa_d = request.POST['alternativa_d']
+            alternativa_e = request.POST['alternativa_e']
+            resposta = request.POST['resposta']
 
+            questao.curso = nome_curso
+            questao.pergunta = pergunta
+            questao.alternativa_a = alternativa_a
+            questao.alternativa_b = alternativa_b
+            questao.alternativa_c = alternativa_c
+            questao.alternativa_d = alternativa_d
+            questao.alternativa_e = alternativa_e
+            questao.alternativa_correta = resposta
             questao.save()
-            return HttpResponse('1')
+
+            messages.success(request, "questão editada com Sucesso")
+            return redirect('home')
         return render(request, 'pagina_principal/editar_questao.html',
-                      {'questao': questao})
+                      {'questao': questao, 'assuntos': assuntos})
     else:
         mensagem = ('Apenas o autor dessa questão pode altera-la')
         messages.error(request, mensagem)

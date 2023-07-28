@@ -1,71 +1,92 @@
 {% extends 'global/pages/base.html' %}
 {% load static %}
-
 {% block css %}
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-{% endblock css %}
-{% block titulo %}
-    Editar questão
-{% endblock titulo %}
-    
-
+{% endblock css %}   
+    {% block titulo %}Cadastrar Questão{% endblock titulo %}
+  
 {% block conteudo %}
-    <div class="container">
-        
-        {% csrf_token %}
-        
-        <p>Nome do curso:</p>
-        <input id='nome_curso' type='text' value = '{{questao.curso}}'>   
-       
-        <p>Pergunta: </p>
-        <div id="editor" class='editor_quill'>
-        
-        </div>
 
-        <p>Alternativa A</p>
-        <div id="alternativa_a" class='editor_quill'>
+    <div class="container">
+        <form action="{% url 'editar_questao' questao.id%}" method='POST' id='form_cadastrar_questao'>
+            {% csrf_token %}
+            
+            <p>Nome do curso:</p>
+            <input id='nome_curso' name='nome_curso' type='text' value='{{questao.curso}}'>
+            </br>
+            <label for="assuntos">Assuntos:</label></br>
+            
+           <select  name="assuntos" id="assuntos" multiple>
+                {% for assunto in assuntos %}
+                    <option value="{{ assunto.id }}" {{assunto.status}}>{{ assunto.nome_assunto }}</option>
+                {% endfor %}
+            </select>
+
+            <button type="button" onclick="mostrarInputAssunto()">+</button></br>
+            <input id='input_novo_assunto' style='display:none'/>
+            <button id='botao_novo_assunto'  style='display:none' type="button" onclick="adicionarAssunto()" >adicionar</button>
+            <button id='botao_cancelar'  style='display:none' type="button" onclick="ocultarInput()" >cancelar</button>
+            <p>Pergunta: </p>
+            
+            <div id="editor" class='editor_quill'>
+                {{questao.pergunta | safe  }}
+            </div>
+            </br>
         
-        </div>
-        <p>Alternativa B</p>
-        <div id="alternativa_b" class='editor_quill'>
+
+            <p>Alternativa A</p>
+            <div id="alternativa_a" class='editor_quill'>
+                {{questao.alternativa_a | safe  }}
+            </div>
+            <p>Alternativa B</p>
+            <div id="alternativa_b" class='editor_quill'>
+                {{questao.alternativa_b | safe  }}
+            </div>
+            <p>Alternativa C</p>
+            <div id="alternativa_c" class='editor_quill'>
+                {{questao.alternativa_c | safe  }}
+            </div>
+            <p>Alternativa D</p>
+            <div id="alternativa_d" class='editor_quill'>
+                {{questao.alternativa_d | safe  }}
+            </div>
+            <p>Alternativa E</p>
+            <div id="alternativa_e" class='editor_quill'>
+                {{questao.alternativa_e | safe  }}
+            </div>
         
-        </div>
-        <p>Alternativa C</p>
-        <div id="alternativa_c" class='editor_quill'>
+            <input type="hidden" name="pergunta" id="input_pergunta">
+            <input type="hidden" name="alternativa_a" id="input_alternativa_a">
+            <input type="hidden" name="alternativa_b" id="input_alternativa_b">
+            <input type="hidden" name="alternativa_c" id="input_alternativa_c">
+            <input type="hidden" name="alternativa_d" id="input_alternativa_d">
+            <input type="hidden" name="alternativa_e" id="input_alternativa_e">
+            <p>Alternativa Correta</p>
+            <select  id="alternativa_correta" name='resposta'>
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+                <option value="D">D</option>
+                <option value="E">E</option>
+            </select>
+            
+            
+        </form>
+
+        <br>
+   
+        <button  class="green-button" onclick='salvar()' >Salvar</button>
         
-        </div>
-        <p>Alternativa D</p>
-        <div id="alternativa_d" class='editor_quill'>
-        
-        </div>
-        <p>Alternativa E</p>
-        <div id="alternativa_e" class='editor_quill'>
-        
-        </div>
-        <p>Alternativa Correta</p>
-        <select  id="alternativa_correta">
-            <option value="A">A</option>
-            <option value="B">B</option>
-            <option value="C">C</option>
-            <option value="D">D</option>
-            <option value="E">E</option>
-        </select>
-        
-        <button  class="green-button" onclick="salvar()">Enviar</button>
         
 
     </div>
     
 
     </br>
-    
-    
-    
-    
+   
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <script src="{% static 'pagina_principal/js/utils.js'%}"></script>
     <script src="{% static 'pagina_principal/js/image-resize.min.js'%}"></script>
-
     <script>
 
         var toolbarOptions = configuracao_toolbar()
@@ -80,7 +101,6 @@
             },
             placeholder: 'Digite a questão',
         }
-        
         var quill_questao = new Quill('#editor', definicao_quill)
 
         var quill_alternativa_a = new Quill('#alternativa_a', definicao_quill)
@@ -92,19 +112,7 @@
         var quill_alternativa_d = new Quill('#alternativa_d', definicao_quill)
 
         var quill_alternativa_e = new Quill('#alternativa_e', definicao_quill)
-
-        
-        
-        quill_questao.root.innerHTML = '{{questao.pergunta | safe  }}'
-        
-
-        quill_alternativa_a.root.innerHTML = '{{questao.alternativa_a | safe  }}'
-        quill_alternativa_b.root.innerHTML = '{{questao.alternativa_b | safe  }}'
-        quill_alternativa_c.root.innerHTML = '{{questao.alternativa_c | safe  }}'
-        quill_alternativa_d.root.innerHTML = '{{questao.alternativa_d | safe  }}'
-        quill_alternativa_e.root.innerHTML = '{{questao.alternativa_e | safe  }}'
-
-
+       
         let select_alternativa_correta = document.getElementById('alternativa_correta')
         for (let i=0; i<select_alternativa_correta.options.length; i++)
         {
@@ -113,45 +121,27 @@
                 select_alternativa_correta.options[i].selected = true;
             }
         }
-        function return_html()
-        {
-            return quill_questao.root.innerHTML
-        }
-
-        async function salvar()
-        {
-            var csrf_token = document.querySelector('[name=csrfmiddlewaretoken]').value
+        
+        function salvar()
+        {            
             var pergunta = quill_questao.root.innerHTML
-
             var alternativa_a = quill_alternativa_a.root.innerHTML
             var alternativa_b = quill_alternativa_b.root.innerHTML
             var alternativa_c = quill_alternativa_c.root.innerHTML
             var alternativa_d = quill_alternativa_d.root.innerHTML
             var alternativa_e = quill_alternativa_e.root.innerHTML
-
-            var nome_curso = document.getElementById('nome_curso').value
-
-            var alternativa_correta = document.getElementById('alternativa_correta').value
             
-            const configuracao  = {
-                method: 'POST',
-                headers:{
-                    'X-CSRFToken': csrf_token
-                },
-                body: JSON.stringify({
-                                       'pergunta':pergunta,
-                                       'nome_curso':nome_curso,                                       
-                                       'alternativa_a':alternativa_a,
-                                       'alternativa_b':alternativa_b,
-                                       'alternativa_c':alternativa_c,
-                                       'alternativa_d':alternativa_d,
-                                       'alternativa_e':alternativa_e,
-                                       'alternativa_correta':alternativa_correta,                     
-
-                                    })
+            
+            document.getElementById('input_pergunta').value = pergunta
+            let value_alternativa = [alternativa_a, alternativa_b, alternativa_c, alternativa_d, alternativa_e]
+            let letras_alternativa = ['a', 'b', 'c', 'd', 'e']
+            
+            for(let i=0;i<letras_alternativa.length; i++){
+                let id_input = 'input_alternativa_' + letras_alternativa[i]
+                document.getElementById(id_input).value = value_alternativa[i]
             }
-            const response = await fetch("{% url 'editar_questao' questao.id %}", configuracao)
-            location.href = "{% url 'lista_questoes' %}"
+            
+            document.getElementById('form_cadastrar_questao').submit()
         }
     </script>
     {% endblock conteudo %}    
