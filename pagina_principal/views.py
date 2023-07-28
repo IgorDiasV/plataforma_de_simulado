@@ -3,6 +3,7 @@ from .models import Questao, Assunto
 from django.contrib.auth.decorators import login_required
 from usuarios.models import Usuario
 from django.contrib import messages
+from utils.utils import assuntos_removidos, assuntos_adicionados
 
 
 def home(request):
@@ -116,6 +117,8 @@ def editar_questao(request, questao_id):
     if questao.autor == usuario:
         if request.method == 'POST':
             nome_curso = request.POST['nome_curso']
+            assuntos_ids = request.POST.getlist('assuntos')
+            
             pergunta = request.POST['pergunta']
             alternativa_a = request.POST['alternativa_a']
             alternativa_b = request.POST['alternativa_b']
@@ -123,7 +126,7 @@ def editar_questao(request, questao_id):
             alternativa_d = request.POST['alternativa_d']
             alternativa_e = request.POST['alternativa_e']
             resposta = request.POST['resposta']
-
+            
             questao.curso = nome_curso
             questao.pergunta = pergunta
             questao.alternativa_a = alternativa_a
@@ -132,10 +135,34 @@ def editar_questao(request, questao_id):
             questao.alternativa_d = alternativa_d
             questao.alternativa_e = alternativa_e
             questao.alternativa_correta = resposta
+
+            assuntos_aux = assuntos_ids.copy()
+            for assunto_pagina in assuntos_aux:
+                if 'novo_' in assunto_pagina:
+                    assuntos_ids.remove(assunto_pagina)
+                    assunto_pagina = assunto_pagina.replace('novo_', '')
+                    assunto_novo = Assunto.objects.create(nome_assunto=assunto_pagina)  # noqa: E501
+                    questao.assuntos.add(assunto_novo)
+           
+            assuntos_novos = list(map(int, assuntos_ids))
+            assuntos_antigos = [assunto_questao.id for assunto_questao in assuntos_questao]  # noqa: E501
+            
+            assuntos_para_remover = assuntos_removidos(assuntos_antigos, assuntos_novos)
+            assuntos_para_adicionar = assuntos_adicionados(assuntos_antigos, assuntos_novos)
+
+            for assunto in assuntos_para_remover:
+                assunto_removido = Assunto.objects.filter(id=assunto).first()
+                questao.assuntos.remove(assunto_removido)
+            
+            for assunto in assuntos_para_adicionar:
+                assunto_adicionado = Assunto.objects.filter(id=assunto).first()
+                questao.assuntos.add(assunto_adicionado)
+            
             questao.save()
 
             messages.success(request, "questão editada com Sucesso")
             return redirect('home')
+        
         return render(request, 'pagina_principal/editar_questao.html',
                       {'questao': questao, 'assuntos': assuntos})
     else:
