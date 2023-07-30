@@ -16,10 +16,11 @@ def lista_questoes(request):
 
     if request.method == 'POST':
         assuntos_ids = request.POST.getlist('assuntos')
+        print(assuntos_ids)
         if len(assuntos_ids) != 0:
             questoes = questoes.filter(assuntos__id__in=assuntos_ids)
 
-    return render(request, 'pagina_principal/lista_questoes.html',
+    return render(request, 'pagina_principal/lista_questoes2.html',
                   {'questoes': questoes, 'assuntos': assuntos})
 
 
@@ -147,8 +148,8 @@ def editar_questao(request, questao_id):
             assuntos_novos = list(map(int, assuntos_ids))
             assuntos_antigos = [assunto_questao.id for assunto_questao in assuntos_questao]  # noqa: E501
             
-            assuntos_para_remover = assuntos_removidos(assuntos_antigos, assuntos_novos)
-            assuntos_para_adicionar = assuntos_adicionados(assuntos_antigos, assuntos_novos)
+            assuntos_para_remover = assuntos_removidos(assuntos_antigos, assuntos_novos)  # noqa: E501
+            assuntos_para_adicionar = assuntos_adicionados(assuntos_antigos, assuntos_novos)  # noqa: E501
 
             for assunto in assuntos_para_remover:
                 assunto_removido = Assunto.objects.filter(id=assunto).first()

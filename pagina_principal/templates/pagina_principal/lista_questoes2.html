@@ -1,0 +1,98 @@
+    {% extends 'global/pages/base.html' %}
+    {% load static %}
+    {% block css %}
+      <link href="{% static 'pagina_principal/css/listar_questoes2.css' %}" rel='stylesheet'>
+    {% endblock css %}
+
+    {% block titulo %}
+        Lista de Questões
+    {% endblock titulo %}
+    
+
+    {% block conteudo %}
+    <div class="container margen_top">
+
+       
+        <div class="filtro-assuntos">
+            <div class="button_label">
+                <span>Assuntos</span>
+                
+                <button onclick="mudar_visibilidade_filtro()" id="botao_exibir_assuntos"><i id='seta' class="fa-solid fa-chevron-down"></i></button>
+            </div>
+            <div class="lista-assuntos">
+            <input type="text" id="busca" placeholder="Buscar assunto...">
+            
+            <form method="post" >
+                    <div class="contianer_assunto">
+                        {% csrf_token %}
+                        {% for assunto in assuntos %}
+                            <div class="assunto">
+                                <input type="checkbox" name="assuntos" value="{{assunto.id}}" id="assunto{{assunto.id}}">
+                                <label for="assunto{{assunto.id}}">{{assunto.nome_assunto}}</label><br>
+                            </div>
+                        {% endfor %}
+                        <button type="submit">Filtrar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        {% for questao in questoes %}
+        <br>
+        <hr>
+        <br>
+        <div class='div_questao'>
+            {% if editavel %}
+                <a href="{% url 'editar_questao' questao.id %}"><button>Editar</button></a> </br>
+            {% endif %}
+            {{questao.pergunta | safe}}
+            </br>
+
+            <p class='visualizar_alternativa'>a) {{questao.alternativa_a | safe}}</p> </br>
+            <p class='visualizar_alternativa'>b) {{questao.alternativa_b | safe}}</p> </br>
+            <p class='visualizar_alternativa'>c) {{questao.alternativa_c | safe}}</p> </br>
+            <p class='visualizar_alternativa'>d) {{questao.alternativa_d | safe}}</p> </br>
+            <p class='visualizar_alternativa'>e) {{questao.alternativa_e | safe}}</p> </br>
+        </div>
+        {% empty%}
+        <div class='container_center'>
+            <h2>Não foi encontrado questões para serem exibidas</h2>
+        </div>
+        {% endfor %}
+        
+    </div>
+
+    <script>
+        
+        const lista_assunto = document.querySelector('.lista-assuntos');
+        const busca = document.getElementById('busca');
+        let assuntos = document.querySelectorAll('.assunto');
+        const seta =  document.getElementById('seta')
+        function  mudar_visibilidade_filtro()
+        {
+            if (lista_assunto.style.display == 'none' || lista_assunto.style.display == '' ) {
+                seta.classList.remove('fa-chevron-down')
+                seta.classList.add('fa-chevron-up')
+                lista_assunto.style.display = 'flex';
+            } else {
+                seta.classList.remove('fa-chevron-up')
+                seta.classList.add('fa-chevron-down')
+                lista_assunto.style.display = 'none';
+            }
+        }
+
+        
+        busca.addEventListener('input', function () {
+            const filtro = busca.value.toLowerCase();
+            for (const assunto of assuntos) {
+                const nome_assunto = assunto.querySelector('label').textContent.toLowerCase();
+                if (nome_assunto.includes(filtro)){
+                    assunto.style.display = 'block'
+                }else{
+                    assunto.style.display = 'none'
+                }
+                
+            }
+        });
+            
+    </script>
+  {% endblock conteudo %}

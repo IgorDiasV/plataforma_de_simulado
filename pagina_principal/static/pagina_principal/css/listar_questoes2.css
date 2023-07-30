@@ -1,0 +1,66 @@
+::-webkit-scrollbar {
+    width: 0px;
+}
+
+.filtro-assuntos {
+
+    width: 250px;
+    border: 1px solid black;
+    display: flex;
+    justify-content: center;
+    flex-direction: column; 
+    padding: 2px 5px;
+    /* position: fixed; */
+    background-color: #f0f0f0;
+   
+}
+
+.button_label{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.contianer_assunto{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+    height: 50px; /* tamanho so para teste  o ideal é 150px*/
+    scrollbar-width: none;
+}
+.filtro-assuntos form{
+    width: 100%;
+}
+
+.lista-assuntos {
+    display: none;
+    flex-direction: column;
+    align-items: center; 
+}
+
+.assunto {
+    margin: 5px 0;
+    display:block;
+    width:90%;
+}
+#busca {
+    width: 90%;
+    padding: 5px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    padding: 5px 10px;
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button i {
+    margin-right: 5px;
+}
