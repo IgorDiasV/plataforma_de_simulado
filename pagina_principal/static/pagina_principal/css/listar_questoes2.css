@@ -45,12 +45,12 @@
     align-items: center; 
 }
 
-.assunto {
+.container_name_item {
     margin: 5px 0;
     display:block;
     width:90%;
 }
-#busca {
+.busca {
     width: 90%;
     padding: 5px;
     margin: 10px 0;

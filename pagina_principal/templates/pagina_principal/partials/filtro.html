@@ -1,13 +1,13 @@
 <div class="container-filter">
     <div class="container-button-label">
         <span>{{titulo_filtro}}</span>   
-        <button type='button' onclick="mudar_visibilidade_filtro()"><i id='seta' class="fa-solid fa-chevron-down"></i></button>
+        <button type='button' onclick="mudar_visibilidade_filtro('campo_filtro_{{name}}', 'seta_{{name}}')"><i id="seta_{{name}}" class="fa-solid fa-chevron-down"></i></button>
     </div>
-    <div class="campos-filtro">
-        <input type="text" id="busca" placeholder="Buscar assunto...">
+    <div class="campos-filtro" id="campo_filtro_{{name}}">
+        <input type="text" class='busca' id="busca_{{name}}" placeholder="Buscar assunto..." oninput="filtrar('busca_{{name}}','.{{id_class}}')">
             <div class="container-list-filter">
                 {% for campo_filtro in itens %}
-                    <div class="{{id_class}}">
+                    <div class="{{id_class}} container_name_item">
                         <input type="checkbox" name="{{name}}" value="{{campo_filtro.id}}" id="{{id_class}}{{campo_filtro.id}}">
                         <label for="{{id_class}}{{campo_filtro.id}}">{{campo_filtro}}</label><br>
                     </div>
