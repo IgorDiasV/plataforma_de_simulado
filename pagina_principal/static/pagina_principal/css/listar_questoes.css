@@ -2,7 +2,7 @@
     width: 0px;
 }
 
-.div_questao p {
+.div_questao p:first-child {
     display: inline;
 }
 
