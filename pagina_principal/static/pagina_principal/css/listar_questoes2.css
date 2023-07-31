@@ -2,7 +2,7 @@
     width: 0px;
 }
 
-.filtro-assuntos {
+.container-filter {
 
     width: 250px;
     border: 1px solid black;
@@ -10,30 +10,36 @@
     justify-content: center;
     flex-direction: column; 
     padding: 2px 5px;
-    /* position: fixed; */
     background-color: #f0f0f0;
    
 }
 
-.button_label{
+.container-button-label{
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.contianer_assunto{
+.container-button-filter{
+    text-align: center;
+}
+
+.button-filter{
+    margin-top: 5px;
+    width: 90%;
+
+}
+.container-list-filter{
     width: 100%;
     display: flex;
     flex-direction: column;
     overflow-y: scroll;
-    height: 50px; /* tamanho so para teste  o ideal é 150px*/
+    height: 150px; 
     scrollbar-width: none;
 }
-.filtro-assuntos form{
-    width: 100%;
-}
 
-.lista-assuntos {
+
+.campos-filtro{
     display: none;
     flex-direction: column;
     align-items: center; 

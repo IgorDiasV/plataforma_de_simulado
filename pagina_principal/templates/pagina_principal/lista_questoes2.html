@@ -13,29 +13,10 @@
     <div class="container margen_top">
 
        
-        <div class="filtro-assuntos">
-            <div class="button_label">
-                <span>Assuntos</span>
-                
-                <button onclick="mudar_visibilidade_filtro()" id="botao_exibir_assuntos"><i id='seta' class="fa-solid fa-chevron-down"></i></button>
-            </div>
-            <div class="lista-assuntos">
-            <input type="text" id="busca" placeholder="Buscar assunto...">
-            
-            <form method="post" >
-                    <div class="contianer_assunto">
-                        {% csrf_token %}
-                        {% for assunto in assuntos %}
-                            <div class="assunto">
-                                <input type="checkbox" name="assuntos" value="{{assunto.id}}" id="assunto{{assunto.id}}">
-                                <label for="assunto{{assunto.id}}">{{assunto.nome_assunto}}</label><br>
-                            </div>
-                        {% endfor %}
-                        <button type="submit">Filtrar</button>
-                    </div>
-                </form>
-            </div>
-        </div>
+        <form method="post" >
+            {% csrf_token %} 
+            {% include 'pagina_principal/partials/filtro.html' with titulo_filtro='Assuntos' itens=assuntos id_class='assunto' name='assuntos'%}   
+        </form>
         {% for questao in questoes %}
         <br>
         <hr>
@@ -63,7 +44,7 @@
 
     <script>
         
-        const lista_assunto = document.querySelector('.lista-assuntos');
+        const lista_assunto = document.querySelector('.campos-filtro');
         const busca = document.getElementById('busca');
         let assuntos = document.querySelectorAll('.assunto');
         const seta =  document.getElementById('seta')

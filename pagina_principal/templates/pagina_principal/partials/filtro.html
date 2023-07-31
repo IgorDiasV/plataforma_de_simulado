@@ -1,0 +1,20 @@
+<div class="container-filter">
+    <div class="container-button-label">
+        <span>{{titulo_filtro}}</span>   
+        <button type='button' onclick="mudar_visibilidade_filtro()"><i id='seta' class="fa-solid fa-chevron-down"></i></button>
+    </div>
+    <div class="campos-filtro">
+        <input type="text" id="busca" placeholder="Buscar assunto...">
+            <div class="container-list-filter">
+                {% for campo_filtro in itens %}
+                    <div class="{{id_class}}">
+                        <input type="checkbox" name="{{name}}" value="{{campo_filtro.id}}" id="{{id_class}}{{campo_filtro.id}}">
+                        <label for="{{id_class}}{{campo_filtro.id}}">{{campo_filtro}}</label><br>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="container-button-filter">
+                <button class='button-filter' type="submit">Filtrar</button>
+        </div>
+    </div>
+</div>
