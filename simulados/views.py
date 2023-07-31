@@ -22,14 +22,10 @@ def simulado(request):
                   {'questoes': questoes, 'simulado': simulado})
 
 
-def gerar_link(request):
-    print('here')
+def gerar_link(request): 
     if request.method == 'POST':
-
-        print('here')
         dados = json.loads(request.body)
         id_simulado = dados['id_simulado']
-        print(id_simulado)
         simulado = Simulado.objects.filter(id=id_simulado).first()
         simulado_compartilhado = SimuladoCompartilhado.objects.create(simulado=simulado)  # noqa: E501
         link = str(simulado_compartilhado.link)
@@ -38,8 +34,6 @@ def gerar_link(request):
                 f"{reverse('simulados:responder_simulado', args=[link])}"
                 )
         link = str(link)
-        print('chegou ')
-        print(link)
         return HttpResponse(json.dumps({'link': link}))
     else:
         return Http404()

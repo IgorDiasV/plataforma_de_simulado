@@ -16,7 +16,6 @@ def lista_questoes(request):
 
     if request.method == 'POST':
         assuntos_ids = request.POST.getlist('assuntos')
-        print(assuntos_ids)
         if len(assuntos_ids) != 0:
             questoes = questoes.filter(assuntos__id__in=assuntos_ids)
 
