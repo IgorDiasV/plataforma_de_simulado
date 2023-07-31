@@ -20,7 +20,6 @@
     <form method="post" >
         {% csrf_token %} 
         {% include 'pagina_principal/partials/filtro.html' with titulo_filtro='Assuntos' itens=assuntos id_class='assunto' name='assuntos'%}  
-        {% include 'pagina_principal/partials/filtro.html' with titulo_filtro='Assuntos2' itens=assuntos id_class='assunto2' name='assuntos2'%}  
         
         <div class="container-button-filter">
             <button class='button-filter' type="submit">Filtrar</button>
@@ -36,7 +35,8 @@
         {% endif %}
         {{questao.pergunta | safe}}
         </br>
-
+        </br>
+        
         <p class='visualizar_alternativa'>a) {{questao.alternativa_a | safe}}</p> </br>
         <p class='visualizar_alternativa'>b) {{questao.alternativa_b | safe}}</p> </br>
         <p class='visualizar_alternativa'>c) {{questao.alternativa_c | safe}}</p> </br>
