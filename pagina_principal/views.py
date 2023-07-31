@@ -20,7 +20,7 @@ def lista_questoes(request):
         if len(assuntos_ids) != 0:
             questoes = questoes.filter(assuntos__id__in=assuntos_ids)
 
-    return render(request, 'pagina_principal/lista_questoes2.html',
+    return render(request, 'pagina_principal/lista_questoes.html',
                   {'questoes': questoes, 'assuntos': assuntos})
 
 
