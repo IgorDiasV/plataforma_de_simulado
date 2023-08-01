@@ -1,4 +1,5 @@
 from simulados.models import Simulado, RespostaQuestaoSimulado
+from pagina_principal.models import Questao, Assunto
 
 
 def qtd_perguntas(id_simulado):
@@ -31,3 +32,13 @@ def assuntos_removidos(assuntos_atingos: list, assuntos_novos: list) -> list:
 def assuntos_adicionados(assuntos_atingos: list, assuntos_novos: list) -> list:
 
     return valores_que_sairam_da_lista(assuntos_novos, assuntos_atingos)
+
+
+def lista_questoes(usuario=None, filtro_assunto=[]):
+    questoes = Questao.objects.all()
+    assuntos = Assunto.objects.all()
+    if len(filtro_assunto) != 0:
+        questoes = questoes.filter(assuntos__id__in=filtro_assunto)
+    if usuario is not None:
+        questoes = questoes.filter(autor=usuario)
+    return questoes, assuntos

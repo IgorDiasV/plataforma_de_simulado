@@ -4,36 +4,31 @@ from django.contrib.auth.decorators import login_required
 from usuarios.models import Usuario
 from django.contrib import messages
 from utils.utils import assuntos_removidos, assuntos_adicionados
+from utils.utils import lista_questoes
 
 
 def home(request):
     return render(request, 'pagina_principal/home.html')
 
 
-def lista_questoes(request):
-    questoes = Questao.objects.all()
-    assuntos = Assunto.objects.all()
-
+def lista_questoes_geral(request):
+    
+    assuntos_ids = []
     if request.method == 'POST':
         assuntos_ids = request.POST.getlist('assuntos')
-        if len(assuntos_ids) != 0:
-            questoes = questoes.filter(assuntos__id__in=assuntos_ids)
-
+    questoes, assuntos = lista_questoes(filtro_assunto=assuntos_ids)
     return render(request, 'pagina_principal/lista_questoes.html',
                   {'questoes': questoes, 'assuntos': assuntos})
 
 
 @login_required(login_url='usuarios:login', redirect_field_name='next')
 def lista_questoes_usuario(request):
-    assuntos = Assunto.objects.all()
     usuario = Usuario.objects.filter(user=request.user).first()
-    questoes = Questao.objects.filter(autor=usuario)
-
+    assuntos_ids = []
     if request.method == 'POST':
         assuntos_ids = request.POST.getlist('assuntos')
-        if len(assuntos_ids) != 0:
-            questoes = questoes.filter(assuntos__id__in=assuntos_ids)
-
+    questoes, assuntos = lista_questoes(usuario=usuario,
+                                        filtro_assunto=assuntos_ids)
     return render(request, 'pagina_principal/lista_questoes.html',
                   {'questoes': questoes, 'assuntos': assuntos,
                    'editavel': True})
