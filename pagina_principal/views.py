@@ -11,22 +11,31 @@ def home(request):
     return render(request, 'pagina_principal/home.html')
 
 
-def lista_questoes_geral(request):
-    
+def dados_post_lista_questao(request):
     assuntos_ids = []
     if request.method == 'POST':
         assuntos_ids = request.POST.getlist('assuntos')
-    questoes, assuntos = lista_questoes(filtro_assunto=assuntos_ids)
+    return assuntos_ids
+
+
+def lista_questoes_geral(request):
+    
+    assuntos_ids = dados_post_lista_questao(request)
+    questoes, assuntos = lista_questoes(
+                                        filtro_assunto=assuntos_ids
+                                        )
+    
     return render(request, 'pagina_principal/lista_questoes.html',
-                  {'questoes': questoes, 'assuntos': assuntos})
+                  {'questoes': questoes,
+                   'assuntos': assuntos,
+                   })
 
 
 @login_required(login_url='usuarios:login', redirect_field_name='next')
 def lista_questoes_usuario(request):
     usuario = Usuario.objects.filter(user=request.user).first()
-    assuntos_ids = []
-    if request.method == 'POST':
-        assuntos_ids = request.POST.getlist('assuntos')
+
+    assuntos_ids = dados_post_lista_questao(request)
     questoes, assuntos = lista_questoes(usuario=usuario,
                                         filtro_assunto=assuntos_ids)
     return render(request, 'pagina_principal/lista_questoes.html',
