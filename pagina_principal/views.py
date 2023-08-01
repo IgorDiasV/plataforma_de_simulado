@@ -13,34 +13,42 @@ def home(request):
 
 def dados_post_lista_questao(request):
     assuntos_ids = []
+    anos = []
     if request.method == 'POST':
         assuntos_ids = request.POST.getlist('assuntos')
-    return assuntos_ids
+        anos = request.POST.getlist('anos')
+    return anos, assuntos_ids
 
 
 def lista_questoes_geral(request):
     
-    assuntos_ids = dados_post_lista_questao(request)
-    questoes, assuntos = lista_questoes(
-                                        filtro_assunto=assuntos_ids
-                                        )
+    anos, assuntos_ids = dados_post_lista_questao(request)
+    questoes, assuntos, anos_questoes = lista_questoes(
+                                            filtro_assunto=assuntos_ids,
+                                            anos=anos)
     
     return render(request, 'pagina_principal/lista_questoes.html',
                   {'questoes': questoes,
                    'assuntos': assuntos,
-                   })
+                   'anos_questoes': anos_questoes})
 
 
 @login_required(login_url='usuarios:login', redirect_field_name='next')
 def lista_questoes_usuario(request):
     usuario = Usuario.objects.filter(user=request.user).first()
 
-    assuntos_ids = dados_post_lista_questao(request)
-    questoes, assuntos = lista_questoes(usuario=usuario,
-                                        filtro_assunto=assuntos_ids)
+    anos, assuntos_ids = dados_post_lista_questao(request)
+    questoes, assuntos, anos_questoes = lista_questoes(
+                                                usuario=usuario,
+                                                filtro_assunto=assuntos_ids,
+                                                anos=anos
+                                                )
+    
     return render(request, 'pagina_principal/lista_questoes.html',
                   {'questoes': questoes, 'assuntos': assuntos,
-                   'editavel': True})
+                   'editavel': True,
+                   'anos_questoes': anos_questoes
+                   })
 
 
 @login_required(login_url='usuarios:login', redirect_field_name='next')

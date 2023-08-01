@@ -34,11 +34,14 @@ def assuntos_adicionados(assuntos_atingos: list, assuntos_novos: list) -> list:
     return valores_que_sairam_da_lista(assuntos_novos, assuntos_atingos)
 
 
-def lista_questoes(usuario=None, filtro_assunto=[]):
+def lista_questoes(usuario=None, filtro_assunto=[], anos=[]):
     questoes = Questao.objects.all()
     assuntos = Assunto.objects.all()
-    if len(filtro_assunto) != 0:
+    anos_questoes = [questao.ano for questao in questoes]
+    if len(filtro_assunto) > 0:
         questoes = questoes.filter(assuntos__id__in=filtro_assunto)
     if usuario is not None:
         questoes = questoes.filter(autor=usuario)
-    return questoes, assuntos
+    if len(anos) > 0:
+        questoes = questoes.filter(ano__in=anos)
+    return questoes, assuntos, anos_questoes

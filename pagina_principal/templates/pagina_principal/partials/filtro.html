@@ -6,12 +6,21 @@
     <div class="campos-filtro" id="campo_filtro_{{name}}">
         <input type="text" class='busca' id="busca_{{name}}" placeholder="Buscar assunto..." oninput="filtrar('busca_{{name}}','.{{id_class}}')">
             <div class="container-list-filter">
-                {% for campo_filtro in itens %}
-                    <div class="{{id_class}} container_name_item">
-                        <input type="checkbox" name="{{name}}" value="{{campo_filtro.id}}" id="{{id_class}}{{campo_filtro.id}}">
-                        <label for="{{id_class}}{{campo_filtro.id}}">{{campo_filtro}}</label><br>
-                    </div>
-                {% endfor %}
+                {% if itens_objeto %}
+                    {% for campo_filtro in itens_objeto %}
+                        <div class="{{id_class}} container_name_item">
+                            <input type="checkbox" name="{{name}}" value="{{campo_filtro.id}}" id="{{id_class}}{{campo_filtro.id}}">
+                            <label for="{{id_class}}{{campo_filtro.id}}">{{campo_filtro}}</label><br>
+                        </div>
+                    {% endfor %}
+                {% elif itens_lista %}
+                    {% for campo_filtro in itens_lista %}
+                        <div class="{{id_class}} container_name_item">
+                            <input type="checkbox" name="{{name}}" value="{{campo_filtro}}" id="{{id_class}}{{campo_filtro}}">
+                            <label for="{{id_class}}{{campo_filtro}}">{{campo_filtro}}</label><br>
+                        </div>
+                    {% endfor %}
+                {% endif %}
             </div>
 
     </div>
