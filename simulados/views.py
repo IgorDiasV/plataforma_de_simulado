@@ -22,7 +22,7 @@ def simulado(request):
                   {'questoes': questoes, 'simulado': simulado})
 
 
-def gerar_link(request): 
+def gerar_link(request):
     if request.method == 'POST':
         dados = json.loads(request.body)
         id_simulado = dados['id_simulado']

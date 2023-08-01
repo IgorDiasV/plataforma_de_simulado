@@ -4,22 +4,37 @@
 
 .option {
     margin-bottom: 10px;
+    display: flex;
 }
 
 .option-radio {
     display: none;
 }
-
+.container-option{
+    margin-left: 10px;
+}
+.container-option p
+{
+    display: block;
+}
 .option-label {
-    display: inline-block;
-    padding: 10px 20px;
     background-color: #eaeaea;
-    border-radius: 5px;
+    border-radius: 50%;
     cursor: pointer;
     font-size: 16px;
     color: #333;
     transition: background-color 0.3s ease;
     border: 1px solid black;
+    margin-top: auto;
+    margin-bottom: auto;
+    text-align: center;
+    display: flex; /* Use o Flexbox para alinhar verticalmente */
+    align-items: center; /* Centraliza verticalmente */
+    justify-content: center;
+    padding: 10px;
+    height: 18px;
+    width: 18px;
+   
 }
 
 .option-radio:checked+.option-label {
@@ -27,9 +42,6 @@
     color: #fff;
 }
 
-.option p {
-    display: inline;
-}
 
 .right_answer{
     background-color: green;

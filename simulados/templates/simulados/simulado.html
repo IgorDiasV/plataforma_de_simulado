@@ -2,6 +2,7 @@
 {% load static %}
 {% block css %}
   <link href="{% static 'simulados/css/simulado.css' %}" rel='stylesheet'>
+  <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 {% endblock css %}
 {% block conteudo %}
 
@@ -12,28 +13,28 @@
       {% for questao in questoes%}
         <div class="question">
             <h3>Questão {{forloop.counter}}:</h3>
-            <p>{{questao.pergunta | safe}}</p>
+            <div class='ql-editor'>{{questao.pergunta | safe}}</div>
             <div class="option">
               <input type="radio" id="q{{forloop.counter}}-option1" name="{{questao.id}}" class="option-radio" value="A" id_questao={{questao.id}}>
-              <label for="q{{forloop.counter}}-option1" class="option-label">A) {{questao.alternativa_a | safe}}</label>
+              <label for="q{{forloop.counter}}-option1" class="option-label">A </label> <div class='container-option ql-editor'>{{questao.alternativa_a | safe}}</div>
             </div>
         
             <div class="option">
               <input type="radio" id="q{{forloop.counter}}-option2" name="{{questao.id}}" class="option-radio" value="B" id_questao={{questao.id}}>
-              <label for="q{{forloop.counter}}-option2" class="option-label">B) {{questao.alternativa_b | safe}}</label>
+              <label for="q{{forloop.counter}}-option2" class="option-label">B</label> <div class='container-option ql-editor'>{{questao.alternativa_b | safe}}</div>
             </div>
         
             <div class="option">
               <input type="radio" id="q{{forloop.counter}}-option3" name="{{questao.id}}" class="option-radio" value="C" id_questao={{questao.id}}>
-              <label for="q{{forloop.counter}}-option3" class="option-label">C) {{questao.alternativa_c | safe}}</label>
+              <label for="q{{forloop.counter}}-option3" class="option-label">C</label> <div class='container-option ql-editor'>{{questao.alternativa_c | safe}}</div>
             </div>
             <div class="option">
                 <input type="radio" id="q{{forloop.counter}}-option4" name="{{questao.id}}" class="option-radio" value="D" id_questao={{questao.id}}>
-                <label for="q{{forloop.counter}}-option4" class="option-label">D) {{questao.alternativa_d | safe}}</label>
+                <label for="q{{forloop.counter}}-option4" class="option-label">D</label> <div class='container-option ql-editor'>{{questao.alternativa_d | safe}}</div>
               </div>
               <div class="option">
                 <input type="radio" id="q{{forloop.counter}}-option5" name="{{questao.id}}" class="option-radio" value="E" id_questao={{questao.id}}>
-                <label for="q{{forloop.counter}}-option5" class="option-label">E) {{questao.alternativa_e | safe}}</label>
+                <label for="q{{forloop.counter}}-option5" class="option-label">E</label> <div class='container-option ql-editor'>{{questao.alternativa_e | safe}}</div>
               </div>
           </div>
         {% endfor %}

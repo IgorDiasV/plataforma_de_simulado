@@ -2,6 +2,7 @@
 {% load static %}
 {% block css %}
   <link href="{% static 'simulados/css/simulado.css' %}" rel='stylesheet'>
+  <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 {% endblock css %}
 {% block conteudo %}
 
@@ -13,23 +14,23 @@
         
         <div class="question">
             <h3>Questão {{forloop.counter}}:</h3>
-            <p>{{dados.questao.pergunta | safe}}</p>
+            <div class='ql-editor'>{{dados.questao.pergunta | safe}}</div>
             <div class="option">
-                <label  class="option-label {{dados.classe_alternativa_a}}">A) {{dados.questao.alternativa_a | safe}}</label>
+                <label  class="option-label {{dados.classe_alternativa_a}}">A) </label> <div class="ql-editor">{{dados.questao.alternativa_a | safe}}</div>
             </div>
         
             <div class="option">
-                <label  class="option-label {{dados.classe_alternativa_b}}">B) {{dados.questao.alternativa_b | safe}}</label>
+                <label  class="option-label {{dados.classe_alternativa_b}}">B) </label> <div class="ql-editor">{{dados.questao.alternativa_b | safe}}</div>
             </div>
         
             <div class="option">
-                <label  class="option-label {{dados.classe_alternativa_c}}">C) {{dados.questao.alternativa_c | safe}}</label>
+                <label  class="option-label {{dados.classe_alternativa_c}}">C) </label> <div class="ql-editor">{{dados.questao.alternativa_c | safe}}</div>
             </div>
             <div class="option">
-                <label class="option-label {{dados.classe_alternativa_d}}">D) {{dados.questao.alternativa_d | safe}}</label>
+                <label class="option-label {{dados.classe_alternativa_d}}">D) </label> <div class="ql-editor">{{dados.questao.alternativa_d | safe}}</div>
                 </div>
             <div class="option">
-                <label class="option-label {{dados.classe_alternativa_e}}">E) {{dados.questao.alternativa_e | safe}}</label>
+                <label class="option-label {{dados.classe_alternativa_e}}">E) </label> <div class="ql-editor">{{dados.questao.alternativa_e | safe}}</div>
             </div>
         </div>
         {% endfor %}

@@ -29,30 +29,25 @@
             <p>Pergunta: </p>
             
             <div id="editor" class='editor_quill'>
-                {{questao.pergunta | safe  }}
+                
             </div>
             </br>
         
 
             <p>Alternativa A</p>
             <div id="alternativa_a" class='editor_quill'>
-                {{questao.alternativa_a | safe  }}
             </div>
             <p>Alternativa B</p>
             <div id="alternativa_b" class='editor_quill'>
-                {{questao.alternativa_b | safe  }}
             </div>
             <p>Alternativa C</p>
             <div id="alternativa_c" class='editor_quill'>
-                {{questao.alternativa_c | safe  }}
             </div>
             <p>Alternativa D</p>
             <div id="alternativa_d" class='editor_quill'>
-                {{questao.alternativa_d | safe  }}
             </div>
             <p>Alternativa E</p>
             <div id="alternativa_e" class='editor_quill'>
-                {{questao.alternativa_e | safe  }}
             </div>
         
             <input type="hidden" name="pergunta" id="input_pergunta">
@@ -113,6 +108,13 @@
 
         var quill_alternativa_e = new Quill('#alternativa_e', definicao_quill)
        
+        quill_questao.root.innerHTML = '{{questao.pergunta | safe  }}'
+        quill_alternativa_a.root.innerHTML = '{{questao.alternativa_a | safe }}'
+        quill_alternativa_b.root.innerHTML = '{{questao.alternativa_b | safe }}'
+        quill_alternativa_c.root.innerHTML = '{{questao.alternativa_c | safe }}'
+        quill_alternativa_d.root.innerHTML = '{{questao.alternativa_d | safe }}'
+        quill_alternativa_e.root.innerHTML = '{{questao.alternativa_e | safe }}'
+
         let select_alternativa_correta = document.getElementById('alternativa_correta')
         for (let i=0; i<select_alternativa_correta.options.length; i++)
         {

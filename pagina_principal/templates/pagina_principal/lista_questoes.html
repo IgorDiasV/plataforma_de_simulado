@@ -2,6 +2,7 @@
 {% load static %}
 {% block css %}
     <link href="{% static 'pagina_principal/css/listar_questoes.css' %}" rel='stylesheet'>
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 {% endblock css %}
 
 {% block titulo %}
@@ -33,15 +34,16 @@
         {% if editavel %}
             <a href="{% url 'editar_questao' questao.id %}"><button>Editar</button></a> </br>
         {% endif %}
-        {{questao.pergunta | safe}}
+        <div class='ql-editor'>{{questao.pergunta | safe}}</div>
         </br>
         </br>
         
-        <p class='visualizar_alternativa'>a) {{questao.alternativa_a | safe}}</p> </br>
-        <p class='visualizar_alternativa'>b) {{questao.alternativa_b | safe}}</p> </br>
-        <p class='visualizar_alternativa'>c) {{questao.alternativa_c | safe}}</p> </br>
-        <p class='visualizar_alternativa'>d) {{questao.alternativa_d | safe}}</p> </br>
-        <p class='visualizar_alternativa'>e) {{questao.alternativa_e | safe}}</p> </br>
+        <div class='ql-editor'>a) </br> {{questao.alternativa_a | safe}} </div>
+        <div class='ql-editor'>b) </br> {{questao.alternativa_b | safe}}</div> </br>
+        <div class='ql-editor'>c) </br> {{questao.alternativa_c | safe}}</div> </br>
+        <div class='ql-editor'>d) </br> {{questao.alternativa_d | safe}}</div> </br>
+        <div class='ql-editor'>e) </br> {{questao.alternativa_e | safe}}</div> </br>
+ 
     </div>
     {% empty%}
     <div class='container_center'>
