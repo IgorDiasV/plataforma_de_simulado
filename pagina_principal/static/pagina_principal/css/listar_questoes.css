@@ -80,3 +80,13 @@ button i {
     margin-right: 5px;
 }
 
+.option {
+    margin-bottom: 10px;
+    display: flex;
+}
+
+.alternative-option {
+    margin-top: auto;
+    margin-bottom: auto;
+    text-align: center;
+}

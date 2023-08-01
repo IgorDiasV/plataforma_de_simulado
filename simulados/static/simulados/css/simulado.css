@@ -28,8 +28,8 @@
     margin-top: auto;
     margin-bottom: auto;
     text-align: center;
-    display: flex; /* Use o Flexbox para alinhar verticalmente */
-    align-items: center; /* Centraliza verticalmente */
+    display: flex;
+    align-items: center;
     justify-content: center;
     padding: 10px;
     height: 18px;

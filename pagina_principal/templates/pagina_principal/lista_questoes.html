@@ -38,11 +38,11 @@
         </br>
         </br>
         
-        <div class='ql-editor'>a) </br> {{questao.alternativa_a | safe}} </div>
-        <div class='ql-editor'>b) </br> {{questao.alternativa_b | safe}}</div> </br>
-        <div class='ql-editor'>c) </br> {{questao.alternativa_c | safe}}</div> </br>
-        <div class='ql-editor'>d) </br> {{questao.alternativa_d | safe}}</div> </br>
-        <div class='ql-editor'>e) </br> {{questao.alternativa_e | safe}}</div> </br>
+        <div class="option"><span class="alternative-option">A)</span><div class='ql-editor'>{{questao.alternativa_a | safe}}</div></div>
+        <div class="option"><span class="alternative-option">B)</span><div class='ql-editor'>{{questao.alternativa_b | safe}}</div></div> 
+        <div class="option"><span class="alternative-option">C)</span><div class='ql-editor'>{{questao.alternativa_c | safe}}</div></div> 
+        <div class="option"><span class="alternative-option">D)</span><div class='ql-editor'>{{questao.alternativa_d | safe}}</div></div> 
+        <div class="option"><span class="alternative-option">E)</span><div class='ql-editor'>{{questao.alternativa_e | safe}}</div></div> 
  
     </div>
     {% empty%}
