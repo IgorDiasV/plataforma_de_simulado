@@ -4,8 +4,10 @@ from . import views
 app_name = 'simulados'
 urlpatterns = [
     path('simulado/', views.simulado, name='simulado'),
+    path('simulado/dados_simulado/<uuid:simulado_link>/',
+         views.dados_simulado, name='responder_simulado'),
     path('simulado/responder_simulado/<uuid:simulado_link>/',
-         views.responder_simulado, name='responder_simulado'),
+         views.dados_simulado, name='responder_simulado'),
     path('simulado/salvar_resposta/', views.salvar_resposta,
          name='salvar_resposta'),
     path('simulado/respostas_do_simulado/', views.respostas_do_simulado,

@@ -1,0 +1,33 @@
+{% extends 'global/pages/base.html' %}
+{% block css %}
+    <style>
+        .dados{
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            width: 500px;
+        }
+        .dados h3{
+            text-align: center;
+        }
+        .container_dados{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    </style>
+{% endblock css %}
+
+
+{% block conteudo %}
+<div class="container_dados">
+    <div class='dados'>
+        <h3>{{titulo}}</h3>
+        <p><strong>Professor:</strong> {{professor}}</p>
+        <p><strong>Quantidade de Perguntas: </strong>{{qtd_questoes}}</p>
+    </div>
+</div>
+{% endblock conteudo %}

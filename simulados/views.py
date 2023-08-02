@@ -40,6 +40,21 @@ def gerar_link(request):
 
 
 @login_required(login_url='usuarios:login', redirect_field_name='next')
+def dados_simulado(request, simulado_link):
+    simulado = get_object_or_404(SimuladoCompartilhado,
+                                 link=simulado_link).simulado
+    titulo = simulado.titulo
+    qtd_questoes = len(simulado.questoes.all())
+    professor = simulado.autor.user
+    nome_professor = professor.first_name + " " + professor.last_name
+    
+    return render(request, 'simulados/dados_simulado.html',
+                  {'titulo': titulo,
+                   'professor': nome_professor,
+                   'qtd_questoes': qtd_questoes})
+
+
+@login_required(login_url='usuarios:login', redirect_field_name='next')
 def responder_simulado(request, simulado_link):
     simulado = get_object_or_404(SimuladoCompartilhado,
                                  link=simulado_link).simulado
