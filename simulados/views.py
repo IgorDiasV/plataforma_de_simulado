@@ -47,6 +47,9 @@ def gerar_link(request):
 
 @login_required(login_url='usuarios:login', redirect_field_name='next')
 def dados_simulado(request, simulado_link):
+    respostas_simulado = RespostaSimulado.objects.filter(simulado_respondido__link=simulado_link)   # noqa: E501
+    usuario = Usuario.objects.filter(user=request.user).first()
+    qtd_respostas = len(respostas_simulado.filter(usuario=usuario))
     simulado_compartilhado = get_object_or_404(SimuladoCompartilhado,
                                                link=simulado_link)
     tempo_de_prova = simulado_compartilhado.tempo_de_prova
@@ -58,6 +61,9 @@ def dados_simulado(request, simulado_link):
 
     if qtd_tentativas == 0:
         qtd_tentativas = "Sem limite de tentativas"
+    else:
+        qtd_tentativas -= qtd_respostas
+    
     simulado = simulado_compartilhado.simulado
     titulo = simulado.titulo
     qtd_questoes = len(simulado.questoes.all())

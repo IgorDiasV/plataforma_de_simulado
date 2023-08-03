@@ -29,8 +29,10 @@
         <p><strong>Professor:</strong> {{professor}}</p>
         <p><strong>Quantidade de Perguntas: </strong>{{qtd_questoes}}</p>
         <p><strong>Tempo de Prova: </strong>{{tempo_de_prova}}</p>
-        <p><strong>Quantidade de Tentativas: </strong>{{qtd_tentativas}}</p>
-        <a href="{% url 'simulados:responder_simulado' link %}"><button class='green-button'>Responder</button></a>
+        <p><strong>Tentativas Restante: </strong>{{qtd_tentativas}}</p>
+        {% if qtd_tentativas > 0 %}
+            <a href="{% url 'simulados:responder_simulado' link %}"><button class='green-button'>Responder</button></a>
+        {% endif %}
     </div>
     
 </div>
