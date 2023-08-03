@@ -31,7 +31,7 @@ def gerar_link(request):
         link = str(simulado_compartilhado.link)
         link = (f"{request.scheme}://"
                 f"{request.get_host()}"
-                f"{reverse('simulados:responder_simulado', args=[link])}"
+                f"{reverse('simulados:dados_simulado', args=[link])}"
                 )
         link = str(link)
         return HttpResponse(json.dumps({'link': link}))
@@ -47,11 +47,12 @@ def dados_simulado(request, simulado_link):
     qtd_questoes = len(simulado.questoes.all())
     professor = simulado.autor.user
     nome_professor = professor.first_name + " " + professor.last_name
-    
+
     return render(request, 'simulados/dados_simulado.html',
                   {'titulo': titulo,
                    'professor': nome_professor,
-                   'qtd_questoes': qtd_questoes})
+                   'qtd_questoes': qtd_questoes,
+                   'link': simulado_link})
 
 
 @login_required(login_url='usuarios:login', redirect_field_name='next')
@@ -160,7 +161,7 @@ def lista_simulados(request):
             link = simulado_compartilhado.link
             url_completa = (f"{request.scheme}://"
                             f"{request.get_host()}"
-                            f"{reverse('simulados:responder_simulado', args=[link])}"  # noqa: E501
+                            f"{reverse('simulados:dados_simulado', args=[link])}"  # noqa: E501
                             )
             aux['link'] = url_completa
         simulados_e_link.append(aux)

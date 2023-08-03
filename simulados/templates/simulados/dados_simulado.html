@@ -28,6 +28,10 @@
         <h3>{{titulo}}</h3>
         <p><strong>Professor:</strong> {{professor}}</p>
         <p><strong>Quantidade de Perguntas: </strong>{{qtd_questoes}}</p>
+        <p><strong>Tempo de Prova: </strong>1H</p>
+        <p><strong>Quantidade de Tentativas: </strong>1</p>
+        <a href="{% url 'simulados:responder_simulado' link %}"><button class='green-button'>Responder</button></a>
     </div>
+    
 </div>
 {% endblock conteudo %}
