@@ -1,10 +1,31 @@
 {% extends 'global/pages/base.html' %}
 {% load static %}
 {% block titulo %}Lista de Simulados{% endblock titulo %}
-{% block css %}<link href="{% static 'simulados/css/lista_simulados.css'%}" rel='stylesheet'>{% endblock css %}
+{% block css %}<link href="{% static 'simulados/css/lista_simulados2.css'%}" rel='stylesheet'>{% endblock css %}
 
 {% block script %}
 <script src="{% static 'simulados/js/link.js'%}"></script>
+<script>
+    function exibir_modal(id_simulado){
+        var questionModal = document.getElementById("modal_questoes");
+        questionModal.style.display = 'block';
+        document.getElementById('id_simulado_form').value = id_simulado
+    }
+    function fecharModal() {
+        var questionModal = document.getElementById("modal_questoes");
+        questionModal.style.display = "none";
+      }
+
+    function mudar_estado(class_div){
+        div = document.querySelector(class_div)
+        if (div.style.display == '' || div.style.display == 'none'){
+          div.style.display = 'block'
+        }else{
+    
+          div.style.display = 'none'
+        }
+      }
+</script>
 {% endblock script %}
 
 {% block conteudo %}
@@ -22,9 +43,9 @@
                             <input type="text"  id="link{{simulado.simulado.id}}" placeholder="Digite alguma coisa" value="{{simulado.link}}" readonly/>
                             <button type='button' id="botaoCopiar{{simulado.simulado.id}}" onclick="copiarLink('link{{simulado.simulado.id}}')" class="green-button"> Copiar Link</button>
                         {% else %}
-                            <input type="text" style='display: none' id="link{{simulado.simulado.id}}" placeholder="Digite alguma coisa" value="" readonly/>
+                            <input type="text" style='display: none' id="link{{simulado.simulado.id}}" placeholder="Digite alguma coisa" value="{{simulado.simulado.id}}" readonly/>
                             <button style='display: none' type='button' onclick="copiarLink('link{{simulado.simulado.id}}')"  id="botaoCopiar{{simulado.simulado.id}}" class="green-button"> Copiar Link</button>
-                            <button type='button' id="botaoGerar{{simulado.simulado.id}}" onclick="gerar_link({{simulado.simulado.id}}, '{% url 'simulados:gerar_link' %}')" class="green-button"> Gerar Link</button>
+                            <button type='button' id="botaoGerar{{simulado.simulado.id}}" onclick="exibir_modal('{{simulado.simulado.id}}')" class="green-button"> Gerar Link</button>
                         {% endif %}
                         
                         <form method='POST' action="{% url 'simulados:simulado' %}">
@@ -42,6 +63,32 @@
             {% endfor%}
         </div>
 
+        <div id="modal_questoes" class="modal">
+            <div class="conteudo_modal">
+              <h3>Configurações do Simulado</h3>
+              <form action="{% url 'simulados:gerar_link' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" id="id_simulado_form" name='id_simulado' value="{{simulado.simulado.id}}"/>
+                <label for='tempo_limite'>Tempo limite:  </label>
+                    <input id='tempo_limite' name='tempo_limite' type="checkbox" onchange="mudar_estado('.tempo_prova')">
+                    </br>
+                    <div class="tempo_prova">
+                        Tempo de Prova
+                        <input type="number" min=0 name='horas' value=0>H:
+                        <input type="number" min=0 name='minutos' value=0>M:
+                        <input type="number" min=0 name='segundos' value=0>S
+                    </div>
+                    <label for='limite_de_tentativas'>Limite de Tentativas:  </label>
+                    <input id='limite_de_tentativas' name='limite_de_tentativas' type="checkbox" onchange="mudar_estado('.qtd_tentativas')">
 
-    
+                    </br>
+                    <div class='qtd_tentativas'>
+                        <label for'qtd_tentativas'>Quantiade de Tentativas:  </label>
+                        <input type='number' id='qtd_tentativas' name='qtd_tentativas' min=0>
+                    </div>
+                    <button>Gerar Link</button>
+                </form>
+              <button onclick="fecharModal()">Cancelar</button>
+            </div>
+          </div>
 {% endblock conteudo %}

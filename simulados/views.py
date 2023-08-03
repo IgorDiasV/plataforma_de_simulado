@@ -1,9 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
 from pagina_principal.models import Questao, Assunto
 from .models import Simulado, SimuladoCompartilhado
 from .models import RespostaSimulado, RespostaQuestaoSimulado
-import json
 from random import sample
 from django.contrib.auth.decorators import login_required
 from usuarios.models import Usuario
@@ -25,17 +23,24 @@ def simulado(request):
 
 def gerar_link(request):
     if request.method == 'POST':
-        dados = json.loads(request.body)
-        id_simulado = dados['id_simulado']
+        qtd_tentativas = 0
+        tempo_de_prova = 0
+        if request.POST.get('limite_de_tentativas'):
+            qtd_tentativas = obter_valor_ou_zero(request,
+                                                 ['qtd_tentativas'])[0]
+        if request.POST.get('tempo_limite'):
+            campos = ['horas', 'minutos', 'segundos']
+            horas, minutos, segundos = obter_valor_ou_zero(request,
+                                                           campos)
+            tempo_de_prova = horas*3600 + minutos*60 + segundos
+        
+        id_simulado = request.POST['id_simulado']
         simulado = Simulado.objects.filter(id=id_simulado).first()
-        simulado_compartilhado = SimuladoCompartilhado.objects.create(simulado=simulado)  # noqa: E501
-        link = str(simulado_compartilhado.link)
-        link = (f"{request.scheme}://"
-                f"{request.get_host()}"
-                f"{reverse('simulados:dados_simulado', args=[link])}"
-                )
-        link = str(link)
-        return HttpResponse(json.dumps({'link': link}))
+        SimuladoCompartilhado.objects.create(simulado=simulado,
+                                             tempo_de_prova=tempo_de_prova,
+                                             qtd_tentativas=qtd_tentativas)
+        
+        return redirect('simulados:lista_simulados')
     else:
         return Http404()
 
@@ -181,7 +186,7 @@ def lista_simulados(request):
                             )
             aux['link'] = url_completa
         simulados_e_link.append(aux)
-    return render(request, 'simulados/lista_simulados.html',
+    return render(request, 'simulados/lista_simulados2.html',
                   {'simulados': simulados_e_link})
 
 
@@ -220,6 +225,17 @@ def criar_simulado(request):
         return redirect('home')
 
 
+def obter_valor_ou_zero(request, campos):
+    valores = []
+    for campo in campos:
+        valor = request.POST.get(campo)
+        if valor is None or valor == '':
+            valores.append(0)
+        else:
+            valores.append(int(valor))
+    return valores
+
+
 @login_required(login_url='usuarios:login', redirect_field_name='next')
 def criar_simulado_manualmente(request):
     usuario = Usuario.objects.filter(user=request.user).first()
@@ -227,9 +243,10 @@ def criar_simulado_manualmente(request):
         questoes = Questao.objects.all()
         assuntos = Assunto.objects.all()
         if request.method == 'POST':
+            
             titulo = request.POST['titulo']
             id_questoes_escolhidas = request.POST.getlist('questoes_escolhidas')  # noqa: E501
-            questoes_escolhidas = questoes.filter(id__in=id_questoes_escolhidas)  # noqa: E501
+            questoes_escolhidas = questoes.filter(id__in=id_questoes_escolhidas)  # noqa: E501           
             simulado = Simulado.objects.create(titulo=titulo, autor=usuario)
             simulado.questoes.set(questoes_escolhidas)
         return render(request, 'simulados/criar_simulado_manualmente.html',  # noqa: E501
