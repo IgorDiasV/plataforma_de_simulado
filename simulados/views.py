@@ -33,13 +33,13 @@ def gerar_link(request):
             horas, minutos, segundos = obter_valor_ou_zero(request,
                                                            campos)
             tempo_de_prova = horas*3600 + minutos*60 + segundos
-        
+
         id_simulado = request.POST['id_simulado']
         simulado = Simulado.objects.filter(id=id_simulado).first()
         SimuladoCompartilhado.objects.create(simulado=simulado,
                                              tempo_de_prova=tempo_de_prova,
                                              qtd_tentativas=qtd_tentativas)
-        
+
         return redirect('simulados:lista_simulados')
     else:
         return Http404()
@@ -47,21 +47,30 @@ def gerar_link(request):
 
 @login_required(login_url='usuarios:login', redirect_field_name='next')
 def dados_simulado(request, simulado_link):
-    simulado = get_object_or_404(SimuladoCompartilhado,
-                                 link=simulado_link).simulado
+    simulado_compartilhado = get_object_or_404(SimuladoCompartilhado,
+                                               link=simulado_link)
+    tempo_de_prova = simulado_compartilhado.tempo_de_prova
+    tempo_formatado = "Sem Tempo limite"
+    if tempo_de_prova > 0:
+        tempo_formatado = formatar_tempo(tempo_de_prova)
+
+    qtd_tentativas = simulado_compartilhado.qtd_tentativas
+
+    if qtd_tentativas == 0:
+        qtd_tentativas = "Sem limite de tentativas"
+    simulado = simulado_compartilhado.simulado
     titulo = simulado.titulo
     qtd_questoes = len(simulado.questoes.all())
     professor = simulado.autor.user
     nome_professor = professor.first_name + " " + professor.last_name
-
-    tempo_de_prova = formatar_tempo(30*60)
 
     return render(request, 'simulados/dados_simulado.html',
                   {'titulo': titulo,
                    'professor': nome_professor,
                    'qtd_questoes': qtd_questoes,
                    'link': simulado_link,
-                   'tempo_de_prova': tempo_de_prova
+                   'tempo_de_prova': tempo_formatado,
+                   'qtd_tentativas': qtd_tentativas
                    })
 
 
@@ -97,7 +106,7 @@ def salvar_resposta(request):
             aux['id_questao'] = name
             aux['resposta'] = value
             dados_questoes.append(aux)
-    
+
     simulado_compartilhado = get_object_or_404(SimuladoCompartilhado,
                                                link=link)
 
@@ -107,7 +116,6 @@ def salvar_resposta(request):
                                     usuario=usuario
                                     )
     for dado_questao in dados_questoes:
-        
         id_questao = int(dado_questao['id_questao'])
         questao = get_object_or_404(Questao, id=id_questao)
         resposta = dado_questao['resposta']
@@ -243,10 +251,9 @@ def criar_simulado_manualmente(request):
         questoes = Questao.objects.all()
         assuntos = Assunto.objects.all()
         if request.method == 'POST':
-            
             titulo = request.POST['titulo']
             id_questoes_escolhidas = request.POST.getlist('questoes_escolhidas')  # noqa: E501
-            questoes_escolhidas = questoes.filter(id__in=id_questoes_escolhidas)  # noqa: E501           
+            questoes_escolhidas = questoes.filter(id__in=id_questoes_escolhidas)  # noqa: E501
             simulado = Simulado.objects.create(titulo=titulo, autor=usuario)
             simulado.questoes.set(questoes_escolhidas)
         return render(request, 'simulados/criar_simulado_manualmente.html',  # noqa: E501
