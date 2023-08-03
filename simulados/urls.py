@@ -6,7 +6,7 @@ urlpatterns = [
     path('simulado/', views.simulado, name='simulado'),
     path('simulado/dados_simulado/<uuid:simulado_link>/',
          views.dados_simulado, name='dados_simulado'),
-    path('simulado/responder_simulado/<uuid:simulado_link>/',
+    path('simulado/responder_simulado/',
          views.responder_simulado, name='responder_simulado'),
     path('simulado/salvar_resposta/', views.salvar_resposta,
          name='salvar_resposta'),

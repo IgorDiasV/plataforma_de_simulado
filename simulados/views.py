@@ -81,26 +81,30 @@ def dados_simulado(request, simulado_link):
 
 
 @login_required(login_url='usuarios:login', redirect_field_name='next')
-def responder_simulado(request, simulado_link):
+def responder_simulado(request):
 
-    if not request.session.get('inicio_simulado', None):
-        request.session['inicio_simulado'] = datetime.now().ctime()
-    inicio_simulado = request.session.get('inicio_simulado', None)
-    
-    simulado_compartilhado = get_object_or_404(SimuladoCompartilhado,
-                                               link=simulado_link)
-    
-    tempo_de_prova = simulado_compartilhado.tempo_de_prova
-    simulado = simulado_compartilhado.simulado
-    questoes = simulado.questoes.all()
+    if request.method == 'POST':
+        link = request.POST['link']
+        if not request.session.get('inicio_simulado', None):
+            request.session['inicio_simulado'] = datetime.now().ctime()
+        inicio_simulado = request.session.get('inicio_simulado', None)
+        
+        simulado_compartilhado = get_object_or_404(SimuladoCompartilhado,
+                                                   link=link)
+        
+        tempo_de_prova = simulado_compartilhado.tempo_de_prova
+        simulado = simulado_compartilhado.simulado
+        questoes = simulado.questoes.all()
 
-    return render(request, 'simulados/simulado.html',
-                  {'questoes': questoes,
-                   'simulado': simulado,
-                   'link': simulado_link,
-                   'inicio_simulado': inicio_simulado,
-                   'tempo_de_prova': tempo_de_prova
-                   })
+        return render(request, 'simulados/simulado.html',
+                      {'questoes': questoes,
+                       'simulado': simulado,
+                       'link': link,
+                       'inicio_simulado': inicio_simulado,
+                       'tempo_de_prova': tempo_de_prova
+                       })
+    else:
+        return Http404()
 
 
 @login_required(login_url='usuarios:login', redirect_field_name='next')
