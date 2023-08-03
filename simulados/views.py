@@ -10,7 +10,7 @@ from usuarios.models import Usuario
 from django.contrib import messages
 from django.http.response import Http404
 from django.urls import reverse
-from utils.utils import qtd_perguntas, qtd_acertos
+from utils.utils import qtd_perguntas, qtd_acertos, formatar_tempo
 from datetime import datetime
 
 
@@ -49,11 +49,15 @@ def dados_simulado(request, simulado_link):
     professor = simulado.autor.user
     nome_professor = professor.first_name + " " + professor.last_name
 
+    tempo_de_prova = formatar_tempo(30*60)
+
     return render(request, 'simulados/dados_simulado.html',
                   {'titulo': titulo,
                    'professor': nome_professor,
                    'qtd_questoes': qtd_questoes,
-                   'link': simulado_link})
+                   'link': simulado_link,
+                   'tempo_de_prova': tempo_de_prova
+                   })
 
 
 @login_required(login_url='usuarios:login', redirect_field_name='next')
