@@ -27,8 +27,12 @@
     }
   }
   window.onload = function() {
-  
-    atualizarContador();
+    if({{tempo_de_prova}} == 0){
+      document.getElementById('contador').textContent = "Sem tempo limite de prova";
+    }
+    else{
+      atualizarContador();
+    }
     
   };
 </script>
@@ -37,7 +41,7 @@
 
 {% block conteudo %}
 
-    <p>Tempo restante: <span id="contador">30:00</span></p>
+    <p>Tempo restante: <span id="contador"></span></p>
     
     <form id='form-simulado' action="{% url 'simulados:salvar_resposta'%}" method='POST'>
         {% csrf_token %}

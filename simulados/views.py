@@ -80,9 +80,12 @@ def responder_simulado(request, simulado_link):
     if not request.session.get('inicio_simulado', None):
         request.session['inicio_simulado'] = datetime.now().ctime()
     inicio_simulado = request.session.get('inicio_simulado', None)
-    tempo_de_prova = 30*60
-    simulado = get_object_or_404(SimuladoCompartilhado,
-                                 link=simulado_link).simulado
+    
+    simulado_compartilhado = get_object_or_404(SimuladoCompartilhado,
+                                               link=simulado_link)
+    
+    tempo_de_prova = simulado_compartilhado.tempo_de_prova
+    simulado = simulado_compartilhado.simulado
     questoes = simulado.questoes.all()
 
     return render(request, 'simulados/simulado.html',
@@ -194,7 +197,7 @@ def lista_simulados(request):
                             )
             aux['link'] = url_completa
         simulados_e_link.append(aux)
-    return render(request, 'simulados/lista_simulados2.html',
+    return render(request, 'simulados/lista_simulados.html',
                   {'simulados': simulados_e_link})
 
 
