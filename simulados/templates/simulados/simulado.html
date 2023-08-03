@@ -4,10 +4,42 @@
   <link href="{% static 'simulados/css/simulado.css' %}" rel='stylesheet'>
   <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 {% endblock css %}
+
+{% block script %}
+<script>
+  const tempoLimiteSegundos = parseInt({{tempo_de_prova}})
+  function atualizarContador() {
+    const inicioSimulado = new Date('{{inicio_simulado}}');
+    const tempoAtual = new Date();
+    const diferencaSegundos = Math.floor((tempoAtual - inicioSimulado) / 1000);
+    const tempoRestanteSegundos = Math.max(tempoLimiteSegundos - diferencaSegundos, 0);
+
+    const horas = Math.floor(tempoRestanteSegundos / (60*60));
+    const minutos = Math.floor((tempoRestanteSegundos - horas*(60*60)) / 60);
+    const segundos = (tempoRestanteSegundos - horas*60*60 - minutos*60);
+    const tempoFormatado = `${horas.toString().padStart(2, '0')}:${minutos.toString().padStart(2, '0')}:${segundos.toString().padStart(2, '0')}`;
+    document.getElementById('contador').textContent = tempoFormatado;
+
+    if (tempoRestanteSegundos === 0) {
+      document.getElementById('form-simulado').submit();
+    } else {
+      setTimeout(atualizarContador, 1000);
+    }
+  }
+  window.onload = function() {
+  
+    atualizarContador();
+    
+  };
+</script>
+{% endblock script %}
+
+
 {% block conteudo %}
 
+    <p>Tempo restante: <span id="contador">30:00</span></p>
     
-    <form action="{% url 'simulados:salvar_resposta'%}" method='POST'>
+    <form id='form-simulado' action="{% url 'simulados:salvar_resposta'%}" method='POST'>
         {% csrf_token %}
         <input type="hidden" name='link' value="{{link}}">
       {% for questao in questoes%}

@@ -11,6 +11,7 @@ from django.contrib import messages
 from django.http.response import Http404
 from django.urls import reverse
 from utils.utils import qtd_perguntas, qtd_acertos
+from datetime import datetime
 
 
 def simulado(request):
@@ -57,6 +58,11 @@ def dados_simulado(request, simulado_link):
 
 @login_required(login_url='usuarios:login', redirect_field_name='next')
 def responder_simulado(request, simulado_link):
+
+    if not request.session.get('inicio_simulado', None):
+        request.session['inicio_simulado'] = datetime.now().ctime()
+    inicio_simulado = request.session.get('inicio_simulado', None)
+    tempo_de_prova = 30*60
     simulado = get_object_or_404(SimuladoCompartilhado,
                                  link=simulado_link).simulado
     questoes = simulado.questoes.all()
@@ -64,7 +70,10 @@ def responder_simulado(request, simulado_link):
     return render(request, 'simulados/simulado.html',
                   {'questoes': questoes,
                    'simulado': simulado,
-                   'link': simulado_link})
+                   'link': simulado_link,
+                   'inicio_simulado': inicio_simulado,
+                   'tempo_de_prova': tempo_de_prova
+                   })
 
 
 @login_required(login_url='usuarios:login', redirect_field_name='next')
@@ -97,6 +106,7 @@ def salvar_resposta(request):
                                                questao=questao,
                                                resposta=resposta)
     messages.success(request, "Respotas Salva")
+    del (request.session['inicio_simulado'])
     return redirect('home')
 
 
@@ -125,6 +135,8 @@ def respostas_do_simulado(request):
 
 @login_required(login_url='usuarios:login', redirect_field_name='next')
 def resposta_aluno(request):
+    # TODO caso o Usuário não tenha respondido uma questão,
+    # ela não ira aparecer (corrigir isso)
     if request.method == 'POST':
         id = request.POST['id_resposta']
         respostas_questoes = RespostaQuestaoSimulado.objects.filter(resposta_simulado__id=id)  # noqa: E501
