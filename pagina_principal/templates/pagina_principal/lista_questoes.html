@@ -51,6 +51,22 @@
     </div>
     {% endfor %}
     
+    <ul class="paginacao">
+        {% if questoes.has_previous %}
+        <li><a href="?page={{questoes.previous_page_number}}"> Anterior </a></li>
+        {% endif %}
+        {% for page in questoes.paginator.page_range %}
+            {% if page == questoes.number %}   
+                <li><a href="?page={{page}}" class="active">{{page}}</a></li>
+            {% else %}
+                <li><a href="?page={{page}}" >{{page}}</a></li>
+            {% endif %} 
+        {% endfor %}
+        {% if questoes.has_next %}
+            <li><a href="?page={{questoes.next_page_number}}"> Próximo </a></li>
+        {% endif %}
+    </ul>
+
 </div>
 
 {% endblock conteudo %}

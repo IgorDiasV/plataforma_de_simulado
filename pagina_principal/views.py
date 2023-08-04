@@ -5,6 +5,7 @@ from usuarios.models import Usuario
 from django.contrib import messages
 from utils.utils import assuntos_removidos, assuntos_adicionados
 from utils.utils import lista_questoes
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 def home(request):
@@ -21,14 +22,22 @@ def dados_post_lista_questao(request):
 
 
 def lista_questoes_geral(request):
-    
+
     anos, assuntos_ids = dados_post_lista_questao(request)
     questoes, assuntos, anos_questoes = lista_questoes(
                                             filtro_assunto=assuntos_ids,
                                             anos=anos)
-    
+
+    n_pagina = request.GET.get('page', '1')
+    page = ''
+    questoes_paginacao = Paginator(questoes, 5)
+    try:
+        page = questoes_paginacao.page(n_pagina)
+    except (EmptyPage, PageNotAnInteger):
+        page = questoes_paginacao.page(1)
+
     return render(request, 'pagina_principal/lista_questoes.html',
-                  {'questoes': questoes,
+                  {'questoes': page,
                    'assuntos': assuntos,
                    'anos_questoes': anos_questoes})
 
@@ -43,7 +52,7 @@ def lista_questoes_usuario(request):
                                                 filtro_assunto=assuntos_ids,
                                                 anos=anos
                                                 )
-    
+
     return render(request, 'pagina_principal/lista_questoes.html',
                   {'questoes': questoes, 'assuntos': assuntos,
                    'editavel': True,
@@ -134,7 +143,7 @@ def editar_questao(request, questao_id):
         if request.method == 'POST':
             nome_curso = request.POST['nome_curso']
             assuntos_ids = request.POST.getlist('assuntos')
-            
+
             pergunta = request.POST['pergunta']
             alternativa_a = request.POST['alternativa_a']
             alternativa_b = request.POST['alternativa_b']
@@ -142,7 +151,7 @@ def editar_questao(request, questao_id):
             alternativa_d = request.POST['alternativa_d']
             alternativa_e = request.POST['alternativa_e']
             resposta = request.POST['resposta']
-            
+
             questao.curso = nome_curso
             questao.pergunta = pergunta
             questao.alternativa_a = alternativa_a
@@ -159,26 +168,26 @@ def editar_questao(request, questao_id):
                     assunto_pagina = assunto_pagina.replace('novo_', '')
                     assunto_novo = Assunto.objects.create(nome_assunto=assunto_pagina)  # noqa: E501
                     questao.assuntos.add(assunto_novo)
-           
+
             assuntos_novos = list(map(int, assuntos_ids))
             assuntos_antigos = [assunto_questao.id for assunto_questao in assuntos_questao]  # noqa: E501
-            
+
             assuntos_para_remover = assuntos_removidos(assuntos_antigos, assuntos_novos)  # noqa: E501
             assuntos_para_adicionar = assuntos_adicionados(assuntos_antigos, assuntos_novos)  # noqa: E501
 
             for assunto in assuntos_para_remover:
                 assunto_removido = Assunto.objects.filter(id=assunto).first()
                 questao.assuntos.remove(assunto_removido)
-            
+
             for assunto in assuntos_para_adicionar:
                 assunto_adicionado = Assunto.objects.filter(id=assunto).first()
                 questao.assuntos.add(assunto_adicionado)
-            
+
             questao.save()
 
             messages.success(request, "questão editada com Sucesso")
             return redirect('home')
-        
+
         return render(request, 'pagina_principal/editar_questao.html',
                       {'questao': questao, 'assuntos': assuntos})
     else:
