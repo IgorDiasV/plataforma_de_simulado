@@ -9,50 +9,87 @@
     <form method="post">
       {% csrf_token %}
       <label for'titulo'>Título:  </label>
-      <input id='titulo' name='titulo'>
-      <h2>Selecione as questões para o simulado:</h2>
+      <input id='titulo' name='titulo' value='{{titulo}}'>
+      </br>
       <select
-        style="display: none"
+        style='display: none;'
         name="questoes_escolhidas"
         id="questoes_escolhidas"
         multiple
-      ></select>
-      <div id="div_questoes_escolhidas"></div>
-      <button type="button" id="adicionar_questao">Adicionar Questão</button>
+      >
+        {% for questao_escolhida in questoes_escolhidas %}
+          <option id='option{{questao_escolhida}}' value='{{questao_escolhida}}' selected>{{questao_escolhida}}</option>
+        {% endfor %}
+      </select>
       <button type="submit">Criar Simulado</button>
     </form>
-
-    <div id="modal_questoes" class="modal">
-      <div class="conteudo_modal">
-        <select name="assuntos" id="assuntos" multiple>
-          {% for assunto in assuntos %}
-          <option value="{{assunto.id}}">{{assunto.nome_assunto}}</option>
-          {% endfor %}
-        </select>
-        <button onclick="filtrar_questoes()">Filtrar</button>
-
-        <h2>Selecione as questões adicionais:</h2>
-        {% for questao in questoes %}
-        <div class="questoes_com_id_assunto" id_assuntos="{{ questao|get_id_assunto }}">
-          <input
-            id="questao_modal{{questao.id}}"
-            type="checkbox"
-            name="questoes_selecionadas"
-            value="{{ questao.id }}"
-          />
-          <label for="questao_modal{{questao.id}}">
-            {{ questao.pergunta | safe }}
-          </label>
-        </div>
-        {% endfor %}
-        <br />
-
-        <button id="add_questoes_selecionadas">
-          Adicionar Questões Selecionadas
-        </button>
-        <button onclick="fecharModal()">Cancelar</button>
-      </div>
-    </div>
     <script src="{% static 'pagina_principal/js/utils.js'%}"></script>
-    <script src="{% static 'pagina_principal/js/logica_modal.js'%}"></script>
+
+    <h2> Lista de Questões</h2>
+    {% for questao in questoes %}
+      <div class='ql-editor'>
+        <input type='checkbox' id='input{{questao.id}}'class='pergunta_selecionada' onchange='adicionar_remover_questao(this, "{{questao.id}}")' value='{{questao.id}}'>{{questao.pergunta | safe}}
+      </div>
+    {% endfor %}
+
+    <ul class="paginacao">
+      {% if questoes.has_previous %}
+      <li><a onclick="mudar_pagina('{{questoes.previous_page_number}}')"> Anterior </a></li>
+      {% endif %}
+      {% for page in questoes.paginator.page_range %}
+          {% if page == questoes.number %}   
+              <li><a  class="active" >{{page}}</a></li>
+          {% else %}
+              <li><a onclick="mudar_pagina('{{page}}')">{{page}}</a></li>
+          {% endif %} 
+      {% endfor %}
+      {% if questoes.has_next %}
+          <li><a onclick="mudar_pagina('{{questoes.next_page_number}}')"> Próximo </a></li>
+      {% endif %}
+  </ul>
+<script>
+  function adicionar_remover_questao(checkbox, id_questao){
+    if (checkbox.checked){
+      adicionar_questao(id_questao)
+    }else{
+      remover_questao(id_questao)
+    }
+  }
+
+  function adicionar_questao(id)
+  {
+      let select_questoes_escolhidas = document.getElementById('questoes_escolhidas')
+      let option = document.createElement("option");
+      option.id = "option" + id;
+      option.value = id;
+      option.text = id;
+      option.selected = true;
+      select_questoes_escolhidas.add(option);
+      
+  }
+  function remover_questao(id)
+  {
+    id = "option" + id
+    let option = document.getElementById(id)
+    option.remove()
+  }
+  function mudar_pagina(pagina){
+    
+    let titulo = document.getElementById('titulo')
+    let select_questoes = document.getElementById('questoes_escolhidas')
+    let questoes_escolhidas = select_questoes.querySelectorAll('option:checked')
+    id_perguntas_selecionadas = []
+    questoes_escolhidas.forEach((pergunta) => {
+          id_perguntas_selecionadas.push(pergunta.value)
+    })
+    const parametros = new URLSearchParams();
+    const parametroLista = id_perguntas_selecionadas.join(',');
+    parametros.append('id_questao', parametroLista);
+    parametros.append('titulo', titulo.value)
+    parametros.append('page', pagina)
+    history.replaceState(null, null, window.location.pathname);
+    const url = window.location.href + '?' + parametros.toString();
+    window.location.href = url
+  }
+</script>
   {% endblock conteudo %}
