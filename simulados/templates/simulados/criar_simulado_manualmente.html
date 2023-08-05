@@ -28,7 +28,12 @@
     <h2> Lista de Questões</h2>
     {% for questao in questoes %}
       <div class='ql-editor'>
-        <input type='checkbox' id='input{{questao.id}}'class='pergunta_selecionada' onchange='adicionar_remover_questao(this, "{{questao.id}}")' value='{{questao.id}}'>{{questao.pergunta | safe}}
+        
+        <div class='questao' id='questao{{questao.id}}'>
+          <input type='checkbox' id='input{{questao.id}}'class='pergunta_selecionada' onchange='adicionar_remover_questao(this, "{{questao.id}}")' value='{{questao.id}}'>
+          <i class="fa-solid fa-chevron-down" onclick="mudar_ocultar_questao('questao{{questao.id}}')"></i>
+          {{questao.pergunta | safe}}
+        </div>
       </div>
     {% endfor %}
 
@@ -48,6 +53,14 @@
       {% endif %}
   </ul>
 <script>
+  function mudar_ocultar_questao(id){
+    var div_questao = document.getElementById(id);
+    if (div_questao.style.height == 'auto'){
+      div_questao.style.height = '200px'
+    }else{
+      div_questao.style.height = 'auto'
+    }
+  }
   function adicionar_remover_questao(checkbox, id_questao){
     if (checkbox.checked){
       adicionar_questao(id_questao)
