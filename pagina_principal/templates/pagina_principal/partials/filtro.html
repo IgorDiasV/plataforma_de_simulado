@@ -9,7 +9,12 @@
                 {% if itens_objeto %}
                     {% for campo_filtro in itens_objeto %}
                         <div class="{{id_class}} container_name_item">
-                            <input type="checkbox" name="{{name}}" value="{{campo_filtro.id}}" id="{{id_class}}{{campo_filtro.id}}">
+           
+                            {% if campo_filtro.id|stringformat:"s" in selecionados %}
+                                <input type="checkbox" name="{{name}}" value="{{campo_filtro.id}}" id="{{id_class}}{{campo_filtro.id}}" checked>
+                            {% else %}
+                                <input type="checkbox" name="{{name}}" value="{{campo_filtro.id}}" id="{{id_class}}{{campo_filtro.id}}">
+                            {% endif %} 
                             <label for="{{id_class}}{{campo_filtro.id}}">{{campo_filtro}}</label><br>
                         </div>
                     {% endfor %}
