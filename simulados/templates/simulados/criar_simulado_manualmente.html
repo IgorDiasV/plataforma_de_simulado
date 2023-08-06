@@ -31,7 +31,7 @@
         
         <div class='questao' id='questao{{questao.id}}'>
           <input type='checkbox' id='input{{questao.id}}'class='pergunta_selecionada' onchange='adicionar_remover_questao(this, "{{questao.id}}")' value='{{questao.id}}'>
-          <i class="fa-solid fa-chevron-down" onclick="mudar_ocultar_questao('questao{{questao.id}}')"></i>
+          <i id="seta_questao{{questao.id}}" class="fa-solid fa-chevron-down" onclick="mudar_ocultar_questao('questao{{questao.id}}','seta_questao{{questao.id}}')"></i>
           {{questao.pergunta | safe}}
         </div>
       </div>
@@ -53,12 +53,18 @@
       {% endif %}
   </ul>
 <script>
-  function mudar_ocultar_questao(id){
-    var div_questao = document.getElementById(id);
+  function mudar_ocultar_questao(id_div_questao, id_seta_questao){
+    let div_questao = document.getElementById(id_div_questao);
+    let seta_questao = document.getElementById(id_seta_questao);
+
     if (div_questao.style.height == 'auto'){
       div_questao.style.height = '200px'
+      seta_questao.classList.remove('fa-chevron-up')
+      seta_questao.classList.add('fa-chevron-down')
     }else{
       div_questao.style.height = 'auto'
+      seta_questao.classList.remove('fa-chevron-down')
+      seta_questao.classList.add('fa-chevron-up')
     }
   }
   function adicionar_remover_questao(checkbox, id_questao){
