@@ -3,8 +3,14 @@
 
 {% block css %}
   <link href="{% static 'simulados/css/criar_simulado_manualmente.css' %}" rel='stylesheet'>
+  <link href="{% static 'pagina_principal/css/filtro.css' %}" rel='stylesheet'>
 {% endblock css %}
 {% block titulo %}Criando Simulado{% endblock titulo %}
+
+{% block script %}
+    <script src={% static 'pagina_principal/js/funcionalidades_filtro.js' %}></script>
+{% endblock script %}
+
 {% block conteudo %}
     <form method="post">
       {% csrf_token %}
@@ -24,8 +30,16 @@
       <button type="submit">Criar Simulado</button>
     </form>
     <script src="{% static 'pagina_principal/js/utils.js'%}"></script>
-
+    
     <h2> Lista de Questões</h2>
+    <form method="get" id='form_filtro' >
+      <input type="hidden" name='form_filtro'> 
+      {% include 'pagina_principal/partials/filtro.html' with titulo_filtro='Assuntos' itens_objeto=assuntos id_class='assunto' name='assuntos' selecionados=id_filtro_assunto %}  
+      {% include 'pagina_principal/partials/filtro.html' with titulo_filtro='Ano' itens_lista=anos_questoes id_class='ano' name='anos'%}  
+      <div class="container-button-filter">
+          <button class='button-filter' type="button" onclick='filtrar()'>Filtrar</button>
+      </div>  
+    </form>
     {% for questao in questoes %}
       <div class='ql-editor'>
         
@@ -92,22 +106,60 @@
     let option = document.getElementById(id)
     option.remove()
   }
-  function mudar_pagina(pagina){
-    
-    let titulo = document.getElementById('titulo')
+
+  function get_questoes_escolhidas(){
     let select_questoes = document.getElementById('questoes_escolhidas')
     let questoes_escolhidas = select_questoes.querySelectorAll('option:checked')
     id_perguntas_selecionadas = []
     questoes_escolhidas.forEach((pergunta) => {
           id_perguntas_selecionadas.push(pergunta.value)
     })
+    return id_perguntas_selecionadas
+  }
+
+  function parametros_para_redirecionar(){
+      let titulo = document.getElementById('titulo')
+      let id_perguntas_selecionadas = get_questoes_escolhidas()
+      let ids_filtro_assuntos = get_filtros_escolhidos()
+
+      const parametros = new URLSearchParams();
+      
+      const parametroListaQuestoes = id_perguntas_selecionadas.join(',');
+      const parametroListaAssuntos = ids_filtro_assuntos.join(',');
+      
+      parametros.append('id_assuntos_filtro', parametroListaAssuntos);
+      parametros.append('id_questao', parametroListaQuestoes);
+      parametros.append('titulo', titulo.value)
+
+      return parametros.toString();
+
+
+  }
+
+  function get_filtros_escolhidos(){
+    let form = document.getElementById('form_filtro')
+    let filtro_assuntos = form.querySelectorAll("[name='assuntos']:checked")
+    let ids_filtro_assuntos = []
+    filtro_assuntos.forEach((assunto) => {
+      ids_filtro_assuntos.push(assunto.value)
+    })
+
+    return ids_filtro_assuntos
+  }
+  function filtrar(){
+      
+      let parametros_gerais = parametros_para_redirecionar()     
+      history.replaceState(null, null, window.location.pathname);
+      const url = window.location.href + '?' + parametros_gerais
+      window.location.href = url
+  }
+  function mudar_pagina(pagina){
+    
+    let parametros_gerais = parametros_para_redirecionar()
     const parametros = new URLSearchParams();
-    const parametroLista = id_perguntas_selecionadas.join(',');
-    parametros.append('id_questao', parametroLista);
-    parametros.append('titulo', titulo.value)
     parametros.append('page', pagina)
     history.replaceState(null, null, window.location.pathname);
-    const url = window.location.href + '?' + parametros.toString();
+    const url = window.location.href + '?' + parametros.toString() + '&' + parametros_gerais;
     window.location.href = url
   }
 </script>

@@ -11,6 +11,7 @@ from django.urls import reverse
 from utils.utils import qtd_perguntas, qtd_acertos, formatar_tempo
 from datetime import datetime
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from utils.utils import lista_questoes
 
 
 def simulado(request):
@@ -262,18 +263,33 @@ def obter_valor_ou_zero(request, campos):
 def criar_simulado_manualmente(request):
     usuario = Usuario.objects.filter(user=request.user).first()
     if usuario.is_teacher:
-        questoes = Questao.objects.all()
-        assuntos = Assunto.objects.all()
-
+  
+        if request.method == 'POST':
+            titulo = request.POST['titulo']
+            id_questoes_escolhidas = request.POST.getlist('questoes_escolhidas')  # noqa: E501
+            questoes_escolhidas = Questao.objects.all().filter(id__in=id_questoes_escolhidas)  # noqa: E501
+            simulado = Simulado.objects.create(titulo=titulo, autor=usuario)  # noqa: E501
+            simulado.questoes.set(questoes_escolhidas)
+            messages.success(request, 'Simulado Criado com Sucesso')
+            return redirect('simulados:lista_simulados')
+        
+        assuntos_ids = request.GET.get('id_assuntos_filtro', '')
+        
         titulo = request.GET.get('titulo', '')
         id_questoes_escolhidas = request.GET.get('id_questao', '')
         n_pagina = request.GET.get('page', '1')
+
+        if assuntos_ids != '':
+            assuntos_ids = assuntos_ids.split(",")
+        else:
+            assuntos_ids = []
 
         if id_questoes_escolhidas != '':
             id_questoes_escolhidas = id_questoes_escolhidas.split(",")
         else:
             id_questoes_escolhidas = []
-
+       
+        questoes, assuntos, _ = lista_questoes(filtro_assunto=assuntos_ids)
         page = ''
         questoes_paginacao = Paginator(questoes, 2)
         try:
@@ -281,20 +297,12 @@ def criar_simulado_manualmente(request):
         except (EmptyPage, PageNotAnInteger):
             page = questoes_paginacao.page(1)
 
-        if request.method == 'POST':
-            titulo = request.POST['titulo']
-            id_questoes_escolhidas = request.POST.getlist('questoes_escolhidas')  # noqa: E501
-            questoes_escolhidas = questoes.filter(id__in=id_questoes_escolhidas)  # noqa: E501
-            simulado = Simulado.objects.create(titulo=titulo, autor=usuario)
-            simulado.questoes.set(questoes_escolhidas)
-            messages.success(request, 'Simulado Criado com Sucesso')
-            return redirect('simulados:lista_simulados')
-
         return render(request, 'simulados/criar_simulado_manualmente.html',  # noqa: E501
                       {'questoes': page,
                        'assuntos': assuntos,
                        'questoes_escolhidas': id_questoes_escolhidas,
-                       'titulo': titulo})
+                       'titulo': titulo,
+                       'id_filtro_assunto': assuntos_ids})
 
     else:
         mensagem = ('Seu perfil é de aluno, '
