@@ -39,7 +39,8 @@ def lista_questoes_geral(request):
     return render(request, 'pagina_principal/lista_questoes.html',
                   {'questoes': page,
                    'assuntos': assuntos,
-                   'anos_questoes': anos_questoes})
+                   'anos_questoes': anos_questoes,
+                   'id_filtro_assunto': assuntos_ids})
 
 
 @login_required(login_url='usuarios:login', redirect_field_name='next')
