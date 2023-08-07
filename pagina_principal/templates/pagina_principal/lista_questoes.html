@@ -31,10 +31,12 @@
     <br>
     <hr>
     <br>
-    <div class='div_questao'>
+    <div class='div_questao' id='questao{{questao.id}}'>
         {% if editavel %}
-            <a href="{% url 'editar_questao' questao.id %}"><button>Editar</button></a> </br>
+            <a href="{% url 'editar_questao' questao.id %}"><button>Editar</button></a>
         {% endif %}
+        <i id="seta_questao{{questao.id}}" class="fa-solid fa-chevron-down" onclick="mudar_ocultar_questao('questao{{questao.id}}','seta_questao{{questao.id}}')"></i>
+        </br>
         <div class='ql-editor'>{{questao.pergunta | safe}}</div>
         </br>
         </br>
@@ -69,5 +71,20 @@
     </ul>
 
 </div>
-
+<script>
+    function mudar_ocultar_questao(id_div_questao, id_seta_questao){
+        let div_questao = document.getElementById(id_div_questao);
+        let seta_questao = document.getElementById(id_seta_questao);
+    
+        if (div_questao.style.height == 'auto'){
+          div_questao.style.height = '200px'
+          seta_questao.classList.remove('fa-chevron-up')
+          seta_questao.classList.add('fa-chevron-down')
+        }else{
+          div_questao.style.height = 'auto'
+          seta_questao.classList.remove('fa-chevron-down')
+          seta_questao.classList.add('fa-chevron-up')
+        }
+      }
+</script>
 {% endblock conteudo %}

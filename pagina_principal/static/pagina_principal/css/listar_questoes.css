@@ -6,8 +6,18 @@
     border: 1px solid #666666;
     padding: 10px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    height: 200px;
+    overflow: hidden;
     
 }
+
+.div_questao div{
+    overflow: hidden;
+}
+
+.div_questao i {
+    float: right;
+  }
 .container_name_item {
     margin: 5px 0;
     display:block;
