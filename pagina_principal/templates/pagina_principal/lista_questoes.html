@@ -19,12 +19,11 @@
 <div class="container margen_top">
 
     
-    <form method="post" >
-        {% csrf_token %} 
+    <form method="get" id='form_filtro'>
         {% include 'pagina_principal/partials/filtro.html' with titulo_filtro='Assuntos' itens_objeto=assuntos id_class='assunto' name='assuntos' selecionados=id_filtro_assunto%}  
         {% include 'pagina_principal/partials/filtro.html' with titulo_filtro='Ano' itens_lista=anos_questoes id_class='ano' name='anos'%}  
         <div class="container-button-filter">
-            <button class='button-filter' type="submit">Filtrar</button>
+            <button class='button-filter' type="button" onclick="filtrar()">Filtrar</button>
         </div>  
     </form>
     {% for questao in questoes %}
@@ -56,17 +55,17 @@
     
     <ul class="paginacao">
         {% if questoes.has_previous %}
-        <li><a href="?page={{questoes.previous_page_number}}"> Anterior </a></li>
+        <li><a onclick="mudar_pagina('{{questoes.previous_page_number}}')"> Anterior </a></li>
         {% endif %}
         {% for page in questoes.paginator.page_range %}
             {% if page == questoes.number %}   
-                <li><a href="?page={{page}}" class="active">{{page}}</a></li>
+                <li><a  class="active" >{{page}}</a></li>
             {% else %}
-                <li><a href="?page={{page}}" >{{page}}</a></li>
+                <li><a onclick="mudar_pagina('{{page}}')">{{page}}</a></li>
             {% endif %} 
         {% endfor %}
         {% if questoes.has_next %}
-            <li><a href="?page={{questoes.next_page_number}}"> Próximo </a></li>
+            <li><a onclick="mudar_pagina('{{questoes.next_page_number}}')"> Próximo </a></li>
         {% endif %}
     </ul>
 
@@ -86,5 +85,56 @@
           seta_questao.classList.add('fa-chevron-up')
         }
       }
+
+      function parametros_para_redirecionar(){
+
+        let ids_filtro = get_filtros_escolhidos()
+        let ids_filtro_assuntos = ids_filtro[0]
+        let ids_filtro_anos = ids_filtro[1]
+        const parametros = new URLSearchParams();
+        
+        const parametroListaAssuntos = ids_filtro_assuntos.join(',');
+        const parametroListaAnos = ids_filtro_anos.join(',');
+        
+        parametros.append('id_assuntos_filtro', parametroListaAssuntos);
+        parametros.append('id_anos_filtro', parametroListaAnos);
+  
+        return parametros.toString();
+  
+  
+    }
+  
+    function get_filtros_escolhidos(){
+      let form = document.getElementById('form_filtro')
+      let filtro_assuntos = form.querySelectorAll("[name='assuntos']:checked")
+      let ids_filtro_assuntos = []
+      filtro_assuntos.forEach((assunto) => {
+        ids_filtro_assuntos.push(assunto.value)
+      })
+  
+      let filtro_anos = form.querySelectorAll("[name='anos']:checked")
+      let ids_filtro_anos = []
+      filtro_anos.forEach((ano) => {
+        ids_filtro_anos.push(ano.value)
+      })
+
+      return [ids_filtro_assuntos, ids_filtro_anos]
+    }
+    function filtrar(){
+        
+        let parametros_gerais = parametros_para_redirecionar()     
+        history.replaceState(null, null, window.location.pathname);
+        const url = window.location.href + '?' + parametros_gerais
+        window.location.href = url
+    }
+    function mudar_pagina(pagina){
+      
+      let parametros_gerais = parametros_para_redirecionar()
+      const parametros = new URLSearchParams();
+      parametros.append('page', pagina)
+      history.replaceState(null, null, window.location.pathname);
+      const url = window.location.href + '?' + parametros.toString() + '&' + parametros_gerais;
+      window.location.href = url
+    }
 </script>
 {% endblock conteudo %}
