@@ -38,6 +38,7 @@ def lista_questoes(usuario=None, filtro_assunto=[], anos=[]):
     questoes = Questao.objects.all()
     assuntos = Assunto.objects.all()
     anos_questoes = [questao.ano for questao in questoes]
+    anos_questoes = list(set(anos_questoes))
     if len(filtro_assunto) > 0:
         questoes = questoes.filter(assuntos__id__in=filtro_assunto)
     if usuario is not None:
