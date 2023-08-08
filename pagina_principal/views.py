@@ -12,25 +12,33 @@ def home(request):
     return render(request, 'pagina_principal/home.html')
 
 
-def dados_post_lista_questao(request):
-    assuntos_ids = []
-    anos = []
-    if request.method == 'POST':
-        assuntos_ids = request.POST.getlist('assuntos')
-        anos = request.POST.getlist('anos')
-    return anos, assuntos_ids
+def dados_get_lista_questao(request):
+    assuntos_ids = request.GET.get('id_assuntos_filtro', '')
+    anos = request.GET.get('id_anos_filtro', '')
+    n_pagina = request.GET.get('page', '1')
+    
+    if assuntos_ids != '':
+        assuntos_ids = assuntos_ids.split(",")
+    else:
+        assuntos_ids = []
+    
+    if anos != '':
+        anos = anos.split(",")
+    else:
+        anos = []
+
+    return anos, assuntos_ids, n_pagina
 
 
 def lista_questoes_geral(request):
 
-    anos, assuntos_ids = dados_post_lista_questao(request)
+    anos, assuntos_ids, n_pagina = dados_get_lista_questao(request)
     questoes, assuntos, anos_questoes = lista_questoes(
                                             filtro_assunto=assuntos_ids,
                                             anos=anos)
 
-    n_pagina = request.GET.get('page', '1')
     page = ''
-    questoes_paginacao = Paginator(questoes, 5)
+    questoes_paginacao = Paginator(questoes, 2)
     try:
         page = questoes_paginacao.page(n_pagina)
     except (EmptyPage, PageNotAnInteger):
@@ -45,9 +53,10 @@ def lista_questoes_geral(request):
 
 @login_required(login_url='usuarios:login', redirect_field_name='next')
 def lista_questoes_usuario(request):
+    # TODO falta adicionar a paginação
     usuario = Usuario.objects.filter(user=request.user).first()
 
-    anos, assuntos_ids = dados_post_lista_questao(request)
+    anos, assuntos_ids, _ = dados_get_lista_questao(request)
     questoes, assuntos, anos_questoes = lista_questoes(
                                                 usuario=usuario,
                                                 filtro_assunto=assuntos_ids,
