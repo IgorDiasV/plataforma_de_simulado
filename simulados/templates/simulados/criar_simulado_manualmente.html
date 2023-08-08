@@ -120,14 +120,19 @@
   function parametros_para_redirecionar(){
       let titulo = document.getElementById('titulo')
       let id_perguntas_selecionadas = get_questoes_escolhidas()
-      let ids_filtro_assuntos = get_filtros_escolhidos()
+
+      let ids_filtro = get_filtros_escolhidos()
+      let ids_filtro_assuntos = ids_filtro[0]
+      let ids_filtro_anos = ids_filtro[1]
 
       const parametros = new URLSearchParams();
       
       const parametroListaQuestoes = id_perguntas_selecionadas.join(',');
       const parametroListaAssuntos = ids_filtro_assuntos.join(',');
-      
+      const parametroListaAnos = ids_filtro_anos.join(',');
+
       parametros.append('id_assuntos_filtro', parametroListaAssuntos);
+      parametros.append('id_anos_filtro', parametroListaAnos);
       parametros.append('id_questao', parametroListaQuestoes);
       parametros.append('titulo', titulo.value)
 
@@ -144,8 +149,15 @@
       ids_filtro_assuntos.push(assunto.value)
     })
 
-    return ids_filtro_assuntos
+    let filtro_anos = form.querySelectorAll("[name='anos']:checked")
+    let ids_filtro_anos = []
+    filtro_anos.forEach((ano) => {
+      ids_filtro_anos.push(ano.value)
+    })
+
+    return [ids_filtro_assuntos, ids_filtro_anos]
   }
+
   function filtrar(){
       
       let parametros_gerais = parametros_para_redirecionar()     

@@ -274,6 +274,7 @@ def criar_simulado_manualmente(request):
             return redirect('simulados:lista_simulados')
         
         assuntos_ids = request.GET.get('id_assuntos_filtro', '')
+        anos_ids = request.GET.get('id_anos_filtro', '')
         
         titulo = request.GET.get('titulo', '')
         id_questoes_escolhidas = request.GET.get('id_questao', '')
@@ -283,13 +284,19 @@ def criar_simulado_manualmente(request):
             assuntos_ids = assuntos_ids.split(",")
         else:
             assuntos_ids = []
-
+        
+        if anos_ids != '':
+            anos_ids = anos_ids.split(",")
+        else:
+            anos_ids = []
+        
         if id_questoes_escolhidas != '':
             id_questoes_escolhidas = id_questoes_escolhidas.split(",")
         else:
             id_questoes_escolhidas = []
        
-        questoes, assuntos, _ = lista_questoes(filtro_assunto=assuntos_ids)
+        questoes, assuntos, anos = lista_questoes(filtro_assunto=assuntos_ids, 
+                                                  anos=anos_ids)
         page = ''
         questoes_paginacao = Paginator(questoes, 2)
         try:
@@ -302,7 +309,8 @@ def criar_simulado_manualmente(request):
                        'assuntos': assuntos,
                        'questoes_escolhidas': id_questoes_escolhidas,
                        'titulo': titulo,
-                       'id_filtro_assunto': assuntos_ids})
+                       'id_filtro_assunto': assuntos_ids,
+                       'anos_questoes': anos})
 
     else:
         mensagem = ('Seu perfil é de aluno, '
