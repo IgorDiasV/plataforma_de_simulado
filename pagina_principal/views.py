@@ -56,17 +56,25 @@ def lista_questoes_usuario(request):
     # TODO falta adicionar a paginação
     usuario = Usuario.objects.filter(user=request.user).first()
 
-    anos, assuntos_ids, _ = dados_get_lista_questao(request)
+    anos, assuntos_ids, n_pagina = dados_get_lista_questao(request)
     questoes, assuntos, anos_questoes = lista_questoes(
                                                 usuario=usuario,
                                                 filtro_assunto=assuntos_ids,
                                                 anos=anos
+                     
                                                 )
+    page = ''
+    questoes_paginacao = Paginator(questoes, 2)
+    try:
+        page = questoes_paginacao.page(n_pagina)
+    except (EmptyPage, PageNotAnInteger):
+        page = questoes_paginacao.page(1)
 
     return render(request, 'pagina_principal/lista_questoes.html',
-                  {'questoes': questoes, 'assuntos': assuntos,
+                  {'questoes': page, 'assuntos': assuntos,
                    'editavel': True,
-                   'anos_questoes': anos_questoes
+                   'anos_questoes': anos_questoes,
+                   'id_filtro_assunto': assuntos_ids
                    })
 
 
