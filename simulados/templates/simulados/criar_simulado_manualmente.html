@@ -9,6 +9,7 @@
 
 {% block script %}
     <script src={% static 'pagina_principal/js/funcionalidades_filtro.js' %}></script>
+    <script src={% static 'global/js/filtro.js' %}></script>
 {% endblock script %}
 
 {% block conteudo %}
@@ -141,30 +142,6 @@
 
   }
 
-  function get_filtros_escolhidos(){
-    let form = document.getElementById('form_filtro')
-    let filtro_assuntos = form.querySelectorAll("[name='assuntos']:checked")
-    let ids_filtro_assuntos = []
-    filtro_assuntos.forEach((assunto) => {
-      ids_filtro_assuntos.push(assunto.value)
-    })
-
-    let filtro_anos = form.querySelectorAll("[name='anos']:checked")
-    let ids_filtro_anos = []
-    filtro_anos.forEach((ano) => {
-      ids_filtro_anos.push(ano.value)
-    })
-
-    return [ids_filtro_assuntos, ids_filtro_anos]
-  }
-
-  function filtrar(){
-      
-      let parametros_gerais = parametros_para_redirecionar()     
-      history.replaceState(null, null, window.location.pathname);
-      const url = window.location.href + '?' + parametros_gerais
-      window.location.href = url
-  }
   function mudar_pagina(pagina){
     
     let parametros_gerais = parametros_para_redirecionar()
