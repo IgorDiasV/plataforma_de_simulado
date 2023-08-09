@@ -48,7 +48,8 @@ def lista_questoes_geral(request):
                   {'questoes': page,
                    'assuntos': assuntos,
                    'anos_questoes': anos_questoes,
-                   'id_filtro_assunto': assuntos_ids})
+                   'id_filtro_assunto': assuntos_ids,
+                   'anos_filtro': anos})
 
 
 @login_required(login_url='usuarios:login', redirect_field_name='next')
@@ -74,7 +75,8 @@ def lista_questoes_usuario(request):
                   {'questoes': page, 'assuntos': assuntos,
                    'editavel': True,
                    'anos_questoes': anos_questoes,
-                   'id_filtro_assunto': assuntos_ids
+                   'id_filtro_assunto': assuntos_ids,
+                   'anos_filtro': anos
                    })
 
 
