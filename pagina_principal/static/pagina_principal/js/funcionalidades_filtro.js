@@ -14,7 +14,7 @@ function  mudar_visibilidade_filtro(id_campo_filtro, id_seta)
     }
 }
 
-function filtrar(id_busca, id_item){
+function busca_filtrar(id_busca, id_item){
     let busca = document.getElementById(id_busca);
     let itens_do_filtro = document.querySelectorAll(id_item);
     let filtro = busca.value.toLowerCase();

@@ -4,7 +4,7 @@
         <button type='button' onclick="mudar_visibilidade_filtro('campo_filtro_{{name}}', 'seta_{{name}}')"><i id="seta_{{name}}" class="fa-solid fa-chevron-down"></i></button>
     </div>
     <div class="campos-filtro" id="campo_filtro_{{name}}">
-        <input type="text" class='busca' id="busca_{{name}}" placeholder="Buscar assunto..." oninput="filtrar('busca_{{name}}','.{{id_class}}')">
+        <input type="text" class='busca' id="busca_{{name}}" placeholder="Buscar assunto..." oninput="busca_filtrar('busca_{{name}}','.{{id_class}}')">
             <div class="container-list-filter">
                 {% if itens_objeto %}
                     {% for campo_filtro in itens_objeto %}
