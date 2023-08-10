@@ -298,7 +298,7 @@ def criar_simulado_manualmente(request):
         questoes, assuntos, anos = lista_questoes(filtro_assunto=assuntos_ids, 
                                                   anos=anos_ids)
         page = ''
-        questoes_paginacao = Paginator(questoes, 2)
+        questoes_paginacao = Paginator(questoes, 5)
         try:
             page = questoes_paginacao.page(n_pagina)
         except (EmptyPage, PageNotAnInteger):
