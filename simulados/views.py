@@ -263,7 +263,6 @@ def obter_valor_ou_zero(request, campos):
 def criar_simulado_manualmente(request):
     usuario = Usuario.objects.filter(user=request.user).first()
     if usuario.is_teacher:
-  
         if request.method == 'POST':
             titulo = request.POST['titulo']
             id_questoes_escolhidas = request.POST.getlist('questoes_escolhidas')  # noqa: E501
@@ -272,10 +271,10 @@ def criar_simulado_manualmente(request):
             simulado.questoes.set(questoes_escolhidas)
             messages.success(request, 'Simulado Criado com Sucesso')
             return redirect('simulados:lista_simulados')
-        
+
         assuntos_ids = request.GET.get('id_assuntos_filtro', '')
         anos_ids = request.GET.get('id_anos_filtro', '')
-        
+
         titulo = request.GET.get('titulo', '')
         id_questoes_escolhidas = request.GET.get('id_questao', '')
         n_pagina = request.GET.get('page', '1')
@@ -284,18 +283,18 @@ def criar_simulado_manualmente(request):
             assuntos_ids = assuntos_ids.split(",")
         else:
             assuntos_ids = []
-        
+
         if anos_ids != '':
             anos_ids = anos_ids.split(",")
         else:
             anos_ids = []
-        
+
         if id_questoes_escolhidas != '':
             id_questoes_escolhidas = id_questoes_escolhidas.split(",")
         else:
             id_questoes_escolhidas = []
-       
-        questoes, assuntos, anos = lista_questoes(filtro_assunto=assuntos_ids, 
+
+        questoes, assuntos, anos = lista_questoes(filtro_assunto=assuntos_ids,
                                                   anos=anos_ids)
         page = ''
         questoes_paginacao = Paginator(questoes, 5)

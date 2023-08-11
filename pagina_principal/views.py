@@ -16,12 +16,12 @@ def dados_get_lista_questao(request):
     assuntos_ids = request.GET.get('id_assuntos_filtro', '')
     anos = request.GET.get('id_anos_filtro', '')
     n_pagina = request.GET.get('page', '1')
-    
+
     if assuntos_ids != '':
         assuntos_ids = assuntos_ids.split(",")
     else:
         assuntos_ids = []
-    
+
     if anos != '':
         anos = anos.split(",")
     else:
@@ -62,7 +62,7 @@ def lista_questoes_usuario(request):
                                                 usuario=usuario,
                                                 filtro_assunto=assuntos_ids,
                                                 anos=anos
-                     
+
                                                 )
     page = ''
     questoes_paginacao = Paginator(questoes, 2)
