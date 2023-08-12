@@ -33,6 +33,7 @@
     </form>
     <script src="{% static 'pagina_principal/js/utils.js'%}"></script>
     
+    <div id='container_questoes_escolhidas'></div>
     <h2> Lista de Questões</h2>
     <form method="get" id='form_filtro' >
       <input type="hidden" name='form_filtro'> 
@@ -48,7 +49,9 @@
         <div class='questao' id='questao{{questao.id}}'>
           <input type='checkbox' id='input{{questao.id}}'class='pergunta_selecionada' onchange='adicionar_remover_questao(this, "{{questao.id}}")' value='{{questao.id}}'>
           <i id="seta_questao{{questao.id}}" class="fa-solid fa-chevron-down" onclick="mudar_ocultar_questao('questao{{questao.id}}','seta_questao{{questao.id}}')"></i>
-          {{questao.pergunta | safe}}
+          <div class="container-questao">
+            {{questao.pergunta | safe}}
+          </div>
         </div>
       </div>
     {% endfor %}
@@ -80,6 +83,7 @@
 
   function adicionar_questao(id)
   {
+      
       let select_questoes_escolhidas = document.getElementById('questoes_escolhidas')
       let option = document.createElement("option");
       option.id = "option" + id;
@@ -87,13 +91,22 @@
       option.text = id;
       option.selected = true;
       select_questoes_escolhidas.add(option);
+
+      let container_questoes_escolhidas = document.getElementById('container_questoes_escolhidas')
+      let conteudo_questao = document.getElementById('questao'+id).querySelector('.container-questao')
+      
+      container_questoes_escolhidas.innerHTML+= `<div id='questao_escolhida${id}' class='questao'>${conteudo_questao.innerHTML}</div>`
       
   }
   function remover_questao(id)
   {
+    document.getElementById('questao_escolhida'+id).remove()
+
     id = "option" + id
     let option = document.getElementById(id)
     option.remove()
+  
+
   }
 
   function get_questoes_escolhidas(){
