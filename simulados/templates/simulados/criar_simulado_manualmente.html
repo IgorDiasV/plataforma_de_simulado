@@ -95,8 +95,11 @@
       let container_questoes_escolhidas = document.getElementById('container_questoes_escolhidas')
       let conteudo_questao = document.getElementById('questao'+id).querySelector('.container-questao')
       
-      container_questoes_escolhidas.innerHTML+= `<div id='questao_escolhida${id}' class='questao'>${conteudo_questao.innerHTML}</div>`
-      
+      let html = `<div id='questao_escolhida${id}' class='questao'>`
+      html += ` <i id="seta_questao_escolhida${id}" class="fa-solid fa-chevron-down" onclick="mudar_ocultar_questao('questao_escolhida${id}','seta_questao_escolhida${id}')"></i>`
+      html +=  `${conteudo_questao.innerHTML}</div>`
+      container_questoes_escolhidas.innerHTML+= html
+        
   }
   function remover_questao(id)
   {
