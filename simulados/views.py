@@ -279,6 +279,7 @@ def criar_simulado_manualmente(request):
         id_questoes_escolhidas = request.GET.get('id_questao', '')
         n_pagina = request.GET.get('page', '1')
 
+        questoes_escolhidas = ''
         if assuntos_ids != '':
             assuntos_ids = assuntos_ids.split(",")
         else:
@@ -291,6 +292,7 @@ def criar_simulado_manualmente(request):
 
         if id_questoes_escolhidas != '':
             id_questoes_escolhidas = id_questoes_escolhidas.split(",")
+            questoes_escolhidas = Questao.objects.all().filter(id__in=id_questoes_escolhidas)  # noqa: E501
         else:
             id_questoes_escolhidas = []
 
@@ -306,7 +308,8 @@ def criar_simulado_manualmente(request):
         return render(request, 'simulados/criar_simulado_manualmente.html',  # noqa: E501
                       {'questoes': page,
                        'assuntos': assuntos,
-                       'questoes_escolhidas': id_questoes_escolhidas,
+                       'id_questoes_escolhidas': id_questoes_escolhidas,
+                       'questoes_escolhidas': questoes_escolhidas,
                        'titulo': titulo,
                        'id_filtro_assunto': assuntos_ids,
                        'anos_questoes': anos})

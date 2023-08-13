@@ -25,8 +25,8 @@
         id="questoes_escolhidas"
         multiple
       >
-        {% for questao_escolhida in questoes_escolhidas %}
-          <option id='option{{questao_escolhida}}' value='{{questao_escolhida}}' selected>{{questao_escolhida}}</option>
+        {% for id_questao_escolhida in id_questoes_escolhidas %}
+          <option id='option{{id_questao_escolhida}}' value='{{id_questao_escolhida}}' selected>{{id_questao_escolhida}}</option>
         {% endfor %}
       </select>
       <button type="submit" class='green-button margin-top'>Criar Simulado</button>
@@ -36,7 +36,12 @@
     <div id='container_questoes_escolhidas'>
       <h2>Questões adicionadas: </h2>
       <i id="seta_questoes_escolhidas" class="fa-solid fa-chevron-down" onclick="mudar_ocultar_questao('container_questoes_escolhidas','seta_questoes_escolhidas', '28px')"></i>
-
+      {% for questao_escolhida in questoes_escolhidas %}
+        <div id="questao_escolhida{{questao_escolhida.id}}" class='questao'>
+          <i id="seta_questao_escolhida{{questao_escolhida.id}}" class="fa-solid fa-chevron-down" onclick="mudar_ocultar_questao('questao_escolhida{{questao_escolhida.id}}','seta_questao_escolhida{{questao_escolhida.id}}')"></i>`
+            {{questao_escolhida.pergunta | safe}}
+        </div>
+      {% endfor %}
     </div>
     <h2> Lista de Questões</h2>
     <form method="get" id='form_filtro' >
