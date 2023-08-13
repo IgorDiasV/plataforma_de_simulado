@@ -159,5 +159,18 @@
     const url = window.location.href + '?' + parametros.toString() + '&' + parametros_gerais;
     window.location.href = url
   }
+
+  window.onload = function() {  
+      let select_questoes_escolhidas = document.getElementById('questoes_escolhidas')
+      let questoes_selecionadas = select_questoes_escolhidas.querySelectorAll('option:checked')
+      questoes_selecionadas.forEach(function(questao){
+        let checkbox_questao = document.getElementById('input'+questao.value)
+        if (checkbox_questao != null){
+          checkbox_questao.checked = true;
+        }
+        
+      })
+    
+  };
 </script>
   {% endblock conteudo %}
