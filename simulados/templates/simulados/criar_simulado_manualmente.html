@@ -33,7 +33,11 @@
     </form>
     <script src="{% static 'pagina_principal/js/utils.js'%}"></script>
     
-    <div id='container_questoes_escolhidas'></div>
+    <div id='container_questoes_escolhidas'>
+      <h2>Questões adicionadas: </h2>
+      <i id="seta_questoes_escolhidas" class="fa-solid fa-chevron-down" onclick="mudar_ocultar_questao('container_questoes_escolhidas','seta_questoes_escolhidas', '28px')"></i>
+
+    </div>
     <h2> Lista de Questões</h2>
     <form method="get" id='form_filtro' >
       <input type="hidden" name='form_filtro'> 

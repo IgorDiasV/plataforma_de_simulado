@@ -53,10 +53,22 @@ color: #fff;
   margin-bottom: 20px;
 }
 
-.questao i {
+.questao i, #container_questoes_escolhidas i {
   float: right;
 }
 
 .margin-top{
   margin-top: 15px;
+}
+
+#container_questoes_escolhidas{
+  border: 1px solid black;
+  padding: 5px;
+  overflow: hidden;
+  height: 28px;
+}
+
+#container_questoes_escolhidas h2{
+  display: inline-block;
+  margin: 0;
 }
