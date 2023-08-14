@@ -20,7 +20,9 @@ def simulado(request):
     questoes = simulado.questoes.all()
 
     return render(request, 'simulados/simulado.html',
-                  {'questoes': questoes, 'simulado': simulado})
+                  {'questoes': questoes,
+                   'simulado': simulado,
+                   'tempo_de_prova': ''})
 
 
 def gerar_link(request):
