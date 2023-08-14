@@ -33,7 +33,7 @@
     </form>
     <script src="{% static 'pagina_principal/js/utils.js'%}"></script>
     
-    <div id='container_questoes_escolhidas'>
+    <div id='container_questoes_escolhidas' class='margin-top'>
       <h2>Questões adicionadas: </h2>
       <i id="seta_questoes_escolhidas" class="fa-solid fa-chevron-down" onclick="mudar_ocultar_questao('container_questoes_escolhidas','seta_questoes_escolhidas', '28px')"></i>
       {% for questao_escolhida in questoes_escolhidas %}
