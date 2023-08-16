@@ -5,13 +5,13 @@
         {% csrf_token %}
 
         <label for="titulo">Título: </label> 
-        <input type="text" id="titulo" name="titulo"></br></br>
+        <input class='custom-input' type="text" id="titulo" name="titulo"></br></br>
 
         <label for="qtd_questoes">Quantidade de Questões</label>   
-        <input type="number" name="qtd_questoes" id="qtd_questoes" value=0></br></br>
+        <input class='custom-input' type="number" name="qtd_questoes" id="qtd_questoes" value=0></br></br>
 
         
-        <select name="assuntos" multiple>
+        <select name="assuntos" class='custom-input' multiple>
           {% for assunto in assuntos%}
             <option value="{{assunto.id}}">{{assunto.nome_assunto}}</option>
           {% endfor %}

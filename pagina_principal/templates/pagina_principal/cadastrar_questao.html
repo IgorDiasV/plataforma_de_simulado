@@ -14,11 +14,11 @@
             {% csrf_token %}
             
             <p>Nome do curso:</p>
-            <input id='nome_curso' name='nome_curso' type='text'>
+            <input id='nome_curso' class='custom-input' name='nome_curso' type='text'>
             </br>
             
             <p>Origem:</p>
-            <select id='origem' name='origem'>
+            <select id='origem' name='origem' class='custom-input'>
                 <option value='ENADE'>ENADE</option>
                 <option value='autoria_propria'>Autoria Própria</option>
                 <option value='outro' selected>Outra Fonte</option>
@@ -26,12 +26,12 @@
             </br>
             </br>
             Ano da questão:</br>
-            <input type="integer" name='ano'>
+            <input type="integer" name='ano' class='custom-input'>
             </br>
             </br>
             <label for="assuntos">Assuntos:</label></br>
             
-            <select  name="assuntos" id="assuntos" multiple>
+            <select  name="assuntos" id="assuntos"  class='custom-input' multiple>
                 {% for assunto in assuntos %}
                 <option value="{{ assunto.id }}">{{ assunto.nome_assunto }}</option>
                 {% endfor %}

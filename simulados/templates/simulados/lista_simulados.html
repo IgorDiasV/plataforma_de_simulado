@@ -40,10 +40,10 @@
                         <h2 > {{simulado.simulado.titulo}}</h2>
                                                 
                         {% if simulado.link %}
-                            <input type="text"  id="link{{simulado.simulado.id}}" placeholder="Digite alguma coisa" value="{{simulado.link}}" readonly/>
+                            <input  class='custom-input' type="text"  id="link{{simulado.simulado.id}}" placeholder="Digite alguma coisa" value="{{simulado.link}}" readonly/>
                             <button type='button' id="botaoCopiar{{simulado.simulado.id}}" onclick="copiarLink('link{{simulado.simulado.id}}')" class="green-button"> Copiar Link</button>
                         {% else %}
-                            <input type="text" style='display: none' id="link{{simulado.simulado.id}}" placeholder="Digite alguma coisa" value="{{simulado.simulado.id}}" readonly/>
+                            <input  class='custom-input' type="text" style='display: none' id="link{{simulado.simulado.id}}" placeholder="Digite alguma coisa" value="{{simulado.simulado.id}}" readonly/>
                             <button style='display: none' type='button' onclick="copiarLink('link{{simulado.simulado.id}}')"  id="botaoCopiar{{simulado.simulado.id}}" class="green-button"> Copiar Link</button>
                             <button type='button' id="botaoGerar{{simulado.simulado.id}}" onclick="exibir_modal('{{simulado.simulado.id}}')" class="green-button"> Gerar Link</button>
                         {% endif %}

@@ -66,3 +66,10 @@ body {
   cursor: pointer;
   margin: 1px;
 }
+
+.custom-input{
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
