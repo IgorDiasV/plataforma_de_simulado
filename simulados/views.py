@@ -169,23 +169,29 @@ def respostas_do_simulado(request):
 
 @login_required(login_url='usuarios:login', redirect_field_name='next')
 def resposta_aluno(request):
-    # TODO caso o Usuário não tenha respondido uma questão,
-    # ela não ira aparecer (corrigir isso)
     if request.method == 'POST':
         id = request.POST['id_resposta']
         respostas_questoes = RespostaQuestaoSimulado.objects.filter(resposta_simulado__id=id)  # noqa: E501
-
+        
+        simulado_respondido = RespostaSimulado.objects.filter(id=id)
+        simulado_respondido = simulado_respondido.first().simulado_respondido
+        questoes_simulados = simulado_respondido.simulado.questoes.all()
+        
         dados_questao = []
-
-        for resposta_questao in respostas_questoes:
-
-            classe = "wrong_answer"
-            if resposta_questao.resposta == resposta_questao.questao.alternativa_correta:  # noqa: E501
-                classe = "right_answer"
-
-            dados_questao.append({'questao': resposta_questao.questao,
-                                  f'classe_alternativa_{resposta_questao.resposta.lower()}': classe})   # noqa: E501
-
+        for questao in questoes_simulados:
+            resposta_questao = respostas_questoes.filter(questao=questao)
+            print(resposta_questao)
+            classe = ''
+            key = ''
+            if len(resposta_questao) > 0:
+                resposta_questao = resposta_questao.first()
+                classe = "wrong_answer"
+                if resposta_questao.resposta == resposta_questao.questao.alternativa_correta:  # noqa: E501
+                    classe = "right_answer"
+                key = f'classe_alternativa_{resposta_questao.resposta.lower()}'
+            dados_questao.append({'questao': questao,
+                                 key: classe})   # noqa: E501
+            
         return render(request, 'simulados/exibir_resultado.html',
                       {'dados_questoes': dados_questao})
     else:
