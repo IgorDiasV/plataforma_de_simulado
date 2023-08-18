@@ -222,6 +222,7 @@ def criar_simulado(request):
     # TODO verificar se a quantiade de questões disponiveis é suficiente
     # para criar o simulado ex: foi pedido para criar um simulado
     # com 10 questões, mas só tem 5 questões cadastradas
+    
     usuario = Usuario.objects.filter(user=request.user).first()
     if usuario.is_teacher:
         assuntos = Assunto.objects.all()

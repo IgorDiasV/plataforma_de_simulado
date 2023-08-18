@@ -72,33 +72,5 @@
     </ul>
 
 </div>
-<script>
-      function parametros_para_redirecionar(){
 
-        let ids_filtro = get_filtros_escolhidos()
-        let ids_filtro_assuntos = ids_filtro[0]
-        let ids_filtro_anos = ids_filtro[1]
-        const parametros = new URLSearchParams();
-        
-        const parametroListaAssuntos = ids_filtro_assuntos.join(',');
-        const parametroListaAnos = ids_filtro_anos.join(',');
-        
-        parametros.append('id_assuntos_filtro', parametroListaAssuntos);
-        parametros.append('id_anos_filtro', parametroListaAnos);
-  
-        return parametros.toString();
-  
-  
-    }
-  
-    function mudar_pagina(pagina){
-      
-      let parametros_gerais = parametros_para_redirecionar()
-      const parametros = new URLSearchParams();
-      parametros.append('page', pagina)
-      history.replaceState(null, null, window.location.pathname);
-      const url = window.location.href + '?' + parametros.toString() + '&' + parametros_gerais;
-      window.location.href = url
-    }
-</script>
 {% endblock conteudo %}

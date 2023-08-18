@@ -11,6 +11,7 @@
     <script src={% static 'pagina_principal/js/funcionalidades_filtro.js' %}></script>
     <script src={% static 'global/js/filtro.js' %}></script>
     <script src={% static 'global/js/utils.js' %}></script>
+    <script src={% static 'simulados/js/criar_simulado.js' %}></script>
 {% endblock script %}
 
 {% block conteudo %}
@@ -67,105 +68,22 @@
 
     <ul class="paginacao">
       {% if questoes.has_previous %}
-      <li><a onclick="mudar_pagina('{{questoes.previous_page_number}}')"> Anterior </a></li>
+      <li><a onclick="mudar_pagina('{{questoes.previous_page_number}}', true)"> Anterior </a></li>
       {% endif %}
       {% for page in questoes.paginator.page_range %}
           {% if page == questoes.number %}   
               <li><a  class="active" >{{page}}</a></li>
           {% else %}
-              <li><a onclick="mudar_pagina('{{page}}')">{{page}}</a></li>
+              <li><a onclick="mudar_pagina('{{page}}', true)">{{page}}</a></li>
           {% endif %} 
       {% endfor %}
       {% if questoes.has_next %}
-          <li><a onclick="mudar_pagina('{{questoes.next_page_number}}')"> Próximo </a></li>
+          <li><a onclick="mudar_pagina('{{questoes.next_page_number}}', true)"> Próximo </a></li>
       {% endif %}
   </ul>
-<script>
 
-  function adicionar_remover_questao(checkbox, id_questao){
-    if (checkbox.checked){
-      adicionar_questao(id_questao)
-    }else{
-      remover_questao(id_questao)
-    }
-  }
-
-  function adicionar_questao(id)
-  {
-      
-      let select_questoes_escolhidas = document.getElementById('questoes_escolhidas')
-      let option = document.createElement("option");
-      option.id = "option" + id;
-      option.value = id;
-      option.text = id;
-      option.selected = true;
-      select_questoes_escolhidas.add(option);
-
-      let container_questoes_escolhidas = document.getElementById('container_questoes_escolhidas')
-      let conteudo_questao = document.getElementById('questao'+id).querySelector('.container-questao')
-      
-      let html = `<div id='questao_escolhida${id}' class='questao'>`
-      html += ` <i id="seta_questao_escolhida${id}" class="fa-solid fa-chevron-down" onclick="mudar_ocultar_questao('questao_escolhida${id}','seta_questao_escolhida${id}')"></i>`
-      html +=  `${conteudo_questao.innerHTML}</div>`
-      container_questoes_escolhidas.innerHTML+= html
-        
-  }
-  function remover_questao(id)
-  {
-    document.getElementById('questao_escolhida'+id).remove()
-
-    id = "option" + id
-    let option = document.getElementById(id)
-    option.remove()
-  
-
-  }
-
-  function get_questoes_escolhidas(){
-    let select_questoes = document.getElementById('questoes_escolhidas')
-    let questoes_escolhidas = select_questoes.querySelectorAll('option:checked')
-    id_perguntas_selecionadas = []
-    questoes_escolhidas.forEach((pergunta) => {
-          id_perguntas_selecionadas.push(pergunta.value)
-    })
-    return id_perguntas_selecionadas
-  }
-
-  function parametros_para_redirecionar(){
-      let titulo = document.getElementById('titulo')
-      let id_perguntas_selecionadas = get_questoes_escolhidas()
-
-      let ids_filtro = get_filtros_escolhidos()
-      let ids_filtro_assuntos = ids_filtro[0]
-      let ids_filtro_anos = ids_filtro[1]
-
-      const parametros = new URLSearchParams();
-      
-      const parametroListaQuestoes = id_perguntas_selecionadas.join(',');
-      const parametroListaAssuntos = ids_filtro_assuntos.join(',');
-      const parametroListaAnos = ids_filtro_anos.join(',');
-
-      parametros.append('id_assuntos_filtro', parametroListaAssuntos);
-      parametros.append('id_anos_filtro', parametroListaAnos);
-      parametros.append('id_questao', parametroListaQuestoes);
-      parametros.append('titulo', titulo.value)
-
-      return parametros.toString();
-
-
-  }
-
-  function mudar_pagina(pagina){
-    
-    let parametros_gerais = parametros_para_redirecionar()
-    const parametros = new URLSearchParams();
-    parametros.append('page', pagina)
-    history.replaceState(null, null, window.location.pathname);
-    const url = window.location.href + '?' + parametros.toString() + '&' + parametros_gerais;
-    window.location.href = url
-  }
-
-  window.onload = function() {  
+  <script>
+    window.onload = function() {  
       let select_questoes_escolhidas = document.getElementById('questoes_escolhidas')
       let questoes_selecionadas = select_questoes_escolhidas.querySelectorAll('option:checked')
       questoes_selecionadas.forEach(function(questao){
@@ -175,7 +93,7 @@
         }
         
       })
-    
-  };
-</script>
-  {% endblock conteudo %}
+    };
+  </script>
+
+{% endblock conteudo %}

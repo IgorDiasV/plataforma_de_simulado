@@ -31,7 +31,6 @@ def dados_get_lista_questao(request):
 
 
 def lista_questoes_geral(request):
-
     anos, assuntos_ids, n_pagina = dados_get_lista_questao(request)
     questoes, assuntos, anos_questoes = lista_questoes(
                                             filtro_assunto=assuntos_ids,
