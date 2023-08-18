@@ -15,9 +15,9 @@ function get_filtros_escolhidos(){
     return [ids_filtro_assuntos, ids_filtro_anos]
   }
 
-  function filtrar(){
+  function filtrar(criar_simulado=false){
       
-      let parametros_gerais = parametros_para_redirecionar()     
+      let parametros_gerais = parametros_para_redirecionar(criar_simulado)     
       history.replaceState(null, null, window.location.pathname);
       const url = window.location.href + '?' + parametros_gerais
       window.location.href = url
