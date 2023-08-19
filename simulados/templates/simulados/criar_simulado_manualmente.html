@@ -15,7 +15,7 @@
 {% endblock script %}
 
 {% block conteudo %}
-    <form method="post">
+    <form method="post" action="{%url 'simulados:criar_simulado_manualmente'%} ">
       {% csrf_token %}
       <label for'titulo'>Título:  </label>
       <input class='custom-input' id='titulo' name='titulo' value='{{titulo}}'>

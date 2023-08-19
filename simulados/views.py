@@ -328,3 +328,33 @@ def criar_simulado_manualmente(request):
                     'Apenas professores podem criar simulados')
         messages.error(request, mensagem)
         return redirect('home')
+
+
+@login_required(login_url='usuarios:login', redirect_field_name='next')
+def editar_simulado(request):
+    usuario = Usuario.objects.filter(user=request.user).first()
+    if usuario.is_teacher:
+        if request.method == 'POST':
+            id = request.POST['id']
+            assuntos_ids = []
+            simulado = Simulado.objects.filter(id=id).first()
+            titulo = simulado.titulo
+
+            questoes_escolhidas = simulado.questoes.all()
+            id_questoes_escolhidas = [questao.id for questao in questoes_escolhidas]  # noqa: E501
+
+            questoes, assuntos, anos = lista_questoes()
+            page = ''
+            questoes_paginacao = Paginator(questoes, 5)
+
+            page = questoes_paginacao.page(1)
+
+            return render(request, 'simulados/criar_simulado_manualmente.html',  # noqa: E501
+                          {'questoes': page,
+                           'assuntos': assuntos,
+                           'id_questoes_escolhidas': id_questoes_escolhidas,
+                           'questoes_escolhidas': questoes_escolhidas,
+                           'titulo': titulo,
+                           'id_filtro_assunto': assuntos_ids,
+                           'anos_questoes': anos})
+        
