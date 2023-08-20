@@ -1,0 +1,100 @@
+{% extends 'global/pages/base.html' %}
+{% load static %} {% load custom_filters %}
+
+{% block css %}
+  <link href="{% static 'simulados/css/criar_simulado_manualmente.css' %}" rel='stylesheet'>
+  <link href="{% static 'pagina_principal/css/filtro.css' %}" rel='stylesheet'>
+{% endblock css %}
+{% block titulo %}Criando Simulado{% endblock titulo %}
+
+{% block script %}
+    <script src={% static 'pagina_principal/js/funcionalidades_filtro.js' %}></script>
+    <script src={% static 'global/js/filtro.js' %}></script>
+    <script src={% static 'global/js/utils.js' %}></script>
+    <script src={% static 'simulados/js/criar_simulado.js' %}></script>
+{% endblock script %}
+
+{% block conteudo %}
+    <form method="post" action="{%url 'simulados:save_edit'%} ">
+      {% csrf_token %}
+      <input type="hidden" name='id_simulado' value='{{id_simulado}}'>
+      <label for'titulo'>Título:  </label>
+      <input class='custom-input' id='titulo' name='titulo' value='{{titulo}}'>
+      </br>
+      <select
+        style='display: none;'
+        name="questoes_escolhidas"
+        id="questoes_escolhidas"
+        multiple
+      >
+        {% for id_questao_escolhida in id_questoes_escolhidas %}
+          <option id='option{{id_questao_escolhida}}' value='{{id_questao_escolhida}}' selected>{{id_questao_escolhida}}</option>
+        {% endfor %}
+      </select>
+      <button type="submit" class='green-button margin-top'>Editar Simulado</button>
+    </form>
+    <script src="{% static 'pagina_principal/js/utils.js'%}"></script>
+    
+    <div id='container_questoes_escolhidas' class='margin-top'>
+      <h2>Questões adicionadas: </h2>
+      <i id="seta_questoes_escolhidas" class="fa-solid fa-chevron-down" onclick="mudar_ocultar_questao('container_questoes_escolhidas','seta_questoes_escolhidas', '28px')"></i>
+      {% for questao_escolhida in questoes_escolhidas %}
+        <div id="questao_escolhida{{questao_escolhida.id}}" class='questao'>
+          <i id="seta_questao_escolhida{{questao_escolhida.id}}" class="fa-solid fa-chevron-down" onclick="mudar_ocultar_questao('questao_escolhida{{questao_escolhida.id}}','seta_questao_escolhida{{questao_escolhida.id}}')"></i>`
+            {{questao_escolhida.pergunta | safe}}
+        </div>
+      {% endfor %}
+    </div>
+    <h2> Lista de Questões</h2>
+    <form method="get" id='form_filtro' >
+      <input type="hidden" name='form_filtro'> 
+      {% include 'pagina_principal/partials/filtro.html' with titulo_filtro='Assuntos' itens_objeto=assuntos id_class='assunto' name='assuntos' selecionados=id_filtro_assunto %}  
+      {% include 'pagina_principal/partials/filtro.html' with titulo_filtro='Ano' itens_lista=anos_questoes id_class='ano' name='anos'%}  
+      <div class="container-button-filter">
+          <button class='button-filter' type="button" onclick='filtrar(criar_simulado=true)'>Filtrar</button>
+      </div>  
+    </form>
+    {% for questao in questoes %}
+      <div class='ql-editor'>
+        
+        <div class='questao' id='questao{{questao.id}}'>
+          <input type='checkbox' id='input{{questao.id}}'class='pergunta_selecionada' onchange='adicionar_remover_questao(this, "{{questao.id}}")' value='{{questao.id}}'>
+          <i id="seta_questao{{questao.id}}" class="fa-solid fa-chevron-down" onclick="mudar_ocultar_questao('questao{{questao.id}}','seta_questao{{questao.id}}')"></i>
+          <div class="container-questao">
+            {{questao.pergunta | safe}}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+
+    <ul class="paginacao">
+      {% if questoes.has_previous %}
+      <li><a onclick="mudar_pagina('{{questoes.previous_page_number}}', true)"> Anterior </a></li>
+      {% endif %}
+      {% for page in questoes.paginator.page_range %}
+          {% if page == questoes.number %}   
+              <li><a  class="active" >{{page}}</a></li>
+          {% else %}
+              <li><a onclick="mudar_pagina('{{page}}', true)">{{page}}</a></li>
+          {% endif %} 
+      {% endfor %}
+      {% if questoes.has_next %}
+          <li><a onclick="mudar_pagina('{{questoes.next_page_number}}', true)"> Próximo </a></li>
+      {% endif %}
+  </ul>
+
+  <script>
+    window.onload = function() {  
+      let select_questoes_escolhidas = document.getElementById('questoes_escolhidas')
+      let questoes_selecionadas = select_questoes_escolhidas.querySelectorAll('option:checked')
+      questoes_selecionadas.forEach(function(questao){
+        let checkbox_questao = document.getElementById('input'+questao.value)
+        if (checkbox_questao != null){
+          checkbox_questao.checked = true;
+        }
+        
+      })
+    };
+  </script>
+
+{% endblock conteudo %}

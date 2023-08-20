@@ -44,9 +44,8 @@
     {% if link %}
       <p>Tempo restante: <span id="contador"></span></p>
     {% else %}
-    <form action="{% url 'simulados:editar_simulado'%}" method='POST'> 
+    <form action="{% url 'simulados:editar_simulado' simulado.id %}" method='POST'> 
       {% csrf_token %}
-      <input type="hidden" name='id' value='{{simulado.id}}'>
       <button>EDITAR</button>
     </form>
     {% endif %}
