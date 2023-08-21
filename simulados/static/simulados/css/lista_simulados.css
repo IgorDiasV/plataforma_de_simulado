@@ -50,3 +50,20 @@
   .qtd_tentativas input{
     width: 50px;
   }
+
+  .texto-centralizado{
+    text-align: center;
+  }
+
+.container-input{
+  padding: 5px;
+  border: 1px solid black;
+  margin-bottom: 5px;
+}
+
+.close-button{
+  border: none;
+  background: none;
+  float: right;
+  cursor: pointer;
+}

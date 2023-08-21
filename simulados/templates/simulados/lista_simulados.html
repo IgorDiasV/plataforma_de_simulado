@@ -65,30 +65,35 @@
 
         <div id="modal_questoes" class="modal">
             <div class="conteudo_modal">
-              <h3>Configurações do Simulado</h3>
+              <button onclick="fecharModal()" class='close-button'><i class="fa-solid fa-x"></i></button>
+              <h3 class='texto-centralizado'>Configurações do Simulado</h3>
               <form action="{% url 'simulados:gerar_link' %}" method="post">
                 {% csrf_token %}
                 <input type="hidden" id="id_simulado_form" name='id_simulado' value="{{simulado.simulado.id}}"/>
-                <label for='tempo_limite'>Tempo limite:  </label>
-                    <input id='tempo_limite' name='tempo_limite' type="checkbox" onchange="mudar_estado('.tempo_prova')">
-                    </br>
-                    <div class="tempo_prova">
-                        Tempo de Prova
-                        <input type="number" min=0 name='horas' value=0>H:
-                        <input type="number" min=0 name='minutos' value=0>M:
-                        <input type="number" min=0 name='segundos' value=0>S
-                    </div>
+                <div class="container-input">
+                  <label for='tempo_limite'>Tempo limite:  </label>
+                  <input id='tempo_limite' name='tempo_limite' type="checkbox" onchange="mudar_estado('.tempo_prova')" >
+                  </br>
+                  <div class="tempo_prova"> 
+                      Tempo de Prova
+                      <input class='custom-input' type="number" min=0 name='horas' value=0>H:
+                      <input class='custom-input' type="number" min=0 name='minutos' value=0>M:
+                      <input class='custom-input' type="number" min=0 name='segundos' value=0>S
+                  </div>
+               </div>
+               <div class="container-input">
                     <label for='limite_de_tentativas'>Limite de Tentativas:  </label>
-                    <input id='limite_de_tentativas' name='limite_de_tentativas' type="checkbox" onchange="mudar_estado('.qtd_tentativas')">
+                    <input id='limite_de_tentativas' name='limite_de_tentativas' type="checkbox" onchange="mudar_estado('.qtd_tentativas')" >
 
                     </br>
                     <div class='qtd_tentativas'>
                         <label for'qtd_tentativas'>Quantiade de Tentativas:  </label>
-                        <input type='number' id='qtd_tentativas' name='qtd_tentativas' min=0>
+                        <input type='number' id='qtd_tentativas' name='qtd_tentativas' min=0 class='custom-input'>
                     </div>
-                    <button>Gerar Link</button>
+                </div>
+                    <button class='green-button'>Gerar Link</button>
                 </form>
-              <button onclick="fecharModal()">Cancelar</button>
+              
             </div>
           </div>
 {% endblock conteudo %}
