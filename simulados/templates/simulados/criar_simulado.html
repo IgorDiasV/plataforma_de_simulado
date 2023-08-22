@@ -1,4 +1,12 @@
 {% extends 'global/pages/base.html' %}
+{% load static %}
+{% block css %}
+  <link href="{% static 'pagina_principal/css/filtro.css' %}" rel='stylesheet'>
+{% endblock css %}
+{% block script %}
+    <script src={% static 'pagina_principal/js/funcionalidades_filtro.js' %}></script>
+{% endblock script %}
+
 
 {% block conteudo %}
     <form method="post">
@@ -10,12 +18,8 @@
         <label for="qtd_questoes">Quantidade de Questões</label>   
         <input class='custom-input' type="number" name="qtd_questoes" id="qtd_questoes" value=0></br></br>
 
-        
-        <select name="assuntos" class='custom-input' multiple>
-          {% for assunto in assuntos%}
-            <option value="{{assunto.id}}">{{assunto.nome_assunto}}</option>
-          {% endfor %}
-        </select></br></br>
+        {% include 'pagina_principal/partials/filtro.html' with titulo_filtro='Assuntos' itens_objeto=assuntos id_class='assunto' name='assuntos'%}
+        </br></br>
         <button type="submit" class='green-button'>Gerar Simulado</button>
 
     </form>
