@@ -71,6 +71,18 @@
                 {% csrf_token %}
                 <input type="hidden" id="id_simulado_form" name='id_simulado' value="{{simulado.simulado.id}}"/>
                 <div class="container-input">
+                    <label for='data_limite'>Data limite:  </label>
+                    <input id='data_limite' name='data_limite' type="checkbox" onchange="mudar_estado('.data_prova')" >
+                    </br>
+                    <div class="data_prova"> 
+                        Data De início
+                        <input class='custom-input' type="date" name='data_inicial'> Hora de início <input type="time" name="horario_inicial"><br>
+                        Data Final
+                        <input class='custom-input' name='data_final' type="date"> Hora final <input type="time" name="horario_final">
+                    </div>
+                 </div>
+
+                <div class="container-input">
                   <label for='tempo_limite'>Tempo limite:  </label>
                   <input id='tempo_limite' name='tempo_limite' type="checkbox" onchange="mudar_estado('.tempo_prova')" >
                   </br>
@@ -80,6 +92,7 @@
                       <input class='custom-input' type="number" min=0 name='minutos' value=0>M:
                       <input class='custom-input' type="number" min=0 name='segundos' value=0>S
                   </div>
+
                </div>
                <div class="container-input">
                     <label for='limite_de_tentativas'>Limite de Tentativas:  </label>
