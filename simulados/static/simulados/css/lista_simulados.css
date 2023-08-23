@@ -36,15 +36,11 @@
     max-width: 600px;
   }
 
-  .tempo_prova{
+  .data_prova, .tempo_prova, .qtd_tentativas{
     display: none;
   }
   .tempo_prova input{
     width: 50px;
-  }
-
-  .qtd_tentativas{
-    display: none;
   }
 
   .qtd_tentativas input{
