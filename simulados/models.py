@@ -23,7 +23,9 @@ class SimuladoCompartilhado(models.Model):
     link = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tempo_de_prova = models.IntegerField(default=0)
     qtd_tentativas = models.IntegerField(default=0)
-
+    data_inicio = models.DateTimeField(default=None, null=True, blank=True)
+    data_fim = models.DateTimeField(default=None, null=True, blank=True)
+    
     def __str__(self) -> str:
         return f"compartilhado o simulado ({self.simulado.titulo})"
 

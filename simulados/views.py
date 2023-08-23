@@ -26,6 +26,8 @@ def simulado(request):
 
 
 def gerar_link(request):
+    # TODO vericar se realmente foi escolhido uma data e horario
+    # no caso onde o usuario marca que tem uma data limite 
     if request.method == 'POST':
         qtd_tentativas = 0
         tempo_de_prova = 0
@@ -39,10 +41,29 @@ def gerar_link(request):
             tempo_de_prova = horas*3600 + minutos*60 + segundos
 
         id_simulado = request.POST['id_simulado']
+        data_hora_inicial = None
+        data_hora_final = None
+        if request.POST.get('data_limite'):
+            formato = "%Y-%m-%d %H:%M"
+        
+            data_inicial = request.POST['data_inicial']
+            hora_inicial = request.POST['horario_inicial']
+            
+            data_hora_inicial_str = f"{data_inicial} {hora_inicial}"
+            data_hora_inicial = datetime.strptime(data_hora_inicial_str, formato)  # noqa: E501
+            
+            data_final = request.POST['data_final']
+            hora_final = request.POST['horario_final']
+
+            data_hora_final_str = f"{data_final} {hora_final}"
+            data_hora_final = datetime.strptime(data_hora_final_str, formato)
+
         simulado = Simulado.objects.filter(id=id_simulado).first()
         SimuladoCompartilhado.objects.create(simulado=simulado,
                                              tempo_de_prova=tempo_de_prova,
-                                             qtd_tentativas=qtd_tentativas)
+                                             qtd_tentativas=qtd_tentativas,
+                                             data_inicio=data_hora_inicial,
+                                             data_fim=data_hora_final)
 
         return redirect('simulados:lista_simulados')
     else:
