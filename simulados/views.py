@@ -96,7 +96,22 @@ def dados_simulado(request, simulado_link):
         
         if qtd_tentativas == 0:
             disponivel_responder_simulado = False
-    
+
+    disponibilidade = 'O simulado não possue data limite'
+    if ((simulado_compartilhado.data_inicio is not None) and
+       (simulado_compartilhado.data_fim is not None)):
+        formato_br = "%d/%m/%Y %H:%M"
+        data_inicio = simulado_compartilhado.data_inicio.replace(tzinfo=None)
+        data_inicio_str = data_inicio.strftime(formato_br)
+        data_fim = simulado_compartilhado.data_fim.replace(tzinfo=None)
+        data_fim_str = data_fim.strftime(formato_br)
+        disponibilidade = f'{data_inicio_str} até {data_fim_str}'
+
+        data_atual = datetime.now()
+        if not (data_atual > data_inicio and data_atual < data_fim):
+            disponibilidade = "O simulado não está mais disponivel"
+            disponivel_responder_simulado = False
+
     simulado = simulado_compartilhado.simulado
     titulo = simulado.titulo
     qtd_questoes = len(simulado.questoes.all())
@@ -110,6 +125,7 @@ def dados_simulado(request, simulado_link):
                    'link': simulado_link,
                    'tempo_de_prova': tempo_formatado,
                    'qtd_tentativas': qtd_tentativas,
+                   'disponibilidade': disponibilidade,
                    'disponivel_responder_simulado': disponivel_responder_simulado  # noqa: E501
                    })
 

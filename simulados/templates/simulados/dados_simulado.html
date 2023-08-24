@@ -13,6 +13,7 @@
         <p><strong>Quantidade de Perguntas: </strong>{{qtd_questoes}}</p>
         <p><strong>Tempo de Prova: </strong>{{tempo_de_prova}}</p>
         <p><strong>Tentativas Restante: </strong>{{qtd_tentativas}}</p>
+        <p><strong>Disponibilidade: </strong>{{disponibilidade}}</p>
         {% if disponivel_responder_simulado%}
             <form action="{% url 'simulados:responder_simulado' %}" method='post'>
                 {% csrf_token %}
