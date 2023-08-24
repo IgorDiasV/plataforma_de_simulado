@@ -83,6 +83,7 @@ def dados_simulado(request, simulado_link):
                                                link=simulado_link)
     tempo_de_prova = simulado_compartilhado.tempo_de_prova
     tempo_formatado = "Sem Tempo limite"
+    disponivel_responder_simulado = True
     if tempo_de_prova > 0:
         tempo_formatado = formatar_tempo(tempo_de_prova)
 
@@ -92,7 +93,10 @@ def dados_simulado(request, simulado_link):
         qtd_tentativas = "Sem limite de tentativas"
     else:
         qtd_tentativas -= qtd_respostas
-
+        
+        if qtd_tentativas == 0:
+            disponivel_responder_simulado = False
+    
     simulado = simulado_compartilhado.simulado
     titulo = simulado.titulo
     qtd_questoes = len(simulado.questoes.all())
@@ -105,7 +109,8 @@ def dados_simulado(request, simulado_link):
                    'qtd_questoes': qtd_questoes,
                    'link': simulado_link,
                    'tempo_de_prova': tempo_formatado,
-                   'qtd_tentativas': qtd_tentativas
+                   'qtd_tentativas': qtd_tentativas,
+                   'disponivel_responder_simulado': disponivel_responder_simulado  # noqa: E501
                    })
 
 

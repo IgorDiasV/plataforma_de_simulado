@@ -13,7 +13,7 @@
         <p><strong>Quantidade de Perguntas: </strong>{{qtd_questoes}}</p>
         <p><strong>Tempo de Prova: </strong>{{tempo_de_prova}}</p>
         <p><strong>Tentativas Restante: </strong>{{qtd_tentativas}}</p>
-        {% if qtd_tentativas > 0 or qtd_tentativas == 'Sem limite de tentativas'%}
+        {% if disponivel_responder_simulado%}
             <form action="{% url 'simulados:responder_simulado' %}" method='post'>
                 {% csrf_token %}
                 <input type="hidden" name='link' value='{{link}}' readonly/>
