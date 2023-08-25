@@ -48,10 +48,19 @@ def lista_questoes(usuario=None, filtro_assunto=[], anos=[]):
     return questoes, assuntos, anos_questoes
 
 
-def formatar_tempo(segundos):
+def formatar_tempo_str(segundos):
     horas = int((segundos/3600))
     segundos -= horas*3600
     minutos = int(segundos/60)
     segundos -= minutos * 60
     tempo_formatado = f"{horas:02d}:{minutos:02d}:{segundos:02d}"
     return tempo_formatado
+
+
+def formatar_tempo_int(segundos):
+    horas = int((segundos/3600))
+    segundos -= horas*3600
+    minutos = int(segundos/60)
+    segundos -= minutos * 60
+    
+    return horas, minutos, segundos

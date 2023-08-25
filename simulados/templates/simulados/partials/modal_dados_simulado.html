@@ -6,9 +6,13 @@
       <form action="{% url action %}" method="post">
         {% csrf_token %}
         <input type="hidden" id="id_simulado_form" name='id_simulado'/>
+        <input type="hidden"  name='tipo' value='{{tipo}}'/>
+        {% if tipo == 'editar' %}
+            <input type="hidden" name='link_parcial'>
+        {% endif %}
         <div class="container-input">
             <label for='data_limite'>Data limite:  </label>
-            <input id='data_limite' name='data_limite' type="checkbox" onchange="mudar_estado('.data_prova')" >
+            <input id='data_limite' name='data_limite' type="checkbox" onchange="mudar_estado('{{id_modal}}','.data_prova')" >
             </br>
             <div class="data_prova"> 
                 Data De início
@@ -20,7 +24,7 @@
 
         <div class="container-input">
           <label for='tempo_limite'>Tempo limite:  </label>
-          <input id='tempo_limite' name='tempo_limite' type="checkbox" onchange="mudar_estado('.tempo_prova')" >
+          <input id='tempo_limite' name='tempo_limite' type="checkbox" onchange="mudar_estado('{{id_modal}}','.tempo_prova')" >
           </br>
           <div class="tempo_prova"> 
               Tempo de Prova
@@ -32,7 +36,7 @@
        </div>
        <div class="container-input">
             <label for='limite_de_tentativas'>Limite de Tentativas:  </label>
-            <input id='limite_de_tentativas' name='limite_de_tentativas' type="checkbox" onchange="mudar_estado('.qtd_tentativas')" >
+            <input id='limite_de_tentativas' name='limite_de_tentativas' type="checkbox" onchange="mudar_estado('{{id_modal}}', '.qtd_tentativas')" >
 
             </br>
             <div class='qtd_tentativas'>
@@ -40,7 +44,11 @@
                 <input type='number' id='qtd_tentativas' name='qtd_tentativas' min=0 class='custom-input'>
             </div>
         </div>
-            <button class='green-button'>Gerar Link</button>
+            {% if tipo == 'criar' %}
+                <button class='green-button'>Gerar Link</button>
+            {% else %}
+                <button class='green-button'>Salvar Alterção</button>
+            {% endif %}
         </form>
       
     </div>

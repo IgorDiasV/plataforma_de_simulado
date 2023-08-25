@@ -8,7 +8,7 @@ from usuarios.models import Usuario
 from django.contrib import messages
 from django.http.response import Http404
 from django.urls import reverse
-from utils.utils import qtd_perguntas, qtd_acertos, formatar_tempo
+from utils.utils import qtd_perguntas, qtd_acertos, formatar_tempo_str, formatar_tempo_int     # noqa: E501
 from datetime import datetime
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from utils.utils import lista_questoes
@@ -63,13 +63,23 @@ def gerar_link(request):
                 data_hora_final = None
 
         simulado = Simulado.objects.filter(id=id_simulado).first()
-        SimuladoCompartilhado.objects.create(
-            simulado=simulado,
-            tempo_de_prova=tempo_de_prova,
-            qtd_tentativas=qtd_tentativas,
-            data_inicio=data_hora_inicial,
-            data_fim=data_hora_final,
-        )
+        if request.POST['tipo'] == 'criar':
+            SimuladoCompartilhado.objects.create(
+                simulado=simulado,
+                tempo_de_prova=tempo_de_prova,
+                qtd_tentativas=qtd_tentativas,
+                data_inicio=data_hora_inicial,
+                data_fim=data_hora_final,
+            )
+        else:
+            link = request.POST['link_parcial']
+            simulado_compartilhado = SimuladoCompartilhado.objects.filter(
+                                        link=link).first()
+            simulado_compartilhado.tempo_de_prova = tempo_de_prova
+            simulado_compartilhado.qtd_tentativas = qtd_tentativas
+            simulado_compartilhado.data_inicio = data_inicial
+            simulado_compartilhado.data_fim = data_final
+            simulado_compartilhado.save()
 
         return redirect("simulados:lista_simulados")
     else:
@@ -90,7 +100,7 @@ def dados_simulado(request, simulado_link):
     tempo_formatado = "Sem Tempo limite"
     disponivel_responder_simulado = True
     if tempo_de_prova > 0:
-        tempo_formatado = formatar_tempo(tempo_de_prova)
+        tempo_formatado = formatar_tempo_str(tempo_de_prova)
 
     qtd_tentativas = simulado_compartilhado.qtd_tentativas
 
@@ -291,12 +301,58 @@ def lista_simulados(request):
 
         if simulado_compartilhado is not None:
             link = simulado_compartilhado.link
+            aux["link_parcial"] = link
             url_completa = (
                 f"{request.scheme}://"
                 f"{request.get_host()}"
                 f"{reverse('simulados:dados_simulado', args=[link])}"
             )
             aux["link"] = url_completa
+            data_inicio = simulado_compartilhado.data_inicio
+            data_fim = simulado_compartilhado.data_fim
+            
+            data_inicio_str = ""
+            data_fim_str = ""
+            hora_inicio_str = ""
+            hora_fim_str = ""
+
+            if data_inicio is not None:
+                formato_data = "%Y-%m-%d"
+                formato_hora = "%H:%M"
+                
+                data_inicio = data_inicio.replace(tzinfo=None)
+                data_fim = data_fim.replace(tzinfo=None)
+    
+                data_inicio_str = data_inicio.strftime(formato_data)
+                data_fim_str = data_fim.strftime(formato_data)
+
+                hora_inicio_str = data_inicio.strftime(formato_hora)
+                hora_fim_str = data_fim.strftime(formato_hora)
+
+            aux['data_inicio'] = data_inicio_str
+            aux['data_fim'] = data_fim_str
+            aux['hora_inicio'] = hora_inicio_str
+            aux['hora_fim'] = hora_fim_str
+
+            tempo_de_prova = simulado_compartilhado.tempo_de_prova
+
+            horas = ""
+            minutos = ""
+            segundos = ""
+
+            if tempo_de_prova != 0:
+                horas, minutos, segundos = formatar_tempo_int(tempo_de_prova)
+
+            aux['tempo_horas'] = horas
+            aux['tempo_minutos'] = minutos
+            aux['tempo_segundos'] = segundos
+
+            qtd_tentativas = simulado_compartilhado.qtd_tentativas
+
+            if qtd_tentativas == 0:
+                qtd_tentativas = ''
+
+            aux['qtd_tentativas'] = qtd_tentativas
         simulados_e_link.append(aux)
     return render(
         request, "simulados/lista_simulados.html",

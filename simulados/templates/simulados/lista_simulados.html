@@ -9,19 +9,79 @@
     function exibir_modal(id_modal, id_simulado){
         var questionModal = document.getElementById(id_modal);
         questionModal.style.display = 'block';
-        document.getElementById('id_simulado_form').value = id_simulado
+        questionModal.querySelector('#id_simulado_form').value = id_simulado
+    }
+
+    function exibir_modal_edit(id_modal, id_simulado){
+ 
+        let div_modal = document.getElementById(id_modal)
+
+        let data_inicio = document.getElementById('data_inicio'+id_simulado).value
+        let data_fim = document.getElementById('data_fim'+id_simulado).value
+        let hora_inicio = document.getElementById('hora_inicio'+id_simulado).value
+        let hora_fim = document.getElementById('hora_fim'+id_simulado).value
+
+        div_modal.querySelector("[name='data_inicial']").value = data_inicio
+        div_modal.querySelector("[name='data_final']").value = data_fim
+        div_modal.querySelector("[name='horario_inicial']").value = hora_inicio
+        div_modal.querySelector("[name='horario_final']").value = hora_fim
+
+        if (data_inicio!=''){
+            div_modal.querySelector('#data_limite').checked = true
+            div_modal.querySelector('.data_prova').style.display = 'block'
+        }else{
+            div_modal.querySelector('#data_limite').checked = false
+            div_modal.querySelector('.data_prova').style.display = 'none'
+        }
+
+        let tempo_horas = document.getElementById('tempo_horas'+id_simulado).value
+        let tempo_minutos = document.getElementById('tempo_minutos'+id_simulado).value
+        let tempo_segundos = document.getElementById('tempo_segundos'+id_simulado).value
+        
+
+        div_modal.querySelector("[name='horas']").value = tempo_horas
+        div_modal.querySelector("[name='minutos']").value = tempo_minutos
+        div_modal.querySelector("[name='segundos']").value = tempo_segundos
+
+        if (tempo_horas!=''){
+            div_modal.querySelector('#tempo_limite').checked = true
+            div_modal.querySelector('.tempo_prova').style.display = 'block'
+        }else{
+            div_modal.querySelector('#tempo_limite').checked = false
+            div_modal.querySelector('.tempo_prova').style.display = 'none'
+        }
+
+        let qtd_tentativas = document.getElementById('qtd_tentativas'+id_simulado).value
+        div_modal.querySelector("[name='qtd_tentativas']").value = qtd_tentativas
+
+
+        if (qtd_tentativas!=''){
+            div_modal.querySelector('#limite_de_tentativas').checked = true
+            div_modal.querySelector('.qtd_tentativas').style.display = 'block'
+        }else{
+            div_modal.querySelector('#limite_de_tentativas').checked = false
+            div_modal.querySelector('.qtd_tentativas').style.display = 'none'
+        }
+
+        let link = document.getElementById('link_parcial'+id_simulado).value
+        div_modal.querySelector("[name='link_parcial']").value = link
+        exibir_modal(id_modal, id_simulado)
+
+        
+
     }
     function fecharModal(id_modal) {
         var questionModal = document.getElementById(id_modal);
         questionModal.style.display = "none";
       }
 
-    function mudar_estado(class_div){
-        div = document.querySelector(class_div)
+    function mudar_estado(id_modal, class_div){
+        let div_modal = document.getElementById(id_modal)
+        div = div_modal.querySelector(class_div)
+        
         if (div.style.display == '' || div.style.display == 'none'){
           div.style.display = 'block'
         }else{
-    
           div.style.display = 'none'
         }
       }
@@ -36,14 +96,26 @@
                 
 
                     <div class='container_simulado'>
-                        <i onclick="exibir_modal('modal_questoes_edit', '{{simulado_e_link.simulado.id}}')"class="fa-solid fa-pen-to-square"></i>
+                        
                         <h2 > {{simulado_e_link.simulado.titulo}}</h2>
                                                 
                         {% if simulado_e_link.link %}
                             <input  class='custom-input' type="text"  id="link{{simulado_e_link.simulado.id}}" placeholder="Digite alguma coisa" value="{{simulado_e_link.link}}" readonly/>
-                
                             <button type='button' id="botaoCopiar{{simulado_e_link.simulado.id}}" onclick="copiarLink('link{{simulado_e_link.simulado.id}}')" class="green-button"> Copiar Link</button>
-     
+                            <i onclick="exibir_modal_edit('modal_questoes_edit', '{{simulado_e_link.simulado.id}}')"class="fa-solid fa-pen-to-square"></i>
+                            
+                            <input type="hidden" id='data_inicio{{simulado_e_link.simulado.id}}' value='{{simulado_e_link.data_inicio}}'>
+                            <input type="hidden" id='hora_inicio{{simulado_e_link.simulado.id}}' value='{{simulado_e_link.hora_inicio}}'>
+                            <input type="hidden" id='data_fim{{simulado_e_link.simulado.id}}' value='{{simulado_e_link.data_fim}}'>
+                            <input type="hidden" id='hora_fim{{simulado_e_link.simulado.id}}' value='{{simulado_e_link.hora_fim}}'>
+
+                            <input type="hidden" id='tempo_horas{{simulado_e_link.simulado.id}}' value='{{simulado_e_link.tempo_horas}}'>
+                            <input type="hidden" id='tempo_minutos{{simulado_e_link.simulado.id}}' value='{{simulado_e_link.tempo_minutos}}'>
+                            <input type="hidden" id='tempo_segundos{{simulado_e_link.simulado.id}}' value='{{simulado_e_link.tempo_segundos}}'>
+
+                            <input type="hidden" id='qtd_tentativas{{simulado_e_link.simulado.id}}' value='{{simulado_e_link.qtd_tentativas}}'>
+
+                            <input type="hidden" id='link_parcial{{simulado_e_link.simulado.id}}' value='{{simulado_e_link.link_parcial}}'>
                         {% else %}
                             <input  class='custom-input' type="text" style='display: none' id="link{{simulado_e_link.simulado.id}}" placeholder="Digite alguma coisa" value="{{simulado_e_link.simulado.id}}" readonly/>
                             <button style='display: none' type='button' onclick="copiarLink('link{{simulado_e_link.simulado.id}}')"  id="botaoCopiar{{simulado_e_link.simulado.id}}" class="green-button"> Copiar Link</button>
@@ -64,7 +136,7 @@
                 
             {% endfor%}
         </div>       
-        {% include 'simulados/partials/modal_dados_simulado.html' with id_modal='modal_questoes' action='simulados:gerar_link'%}
-        {% include 'simulados/partials/modal_dados_simulado.html' with id_modal='modal_questoes_edit' action='simulados:gerar_link'%}
+        {% include 'simulados/partials/modal_dados_simulado.html' with id_modal='modal_questoes' action='simulados:gerar_link' tipo='criar'%}
+        {% include 'simulados/partials/modal_dados_simulado.html' with id_modal='modal_questoes_edit' action='simulados:gerar_link' tipo='editar'%}
 
 {% endblock conteudo %}
