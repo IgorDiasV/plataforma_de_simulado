@@ -6,13 +6,13 @@
 {% block script %}
 <script src="{% static 'simulados/js/link.js'%}"></script>
 <script>
-    function exibir_modal(id_simulado){
-        var questionModal = document.getElementById("modal_questoes");
+    function exibir_modal(id_modal, id_simulado){
+        var questionModal = document.getElementById(id_modal);
         questionModal.style.display = 'block';
         document.getElementById('id_simulado_form').value = id_simulado
     }
-    function fecharModal() {
-        var questionModal = document.getElementById("modal_questoes");
+    function fecharModal(id_modal) {
+        var questionModal = document.getElementById(id_modal);
         questionModal.style.display = "none";
       }
 
@@ -36,7 +36,7 @@
                 
 
                     <div class='container_simulado'>
-                        <i class="fa-solid fa-pen-to-square"></i>
+                        <i onclick="exibir_modal('modal_questoes_edit', '{{simulado.simulado.id}}')"class="fa-solid fa-pen-to-square"></i>
                         <h2 > {{simulado.simulado.titulo}}</h2>
                                                 
                         {% if simulado.link %}
@@ -47,7 +47,7 @@
                         {% else %}
                             <input  class='custom-input' type="text" style='display: none' id="link{{simulado.simulado.id}}" placeholder="Digite alguma coisa" value="{{simulado.simulado.id}}" readonly/>
                             <button style='display: none' type='button' onclick="copiarLink('link{{simulado.simulado.id}}')"  id="botaoCopiar{{simulado.simulado.id}}" class="green-button"> Copiar Link</button>
-                            <button type='button' id="botaoGerar{{simulado.simulado.id}}" onclick="exibir_modal('{{simulado.simulado.id}}')" class="green-button"> Gerar Link</button>
+                            <button type='button' id="botaoGerar{{simulado.simulado.id}}" onclick="exibir_modal('modal_questoes','{{simulado.simulado.id}}')" class="green-button"> Gerar Link</button>
                         {% endif %}
                         
                         <form method='POST' action="{% url 'simulados:simulado' %}">
@@ -63,8 +63,8 @@
                     </div>
                 
             {% endfor%}
-        </div>
-        
+        </div>       
+        {% include 'simulados/partials/modal_dados_simulado.html' with id_modal='modal_questoes' action='simulados:gerar_link'%}
+        {% include 'simulados/partials/modal_dados_simulado.html' with id_modal='modal_questoes_edit' action='simulados:gerar_link'%}
 
-        {% include 'simulados/partials/modal_dados_simulado.html' with action='simulados:gerar_link'%}  
 {% endblock conteudo %}

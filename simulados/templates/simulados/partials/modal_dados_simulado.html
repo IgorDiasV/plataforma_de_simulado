@@ -1,11 +1,11 @@
-<div id="modal_questoes" class="modal">
+<div id='{{id_modal}}' class="modal">
     <div class="conteudo_modal">
-      <button onclick="fecharModal()" class='close-button'><i class="fa-solid fa-x"></i></button>
+      <button onclick="fecharModal('{{id_modal}}')" class='close-button'><i class="fa-solid fa-x"></i></button>
       <h3 class='texto-centralizado'>Configurações do Simulado</h3>
       
       <form action="{% url action %}" method="post">
         {% csrf_token %}
-        <input type="hidden" id="id_simulado_form" name='id_simulado' value="{{simulado.simulado.id}}"/>
+        <input type="hidden" id="id_simulado_form" name='id_simulado'/>
         <div class="container-input">
             <label for='data_limite'>Data limite:  </label>
             <input id='data_limite' name='data_limite' type="checkbox" onchange="mudar_estado('.data_prova')" >
