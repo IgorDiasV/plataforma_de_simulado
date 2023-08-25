@@ -300,7 +300,7 @@ def lista_simulados(request):
         simulados_e_link.append(aux)
     return render(
         request, "simulados/lista_simulados.html",
-        {"simulados": simulados_e_link}
+        {"simulados_e_links": simulados_e_link}
     )
 
 
