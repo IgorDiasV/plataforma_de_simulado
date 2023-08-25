@@ -5,6 +5,7 @@
     border: 1px solid #ccc;
     border-radius: 5px;
     padding: 10px;
+    position: relative;
     
 }
 
@@ -62,4 +63,10 @@
   background: none;
   float: right;
   cursor: pointer;
+}
+
+.container_simulado i{
+  position: absolute;
+  top: 5px;
+  right: 10px;
 }
