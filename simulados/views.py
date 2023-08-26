@@ -449,9 +449,13 @@ def criar_simulado_manualmente(request):
         else:
             id_questoes_escolhidas = []
 
-        questoes, assuntos, anos = lista_questoes(
+        dados_questoes = lista_questoes(
             filtro_assunto=assuntos_ids, anos=anos_ids
         )
+
+        questoes = dados_questoes['questoes']
+        assuntos = dados_questoes['assuntos']
+        anos = dados_questoes['anos_questoes']       
         page = ""
         questoes_paginacao = Paginator(questoes, 5)
         try:

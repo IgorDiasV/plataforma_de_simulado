@@ -15,6 +15,7 @@ def home(request):
 def dados_get_lista_questao(request):
     assuntos_ids = request.GET.get('id_assuntos_filtro', '')
     anos = request.GET.get('id_anos_filtro', '')
+    origens = request.GET.get('ids_filtro_origens', '')
     n_pagina = request.GET.get('page', '1')
 
     if assuntos_ids != '':
@@ -26,15 +27,24 @@ def dados_get_lista_questao(request):
         anos = anos.split(",")
     else:
         anos = []
-
-    return anos, assuntos_ids, n_pagina
+    
+    if origens != '':
+        origens = origens.split(",")
+    else:
+        origens = []
+    return anos, assuntos_ids, origens, n_pagina
 
 
 def lista_questoes_geral(request):
-    anos, assuntos_ids, n_pagina = dados_get_lista_questao(request)
-    questoes, assuntos, anos_questoes = lista_questoes(
-                                            filtro_assunto=assuntos_ids,
-                                            anos=anos)
+    anos, assuntos_ids, origens, n_pagina = dados_get_lista_questao(request)
+    dados_questoes = lista_questoes(filtro_assunto=assuntos_ids,
+                                    anos=anos,
+                                    origem=origens)
+    
+    questoes = dados_questoes['questoes']
+    assuntos = dados_questoes['assuntos']
+    anos_questoes = dados_questoes['anos_questoes']
+    origem = dados_questoes['origem']
 
     page = ''
     questoes_paginacao = Paginator(questoes, 5)
@@ -48,7 +58,9 @@ def lista_questoes_geral(request):
                    'assuntos': assuntos,
                    'anos_questoes': anos_questoes,
                    'id_filtro_assunto': assuntos_ids,
-                   'anos_filtro': anos})
+                   'anos_filtro': anos,
+                   'origens_filtro': origens,
+                   'origem': origem})
 
 
 @login_required(login_url='usuarios:login', redirect_field_name='next')
@@ -56,13 +68,17 @@ def lista_questoes_usuario(request):
     # TODO falta adicionar a paginação
     usuario = Usuario.objects.filter(user=request.user).first()
 
-    anos, assuntos_ids, n_pagina = dados_get_lista_questao(request)
-    questoes, assuntos, anos_questoes = lista_questoes(
-                                                usuario=usuario,
-                                                filtro_assunto=assuntos_ids,
-                                                anos=anos
+    anos, assuntos_ids, origens, n_pagina = dados_get_lista_questao(request)
+    dados_questoes = lista_questoes(usuario=usuario,
+                                    filtro_assunto=assuntos_ids,
+                                    anos=anos,
+                                    origem=origens)
+       
+    questoes = dados_questoes['questoes']
+    assuntos = dados_questoes['assuntos']
+    anos_questoes = dados_questoes['anos_questoes']
+    origem = dados_questoes['origem']
 
-                                                )
     page = ''
     questoes_paginacao = Paginator(questoes, 2)
     try:
@@ -75,7 +91,9 @@ def lista_questoes_usuario(request):
                    'editavel': True,
                    'anos_questoes': anos_questoes,
                    'id_filtro_assunto': assuntos_ids,
-                   'anos_filtro': anos
+                   'anos_filtro': anos,
+                   'origens_filtro': origens,
+                   'origem': origem
                    })
 
 
