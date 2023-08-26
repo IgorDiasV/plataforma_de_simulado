@@ -7,10 +7,12 @@ function  mudar_visibilidade_filtro(id_campo_filtro, id_seta)
         seta.classList.remove('fa-chevron-down')
         seta.classList.add('fa-chevron-up')
         lista_itens.style.display = 'flex';
+        lista_itens.parentNode.style.height = 'auto'
     } else {
         seta.classList.remove('fa-chevron-up')
         seta.classList.add('fa-chevron-down')
         lista_itens.style.display = 'none';
+        lista_itens.parentNode.style.height = '25px'
     }
 }
 
