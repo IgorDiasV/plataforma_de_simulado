@@ -22,8 +22,11 @@
 
     
     <form method="get" id='form_filtro'>
-        {% include 'pagina_principal/partials/filtro.html' with titulo_filtro='Assuntos' itens_objeto=assuntos id_class='assunto' name='assuntos' selecionados=id_filtro_assunto%}  
-        {% include 'pagina_principal/partials/filtro.html' with titulo_filtro='Ano' itens_lista=anos_questoes id_class='ano' name='anos' selecionados=anos_filtro %}  
+
+        <div class="container-filters">
+            {% include 'pagina_principal/partials/filtro.html' with titulo_filtro='Assuntos' itens_objeto=assuntos id_class='assunto' name='assuntos' selecionados=id_filtro_assunto%}  
+            {% include 'pagina_principal/partials/filtro.html' with titulo_filtro='Ano' itens_lista=anos_questoes id_class='ano' name='anos' selecionados=anos_filtro %}  
+        </div>
         <div class="container-button-filter">
             <button class='button-filter' type="button" onclick="filtrar()">Filtrar</button>
         </div>  
