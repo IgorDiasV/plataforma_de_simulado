@@ -425,7 +425,7 @@ def criar_simulado_manualmente(request):
 
         assuntos_ids = request.GET.get("id_assuntos_filtro", "")
         anos_ids = request.GET.get("id_anos_filtro", "")
-
+        origens = request.GET.get('ids_filtro_origens', '')
         titulo = request.GET.get("titulo", "")
         id_questoes_escolhidas = request.GET.get("id_questao", "")
         n_pagina = request.GET.get("page", "1")
@@ -441,6 +441,11 @@ def criar_simulado_manualmente(request):
         else:
             anos_ids = []
 
+        if origens != '':
+            origens = origens.split(",")
+        else:
+            origens = []
+
         if id_questoes_escolhidas != "":
             id_questoes_escolhidas = id_questoes_escolhidas.split(",")
             questoes_escolhidas = Questao.objects.all().filter(
@@ -450,12 +455,16 @@ def criar_simulado_manualmente(request):
             id_questoes_escolhidas = []
 
         dados_questoes = lista_questoes(
-            filtro_assunto=assuntos_ids, anos=anos_ids
+            filtro_assunto=assuntos_ids, 
+            anos=anos_ids,
+            origem=origens
         )
 
         questoes = dados_questoes['questoes']
         assuntos = dados_questoes['assuntos']
-        anos = dados_questoes['anos_questoes']       
+        anos = dados_questoes['anos_questoes']
+        origem = dados_questoes['origem']
+        
         page = ""
         questoes_paginacao = Paginator(questoes, 5)
         try:
@@ -474,6 +483,7 @@ def criar_simulado_manualmente(request):
                 "titulo": titulo,
                 "id_filtro_assunto": assuntos_ids,
                 "anos_questoes": anos,
+                "origem": origem
             },
         )
 
