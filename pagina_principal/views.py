@@ -12,41 +12,42 @@ def home(request):
     return render(request, 'pagina_principal/home.html')
 
 
-def dados_get_lista_questao(request):
-    assuntos_ids = request.GET.get('id_assuntos_filtro', '')
-    anos = request.GET.get('id_anos_filtro', '')
-    origens = request.GET.get('ids_filtro_origens', '')
-    n_pagina = request.GET.get('page', '1')
+def get_parametros_url(request, lista_parametros: list[str]) -> dict:
+    dados = {}
 
-    if assuntos_ids != '':
-        assuntos_ids = assuntos_ids.split(",")
-    else:
-        assuntos_ids = []
+    for parametro in lista_parametros:
+        valor = request.GET.get(parametro, '')
 
-    if anos != '':
-        anos = anos.split(",")
-    else:
-        anos = []
-    
-    if origens != '':
-        origens = origens.split(",")
-    else:
-        origens = []
-    return anos, assuntos_ids, origens, n_pagina
+        if valor != '':
+            lista_valores = valor.split(',')
+        else:
+            lista_valores = []
+
+        dados[parametro] = lista_valores
+    return dados
 
 
 def lista_questoes_geral(request):
-    anos, assuntos_ids, origens, n_pagina = dados_get_lista_questao(request)
+    lista_parametros = ['id_assuntos_filtro',
+                        'id_anos_filtro',
+                        'ids_filtro_origens']
+    valores_parametros = get_parametros_url(request, lista_parametros)
+
+    anos = valores_parametros['id_anos_filtro']
+    assuntos_ids = valores_parametros['id_assuntos_filtro']
+    origens = valores_parametros['ids_filtro_origens']
+
     dados_questoes = lista_questoes(filtro_assunto=assuntos_ids,
                                     anos=anos,
                                     origem=origens)
-    
+
     questoes = dados_questoes['questoes']
     assuntos = dados_questoes['assuntos']
     anos_questoes = dados_questoes['anos_questoes']
     origem = dados_questoes['origem']
 
     page = ''
+    n_pagina = request.GET.get('page', '1')
     questoes_paginacao = Paginator(questoes, 5)
     try:
         page = questoes_paginacao.page(n_pagina)
@@ -68,18 +69,27 @@ def lista_questoes_usuario(request):
     # TODO falta adicionar a paginação
     usuario = Usuario.objects.filter(user=request.user).first()
 
-    anos, assuntos_ids, origens, n_pagina = dados_get_lista_questao(request)
+    lista_parametros = ['id_assuntos_filtro',
+                        'id_anos_filtro',
+                        'ids_filtro_origens']
+    valores_parametros = get_parametros_url(request, lista_parametros)
+
+    anos = valores_parametros['id_anos_filtro']
+    assuntos_ids = valores_parametros['id_assuntos_filtro']
+    origens = valores_parametros['ids_filtro_origens']
+
     dados_questoes = lista_questoes(usuario=usuario,
                                     filtro_assunto=assuntos_ids,
                                     anos=anos,
                                     origem=origens)
-       
+
     questoes = dados_questoes['questoes']
     assuntos = dados_questoes['assuntos']
     anos_questoes = dados_questoes['anos_questoes']
     origem = dados_questoes['origem']
 
     page = ''
+    n_pagina = request.GET.get('page', '1')
     questoes_paginacao = Paginator(questoes, 2)
     try:
         page = questoes_paginacao.page(n_pagina)
