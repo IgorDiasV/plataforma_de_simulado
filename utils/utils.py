@@ -60,6 +60,21 @@ def lista_questoes(usuario=None, filtro_assunto=[], anos=[], origem=[]):
     return dados_questoes
 
 
+def get_parametros_url(request, lista_parametros: list[str]) -> dict:
+    dados = {}
+
+    for parametro in lista_parametros:
+        valor = request.GET.get(parametro, '')
+
+        if valor != '':
+            lista_valores = valor.split(',')
+        else:
+            lista_valores = []
+
+        dados[parametro] = lista_valores
+    return dados
+
+
 def formatar_tempo_str(segundos):
     horas = int((segundos/3600))
     segundos -= horas*3600

@@ -4,27 +4,12 @@ from django.contrib.auth.decorators import login_required
 from usuarios.models import Usuario
 from django.contrib import messages
 from utils.utils import assuntos_removidos, assuntos_adicionados
-from utils.utils import lista_questoes
+from utils.utils import lista_questoes, get_parametros_url
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 def home(request):
     return render(request, 'pagina_principal/home.html')
-
-
-def get_parametros_url(request, lista_parametros: list[str]) -> dict:
-    dados = {}
-
-    for parametro in lista_parametros:
-        valor = request.GET.get(parametro, '')
-
-        if valor != '':
-            lista_valores = valor.split(',')
-        else:
-            lista_valores = []
-
-        dados[parametro] = lista_valores
-    return dados
 
 
 def lista_questoes_geral(request):
