@@ -11,7 +11,7 @@ from django.urls import reverse
 from utils.utils import qtd_perguntas, qtd_acertos, formatar_tempo_str, formatar_tempo_int     # noqa: E501
 from datetime import datetime
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from utils.utils import lista_questoes
+from utils.utils import lista_questoes, get_parametros_url
 
 
 def simulado(request):
@@ -310,7 +310,7 @@ def lista_simulados(request):
             aux["link"] = url_completa
             data_inicio = simulado_compartilhado.data_inicio
             data_fim = simulado_compartilhado.data_fim
-            
+
             data_inicio_str = ""
             data_fim_str = ""
             hora_inicio_str = ""
@@ -319,10 +319,10 @@ def lista_simulados(request):
             if data_inicio is not None:
                 formato_data = "%Y-%m-%d"
                 formato_hora = "%H:%M"
-                
+
                 data_inicio = data_inicio.replace(tzinfo=None)
                 data_fim = data_fim.replace(tzinfo=None)
-    
+
                 data_inicio_str = data_inicio.strftime(formato_data)
                 data_fim_str = data_fim.strftime(formato_data)
 
@@ -423,39 +423,28 @@ def criar_simulado_manualmente(request):
             messages.success(request, "Simulado Criado com Sucesso")
             return redirect("simulados:lista_simulados")
 
-        assuntos_ids = request.GET.get("id_assuntos_filtro", "")
-        anos_ids = request.GET.get("id_anos_filtro", "")
-        origens = request.GET.get('ids_filtro_origens', '')
-        titulo = request.GET.get("titulo", "")
-        id_questoes_escolhidas = request.GET.get("id_questao", "")
+        lista_parametros = ['id_assuntos_filtro',
+                            'id_anos_filtro',
+                            'ids_filtro_origens',
+                            'id_questao']
+        valores_parametros = get_parametros_url(request, lista_parametros)
+
+        assuntos_ids = valores_parametros['id_assuntos_filtro']
+        anos_ids = valores_parametros['id_anos_filtro']
+        origens = valores_parametros['ids_filtro_origens']
+        id_questoes_escolhidas = valores_parametros['id_questao']
+
         n_pagina = request.GET.get("page", "1")
-
+        titulo = request.GET.get("titulo", "")
         questoes_escolhidas = ""
-        if assuntos_ids != "":
-            assuntos_ids = assuntos_ids.split(",")
-        else:
-            assuntos_ids = []
 
-        if anos_ids != "":
-            anos_ids = anos_ids.split(",")
-        else:
-            anos_ids = []
-
-        if origens != '':
-            origens = origens.split(",")
-        else:
-            origens = []
-
-        if id_questoes_escolhidas != "":
-            id_questoes_escolhidas = id_questoes_escolhidas.split(",")
+        if len(id_questoes_escolhidas) > 0:
             questoes_escolhidas = Questao.objects.all().filter(
                 id__in=id_questoes_escolhidas
             )
-        else:
-            id_questoes_escolhidas = []
 
         dados_questoes = lista_questoes(
-            filtro_assunto=assuntos_ids, 
+            filtro_assunto=assuntos_ids,
             anos=anos_ids,
             origem=origens
         )
@@ -464,7 +453,7 @@ def criar_simulado_manualmente(request):
         assuntos = dados_questoes['assuntos']
         anos = dados_questoes['anos_questoes']
         origem = dados_questoes['origem']
-        
+
         page = ""
         questoes_paginacao = Paginator(questoes, 5)
         try:
@@ -505,7 +494,11 @@ def editar_simulado(request, id):
             questoes_escolhidas = simulado.questoes.all()
             id_questoes_escolhidas = [questao.id for questao in questoes_escolhidas]  # noqa: E501
 
-            questoes, assuntos, anos = lista_questoes()
+            dados_questoes = lista_questoes()
+            questoes = dados_questoes['questoes']
+            assuntos = dados_questoes['assuntos']
+            anos = dados_questoes['anos_questoes']
+
             page = ""
             questoes_paginacao = Paginator(questoes, 5)
 
@@ -526,36 +519,34 @@ def editar_simulado(request, id):
                 },
             )
         else:
-            assuntos_ids = request.GET.get("id_assuntos_filtro", "")
-            anos_ids = request.GET.get("id_anos_filtro", "")
+            lista_parametros = ['id_assuntos_filtro',
+                                'id_anos_filtro',
+                                'ids_filtro_origens',
+                                'id_questao']
+            valores_parametros = get_parametros_url(request, lista_parametros)
 
-            titulo = request.GET.get("titulo", "")
-            id_questoes_escolhidas = request.GET.get("id_questao", "")
+            assuntos_ids = valores_parametros['id_assuntos_filtro']
+            anos_ids = valores_parametros['id_anos_filtro']
+            id_questoes_escolhidas = valores_parametros['id_questao']
+
             n_pagina = request.GET.get("page", "1")
-
+            titulo = request.GET.get("titulo", "")
             questoes_escolhidas = ""
-            if assuntos_ids != "":
-                assuntos_ids = assuntos_ids.split(",")
-            else:
-                assuntos_ids = []
 
-            if anos_ids != "":
-                anos_ids = anos_ids.split(",")
-            else:
-                anos_ids = []
-
-            if id_questoes_escolhidas != "":
-                id_questoes_escolhidas = id_questoes_escolhidas.split(",")
+            if len(id_questoes_escolhidas) > 0:
                 questoes_escolhidas = Questao.objects.all().filter(
                     id__in=id_questoes_escolhidas
                 )
-            else:
-                id_questoes_escolhidas = []
 
-            questoes, assuntos, anos = lista_questoes(
+            dados_questoes = lista_questoes(
                 filtro_assunto=assuntos_ids, anos=anos_ids
             )
+
+            questoes = dados_questoes['questoes']
+            assuntos = dados_questoes['assuntos']
+            anos = dados_questoes['anos_questoes']
             page = ""
+
             questoes_paginacao = Paginator(questoes, 5)
             try:
                 page = questoes_paginacao.page(n_pagina)
