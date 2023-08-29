@@ -15,8 +15,9 @@
 {% endblock script %}
 
 {% block conteudo %}
-    <form method="post" action="{%url 'simulados:criar_simulado_manualmente'%} ">
+    <form method="post" action="{%url 'simulados:save' tipo %} ">
       {% csrf_token %}
+      <input type="hidden" id="id_simulado" name='id_simulado' value="{{id_simulado}}">
       <label for'titulo'>Título:  </label>
       <input class='custom-input' id='titulo' name='titulo' value='{{titulo}}'>
       </br>

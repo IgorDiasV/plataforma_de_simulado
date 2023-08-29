@@ -18,11 +18,13 @@ function mudar_ocultar_questao(id_div_questao, id_seta_questao, tamanho='200px')
     const parametros = new URLSearchParams();
     
     if(criar_simulado){
+      let id_simulado = document.getElementById('id_simulado')
       let titulo = document.getElementById('titulo')
       let id_perguntas_selecionadas = get_questoes_escolhidas()
       const parametroListaQuestoes = id_perguntas_selecionadas.join(',');
       parametros.append('id_questao', parametroListaQuestoes);
       parametros.append('titulo', titulo.value)
+      parametros.append('id_simulado', id_simulado.value)
     }
 
     let ids_filtro = get_filtros_escolhidos()

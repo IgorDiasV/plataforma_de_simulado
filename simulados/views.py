@@ -408,20 +408,47 @@ def obter_valor_ou_zero(request, campos):
 
 
 @login_required(login_url="usuarios:login", redirect_field_name="next")
-def criar_simulado_manualmente(request):
+def criar_simulado_manualmente(request, tipo):
     usuario = Usuario.objects.filter(user=request.user).first()
     if usuario.is_teacher:
         if request.method == "POST":
-            titulo = request.POST["titulo"]
-            id_questoes_escolhidas = request.POST.getlist(
-                                        "questoes_escolhidas")
-            questoes_escolhidas = Questao.objects.all().filter(
-                id__in=id_questoes_escolhidas
+            id_questoes_escolhidas = []
+            questoes_escolhidas = None
+            assuntos_ids = []
+            id = ""
+            titulo = ""
+            if tipo == 'editar':
+                id = request.POST['id_simulado']
+                simulado = Simulado.objects.filter(id=id).first()
+                titulo = simulado.titulo
+                questoes_escolhidas = simulado.questoes.all()
+                id_questoes_escolhidas = [questao.id for questao in questoes_escolhidas]  # noqa: E501
+
+            dados_questoes = lista_questoes()
+            questoes = dados_questoes['questoes']
+            assuntos = dados_questoes['assuntos']
+            anos = dados_questoes['anos_questoes']
+
+            page = ""
+            questoes_paginacao = Paginator(questoes, 5)
+
+            page = questoes_paginacao.page(1)
+
+            return render(
+                request,
+                "simulados/criar_simulado_manualmente.html",
+                {
+                    "tipo": tipo,
+                    "id_simulado": id,
+                    "questoes": page,
+                    "assuntos": assuntos,
+                    "id_questoes_escolhidas": id_questoes_escolhidas,
+                    "questoes_escolhidas": questoes_escolhidas,
+                    "titulo": titulo,
+                    "id_filtro_assunto": assuntos_ids,
+                    "anos_questoes": anos,
+                },
             )
-            simulado = Simulado.objects.create(titulo=titulo, autor=usuario)
-            simulado.questoes.set(questoes_escolhidas)
-            messages.success(request, "Simulado Criado com Sucesso")
-            return redirect("simulados:lista_simulados")
 
         lista_parametros = ['id_assuntos_filtro',
                             'id_anos_filtro',
@@ -436,6 +463,7 @@ def criar_simulado_manualmente(request):
 
         n_pagina = request.GET.get("page", "1")
         titulo = request.GET.get("titulo", "")
+        id = request.GET.get("id_simulado", "")
         questoes_escolhidas = ""
 
         if len(id_questoes_escolhidas) > 0:
@@ -465,6 +493,8 @@ def criar_simulado_manualmente(request):
             request,
             "simulados/criar_simulado_manualmente.html",
             {
+                "id_simulado": id,
+                "tipo": tipo,
                 "questoes": page,
                 "assuntos": assuntos,
                 "id_questoes_escolhidas": id_questoes_escolhidas,
@@ -482,107 +512,27 @@ def criar_simulado_manualmente(request):
         return redirect("home")
 
 
-@login_required(login_url="usuarios:login", redirect_field_name="next")
-def editar_simulado(request, id):
+def save(request, tipo):
     usuario = Usuario.objects.filter(user=request.user).first()
     if usuario.is_teacher:
         if request.method == "POST":
-            assuntos_ids = []
-            simulado = Simulado.objects.filter(id=id).first()
-            titulo = simulado.titulo
-
-            questoes_escolhidas = simulado.questoes.all()
-            id_questoes_escolhidas = [questao.id for questao in questoes_escolhidas]  # noqa: E501
-
-            dados_questoes = lista_questoes()
-            questoes = dados_questoes['questoes']
-            assuntos = dados_questoes['assuntos']
-            anos = dados_questoes['anos_questoes']
-
-            page = ""
-            questoes_paginacao = Paginator(questoes, 5)
-
-            page = questoes_paginacao.page(1)
-
-            return render(
-                request,
-                "simulados/editar_simulado.html",
-                {
-                    "id_simulado": id,
-                    "questoes": page,
-                    "assuntos": assuntos,
-                    "id_questoes_escolhidas": id_questoes_escolhidas,
-                    "questoes_escolhidas": questoes_escolhidas,
-                    "titulo": titulo,
-                    "id_filtro_assunto": assuntos_ids,
-                    "anos_questoes": anos,
-                },
-            )
-        else:
-            lista_parametros = ['id_assuntos_filtro',
-                                'id_anos_filtro',
-                                'ids_filtro_origens',
-                                'id_questao']
-            valores_parametros = get_parametros_url(request, lista_parametros)
-
-            assuntos_ids = valores_parametros['id_assuntos_filtro']
-            anos_ids = valores_parametros['id_anos_filtro']
-            id_questoes_escolhidas = valores_parametros['id_questao']
-
-            n_pagina = request.GET.get("page", "1")
-            titulo = request.GET.get("titulo", "")
-            questoes_escolhidas = ""
-
-            if len(id_questoes_escolhidas) > 0:
-                questoes_escolhidas = Questao.objects.all().filter(
-                    id__in=id_questoes_escolhidas
-                )
-
-            dados_questoes = lista_questoes(
-                filtro_assunto=assuntos_ids, anos=anos_ids
-            )
-
-            questoes = dados_questoes['questoes']
-            assuntos = dados_questoes['assuntos']
-            anos = dados_questoes['anos_questoes']
-            page = ""
-
-            questoes_paginacao = Paginator(questoes, 5)
-            try:
-                page = questoes_paginacao.page(n_pagina)
-            except (EmptyPage, PageNotAnInteger):
-                page = questoes_paginacao.page(1)
-
-            return render(
-                request,
-                "simulados/editar_simulado.html",
-                {
-                    "id_simulado": id,
-                    "questoes": page,
-                    "assuntos": assuntos,
-                    "id_questoes_escolhidas": id_questoes_escolhidas,
-                    "questoes_escolhidas": questoes_escolhidas,
-                    "titulo": titulo,
-                    "id_filtro_assunto": assuntos_ids,
-                    "anos_questoes": anos,
-                },
-            )
-
-
-def save_edit(request):
-    usuario = Usuario.objects.filter(user=request.user).first()
-    if usuario.is_teacher:
-        if request.method == "POST":
-            id_simulado = request.POST["id_simulado"]
             titulo = request.POST["titulo"]
             id_questoes_escolhidas = request.POST.getlist(
                                         "questoes_escolhidas")
             questoes_escolhidas = Questao.objects.all().filter(
                 id__in=id_questoes_escolhidas
             )
-            simulado = Simulado.objects.filter(id=id_simulado).first()
-            simulado.titulo = titulo
-            simulado.questoes.set(questoes_escolhidas)
-            simulado.save()
-            messages.success(request, "Simulado Editado com Sucesso")
+            if tipo == 'editar':
+                id_simulado = request.POST["id_simulado"]
+                simulado = Simulado.objects.filter(id=id_simulado).first()
+                simulado.titulo = titulo
+                simulado.questoes.set(questoes_escolhidas)
+                simulado.save()
+                messages.success(request, "Simulado Editado com Sucesso")
+            else:
+                simulado = Simulado.objects.create(titulo=titulo,
+                                                   autor=usuario)
+                simulado.questoes.set(questoes_escolhidas)
+                messages.success(request, "Simulado Criado com Sucesso")
+
             return redirect("simulados:lista_simulados")
