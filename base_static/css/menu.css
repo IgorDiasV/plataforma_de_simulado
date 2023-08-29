@@ -24,9 +24,18 @@
     padding: 10px 15px;
   }
   
-  .menu a:hover {
+  .menu button{
+    background-color: none;
+    background: none;
+    border: none;
+    color:#fff;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  .menu a:hover{
     background-color: #555;
     border-radius: 4px;
+
   }
   
   
