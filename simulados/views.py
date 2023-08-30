@@ -428,6 +428,7 @@ def criar_simulado_manualmente(request, tipo):
             questoes = dados_questoes['questoes']
             assuntos = dados_questoes['assuntos']
             anos = dados_questoes['anos_questoes']
+            origem = dados_questoes['origem']
 
             page = ""
             questoes_paginacao = Paginator(questoes, 5)
@@ -447,6 +448,7 @@ def criar_simulado_manualmente(request, tipo):
                     "titulo": titulo,
                     "id_filtro_assunto": assuntos_ids,
                     "anos_questoes": anos,
+                    "origem": origem
                 },
             )
 
