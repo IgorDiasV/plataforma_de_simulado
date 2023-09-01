@@ -102,8 +102,9 @@
                         {% if simulado_e_link.link %}
                             <input  class='custom-input' type="text"  id="link{{simulado_e_link.simulado.id}}" placeholder="Digite alguma coisa" value="{{simulado_e_link.link}}" readonly/>
                             <button type='button' id="botaoCopiar{{simulado_e_link.simulado.id}}" onclick="copiarLink('link{{simulado_e_link.simulado.id}}')" class="green-button"> Copiar Link</button>
-                            <i onclick="exibir_modal_edit('modal_questoes_edit', '{{simulado_e_link.simulado.id}}')"class="fa-solid fa-pen-to-square"></i>
-                            
+                            <div class="container-icon">
+                                <span class='span-edit'>Editar</span> <i onclick="exibir_modal_edit('modal_questoes_edit', '{{simulado_e_link.simulado.id}}')"class="fa-solid fa-pen-to-square"></i>
+                            </div>
                             <input type="hidden" id='data_inicio{{simulado_e_link.simulado.id}}' value='{{simulado_e_link.data_inicio}}'>
                             <input type="hidden" id='hora_inicio{{simulado_e_link.simulado.id}}' value='{{simulado_e_link.hora_inicio}}'>
                             <input type="hidden" id='data_fim{{simulado_e_link.simulado.id}}' value='{{simulado_e_link.data_fim}}'>
