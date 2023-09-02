@@ -44,10 +44,12 @@
     {% if link %}
       <p>Tempo restante: <span id="contador"></span></p>
     {% else %}
-      <form action="{% url 'simulados:criar_simulado_manualmente' 'editar' %}" method='POST'> 
+      <form class='form-edit-simulado' action="{% url 'simulados:criar_simulado_manualmente' 'editar' %}" method='POST'> 
         {% csrf_token %}
         <input type="hidden" name='id_simulado' value={{simulado.id}}>
-        <button>EDITAR</button>
+        <div class="container-icon">
+          <span class='span-edit'>Editar</span> <button class='plain-button'><i class="fa-solid fa-pen-to-square"></i></button>
+      </div>
       </form>
     {% endif %}
     <form id='form-simulado' action="{% url 'simulados:salvar_resposta'%}" method='POST'>

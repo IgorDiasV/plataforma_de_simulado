@@ -49,3 +49,7 @@
 .wrong_answer{
 background-color: red;
 }
+
+.form-edit-simulado{
+    position: relative;
+}
