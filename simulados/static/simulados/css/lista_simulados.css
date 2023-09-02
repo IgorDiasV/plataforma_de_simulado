@@ -64,19 +64,3 @@
   float: right;
   cursor: pointer;
 }
-
-.container-icon{
-  position: absolute;
-  top: 5px;
-  right: 10px;
-  cursor: pointer;
-}
-
-.container-icon span{
-  opacity: 0;
-}
-
-.container-icon:hover .span-edit{
-  opacity: 1;
-
-}
