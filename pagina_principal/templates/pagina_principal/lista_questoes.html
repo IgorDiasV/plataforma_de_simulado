@@ -38,7 +38,13 @@
     <br>
     <div class='div_questao' id='questao{{questao.id}}'>
         {% if editavel %}
-            <a href="{% url 'editar_questao' questao.id %}"><button>Editar</button></a>
+                   
+                <div class="container-icon">
+                    <a href="{% url 'editar_questao' questao.id %}">
+                        <span class='span-edit'>Editar</span> <button class='plain-button'><i class="fa-solid fa-pen-to-square"></i></button>
+                    </a>
+                </div>
+           
         {% endif %}
         <i id="seta_questao{{questao.id}}" class="fa-solid fa-chevron-down" onclick="mudar_ocultar_questao('questao{{questao.id}}','seta_questao{{questao.id}}')"></i>
         </br>
