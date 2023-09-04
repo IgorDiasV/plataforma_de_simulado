@@ -19,7 +19,7 @@
       {% csrf_token %}
       <input type="hidden" id="id_simulado" name='id_simulado' value="{{id_simulado}}">
       <label for'titulo'>Título:  </label>
-      <input class='custom-input' id='titulo' name='titulo' value='{{titulo}}'>
+      <input class='custom-input' id='titulo' name='titulo' value='{{titulo}}' required>
       </br>
       <select
         style='display: none;'

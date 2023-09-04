@@ -13,10 +13,10 @@
         {% csrf_token %}
 
         <label for="titulo">Título: </label> 
-        <input class='custom-input' type="text" id="titulo" name="titulo"></br></br>
+        <input class='custom-input' type="text" id="titulo" name="titulo" required></br></br>
 
         <label for="qtd_questoes">Quantidade de Questões</label>   
-        <input class='custom-input' type="number" name="qtd_questoes" id="qtd_questoes" value=0></br></br>
+        <input class='custom-input' type="number" name="qtd_questoes" id="qtd_questoes" value=1 min=1 required></br></br>
 
         {% include 'pagina_principal/partials/filtro.html' with titulo_filtro='Assuntos' itens_objeto=assuntos id_class='assunto' name='assuntos'%}
         </br></br>
