@@ -363,7 +363,6 @@ def lista_simulados(request):
 @login_required(login_url="usuarios:login", redirect_field_name="next")
 def criar_simulado(request):
     # TODO Verificar se todos os campos foram preenchidos para evitar erros
-    # TODO adicionar requerid no form
     # TODO verificar se a quantiade de questões disponiveis é suficiente
     # para criar o simulado ex: foi pedido para criar um simulado
     # com 10 questões, mas só tem 5 questões cadastradas
@@ -524,6 +523,10 @@ def save(request, tipo):
             questoes_escolhidas = Questao.objects.all().filter(
                 id__in=id_questoes_escolhidas
             )
+            if len(id_questoes_escolhidas) < 1:
+                mensagem = 'É precisso selecionar no mínimo uma questão'
+                messages.error(request, mensagem)
+                return redirect('home')
             if tipo == 'editar':
                 id_simulado = request.POST["id_simulado"]
                 simulado = Simulado.objects.filter(id=id_simulado).first()
