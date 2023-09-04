@@ -2,7 +2,7 @@
 {% load static %}
 {% block css %}
     <link href="{% static 'pagina_principal/css/listar_questoes.css' %}" rel='stylesheet'>
-    <link href="{% static 'pagina_principal/css/filtro.css' %}" rel='stylesheet'>
+    <link href="{% static 'css/filtro.css' %}" rel='stylesheet'>
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 {% endblock css %}
 
@@ -11,7 +11,7 @@
 {% endblock titulo %}
 
 {% block script %}
-    <script src={% static 'pagina_principal/js/funcionalidades_filtro.js' %}></script>
+    <script src={% static 'global/js/funcionalidades_filtro.js' %}></script>
     <script src={% static 'global/js/filtro.js' %}></script>
     <script src={% static 'global/js/utils.js' %}></script>
 {% endblock script %}
@@ -24,9 +24,9 @@
     <form method="get" id='form_filtro'>
 
         <div class="container-filters">
-            {% include 'pagina_principal/partials/filtro.html' with titulo_filtro='Assuntos' itens_objeto=assuntos id_class='assunto' name='assuntos' selecionados=id_filtro_assunto%}  
-            {% include 'pagina_principal/partials/filtro.html' with titulo_filtro='Ano' itens_lista=anos_questoes id_class='ano' name='anos' selecionados=anos_filtro %}
-            {% include 'pagina_principal/partials/filtro.html' with titulo_filtro='Origem Da Questão' itens_lista=origem id_class='origem' name='origens' selecionados=origens_filtro %}  
+            {% include 'global/partials/filtro.html' with titulo_filtro='Assuntos' itens_objeto=assuntos id_class='assunto' name='assuntos' selecionados=id_filtro_assunto%}  
+            {% include 'global/partials/filtro.html' with titulo_filtro='Ano' itens_lista=anos_questoes id_class='ano' name='anos' selecionados=anos_filtro %}
+            {% include 'global/partials/filtro.html' with titulo_filtro='Origem Da Questão' itens_lista=origem id_class='origem' name='origens' selecionados=origens_filtro %}  
         </div>
         <div class="container-button-filter">
             <button class='button-filter' type="button" onclick="filtrar()">Filtrar</button>

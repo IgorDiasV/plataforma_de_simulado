@@ -1,10 +1,10 @@
 {% extends 'global/pages/base.html' %}
 {% load static %}
 {% block css %}
-  <link href="{% static 'pagina_principal/css/filtro.css' %}" rel='stylesheet'>
+  <link href="{% static 'css/filtro.css' %}" rel='stylesheet'>
 {% endblock css %}
 {% block script %}
-    <script src={% static 'pagina_principal/js/funcionalidades_filtro.js' %}></script>
+    <script src={% static 'global/js/funcionalidades_filtro.js' %}></script>
 {% endblock script %}
 
 
@@ -18,7 +18,7 @@
         <label for="qtd_questoes">Quantidade de Questões</label>   
         <input class='custom-input' type="number" name="qtd_questoes" id="qtd_questoes" value=1 min=1 required></br></br>
 
-        {% include 'pagina_principal/partials/filtro.html' with titulo_filtro='Assuntos' itens_objeto=assuntos id_class='assunto' name='assuntos'%}
+        {% include 'global/partials/filtro.html' with titulo_filtro='Assuntos' itens_objeto=assuntos id_class='assunto' name='assuntos'%}
         </br></br>
         <button type="submit" class='green-button'>Gerar Simulado</button>
 
