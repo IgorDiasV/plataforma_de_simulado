@@ -75,6 +75,9 @@ body {
   border-radius: 4px;
 }
 
+.large-input{
+  width: 250px;
+}
 .container-icon{
   position: absolute;
   top: 5px;
