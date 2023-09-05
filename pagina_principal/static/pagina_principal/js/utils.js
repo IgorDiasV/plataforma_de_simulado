@@ -19,13 +19,27 @@ function adicionarAssunto() {
     input = document.getElementById('input_novo_assunto');
     novoAssunto = input.value;
     if (novoAssunto) {
-        var selectAssuntos = document.getElementById("assuntos");
-        var option = document.createElement("option");
-        option.value = "novo_"+novoAssunto;
-        option.text = novoAssunto;
-        selectAssuntos.add(option);
+        var containerInputs = document.getElementById("container_list_filter_assuntos");
+        
+        var div = document.createElement("div");
+        div.classList.add("container_name_item");
+        div.classList.add("assunto");
+        
+        var input = document.createElement("input");
+        input.value = "novo_"+novoAssunto;
+        input.name = "assuntos";
+        input.type = "checkbox";
+        input.checked = true;
+        
+        var label = document.createElement("label");
+        label.innerHTML = " "+novoAssunto;
+        
+        div.appendChild(input);
+        div.appendChild(label);
 
+        containerInputs.appendChild(div)
         ocultarInput();
+        
     }
 
 }
