@@ -157,19 +157,9 @@ def editar_questao(request, questao_id):
     questao = get_object_or_404(Questao, id=questao_id)
     usuario = Usuario.objects.filter(user=request.user).first()
     assuntos_geral = Assunto.objects.all()
-
+    
     assuntos_questao = questao.assuntos.all()
-    assuntos = []
-    for assunto in assuntos_geral:
-        aux = {}
-
-        aux['id'] = assunto.id
-        aux['nome_assunto'] = assunto.nome_assunto
-
-        if assunto in assuntos_questao:
-            aux['status'] = 'selected'
-
-        assuntos.append(aux)
+    assuntos_selecionados = [str(assunto.id) for assunto in assuntos_questao]
 
     if questao.autor == usuario:
         if request.method == 'POST':
@@ -221,7 +211,9 @@ def editar_questao(request, questao_id):
             return redirect('home')
 
         return render(request, 'pagina_principal/editar_questao.html',
-                      {'questao': questao, 'assuntos': assuntos})
+                      {'questao': questao,
+                       'assuntos': assuntos_geral,
+                       'assuntos_selecionados': assuntos_selecionados})
     else:
         mensagem = ('Apenas o autor dessa questão pode altera-la')
         messages.error(request, mensagem)
