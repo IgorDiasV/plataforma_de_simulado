@@ -40,8 +40,8 @@
                 {% include 'global/partials/filtro.html' with titulo_filtro='Assuntos' itens_objeto=assuntos id_class='assunto' name='assuntos' selecionados=assuntos_selecionados%}  
             </div>
 
-            <button type="button" onclick="mostrarInputAssunto()">+</button></br>
-            <input id='input_novo_assunto' style='display:none'/>
+            <button type="button" class='margin-top' onclick="mostrarInputAssunto()">Cadastrar Assunto</button></br>
+            <input id='input_novo_assunto' class='custom-input margin-top' style='display:none'/>
             <button id='botao_novo_assunto'  style='display:none' type="button" onclick="adicionarAssunto()" >adicionar</button>
             <button id='botao_cancelar'  style='display:none' type="button" onclick="ocultarInput()" >cancelar</button>
             <p>Pergunta: </p>

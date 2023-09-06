@@ -13,6 +13,10 @@ body {
   padding-right: 15px; 
 }
 
+.margin-top{
+  margin-top: 15px;
+}
+
 .editor_quill{
   background: white;
 }
