@@ -91,3 +91,19 @@ def formatar_tempo_int(segundos):
     segundos -= minutos * 60
     
     return horas, minutos, segundos
+
+
+def get_acertos_e_qtd_total(respostas):
+    estatisticas_dict = {}
+    for resposta in respostas:
+        acertou = resposta.resposta == resposta.questao.alternativa_correta
+       
+        for assunto in resposta.questao.assuntos.all():
+            inicial_dict = {'acertos': 0, 'qtd': 0}
+            dados_asssunto = estatisticas_dict.get(assunto.nome_assunto,
+                                                   inicial_dict)
+            dados_asssunto['qtd'] += 1
+            if acertou:
+                dados_asssunto['acertos'] += 1
+            estatisticas_dict[assunto.nome_assunto] = dados_asssunto
+    return estatisticas_dict
