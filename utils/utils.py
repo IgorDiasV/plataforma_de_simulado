@@ -113,6 +113,18 @@ def get_acertos_e_qtd_total(respostas):
     return estatisticas_dict
 
 
+def get_porcentagem(dict_acertos_total):
+    dict_porcentagem = {}
+    for assunto in dict_acertos_total:
+        acertos = dict_acertos_total[assunto]['acertos']
+        total = dict_acertos_total[assunto]['qtd']
+
+        porcentagem = ((acertos/total)*100)
+        dict_porcentagem[assunto] = porcentagem
+    
+    return dict_porcentagem
+
+
 def get_grafico_base64(dict_porcentagem):
     assuntos = []
     acertos = []
