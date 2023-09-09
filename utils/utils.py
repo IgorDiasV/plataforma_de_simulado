@@ -1,5 +1,9 @@
 from simulados.models import Simulado, RespostaQuestaoSimulado
 from pagina_principal.models import Questao, Assunto
+import seaborn as sns
+import matplotlib.pyplot as plt
+import io
+import base64
 
 
 def qtd_perguntas(id_simulado):
@@ -107,3 +111,33 @@ def get_acertos_e_qtd_total(respostas):
                 dados_asssunto['acertos'] += 1
             estatisticas_dict[assunto.nome_assunto] = dados_asssunto
     return estatisticas_dict
+
+
+def get_grafico_base64(dict_porcentagem):
+    assuntos = []
+    acertos = []
+    for assunto in dict_porcentagem:
+        assuntos.append(assunto)
+        acertos.append(dict_porcentagem[assunto])
+    
+    sns.set(style="whitegrid")
+    cor = 'royalblue'
+    plt.figure(figsize=(10, 6))
+    ax = sns.barplot(x=assuntos, y=acertos, color=cor)
+    
+    for p in ax.patches:
+        ax.annotate(f'{int(p.get_height())}%', (p.get_x() + p.get_width() / 2., p.get_height()),
+                    ha='center', va='center', fontsize=12, color='black', xytext=(0, 5),
+                    textcoords='offset points')
+
+    plt.title('Desempenho por Assunto')
+
+    sns.set(style="whitegrid")
+
+    buffer = io.BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+    imagem_base64 = base64.b64encode(buffer.read()).decode()
+    buffer.close()
+
+    return imagem_base64
