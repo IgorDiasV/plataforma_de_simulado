@@ -11,7 +11,7 @@ from django.urls import reverse
 from utils.utils import qtd_perguntas, qtd_acertos, formatar_tempo_str, formatar_tempo_int     # noqa: E501
 from datetime import datetime
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from utils.utils import lista_questoes, get_parametros_url
+from utils.utils import lista_questoes, get_parametros_url, get_grafico
 
 
 def simulado(request):
@@ -290,6 +290,9 @@ def resposta_aluno(request):
 def lista_simulados(request):
     usuario = Usuario.objects.filter(user=request.user).first()
     simulados = Simulado.objects.filter(autor=usuario)
+    respostas = RespostaQuestaoSimulado.objects.all()
+    respostas = respostas.filter(resposta_simulado__simulado_respondido__simulado__autor=usuario)  # noqa: E501
+    img_grafico = get_grafico(respostas)
     simulados_e_link = []
 
     for simulado in simulados:
@@ -356,7 +359,9 @@ def lista_simulados(request):
         simulados_e_link.append(aux)
     return render(
         request, "simulados/lista_simulados.html",
-        {"simulados_e_links": simulados_e_link}
+        {"simulados_e_links": simulados_e_link,
+         "grafico": img_grafico
+         }
     )
 
 
