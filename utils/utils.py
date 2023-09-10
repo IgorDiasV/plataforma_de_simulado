@@ -138,8 +138,8 @@ def get_grafico_base64(dict_porcentagem):
     ax = sns.barplot(x=assuntos, y=acertos, color=cor)
     
     for p in ax.patches:
-        ax.annotate(f'{int(p.get_height())}%', (p.get_x() + p.get_width() / 2., p.get_height()),
-                    ha='center', va='center', fontsize=12, color='black', xytext=(0, 5),
+        ax.annotate(f'{int(p.get_height())}%', (p.get_x() + p.get_width() / 2., p.get_height()),  # noqa: E501
+                    ha='center', va='center', fontsize=12, color='black', xytext=(0, 5),  # noqa: E501
                     textcoords='offset points')
 
     plt.title('Desempenho por Assunto')
@@ -153,3 +153,9 @@ def get_grafico_base64(dict_porcentagem):
     buffer.close()
 
     return imagem_base64
+
+
+def get_grafico(respostas):
+    dict_acertos_total = get_acertos_e_qtd_total(respostas)
+    dict_porcentagem = get_porcentagem(dict_acertos_total)
+    return get_grafico_base64(dict_porcentagem)        
