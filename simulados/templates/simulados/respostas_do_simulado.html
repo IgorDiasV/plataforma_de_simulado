@@ -1,11 +1,15 @@
 {% extends 'global/pages/base.html' %}
 {% load static %}
 {% block css %}
-<link rel="stylesheet" href="{% static 'simulados/css/respostas_do_simulado.css' %}">
+    <link rel="stylesheet" href="{% static 'simulados/css/respostas_do_simulado.css' %}">
+    <link href="{% static 'css/estatisticas.css'%}" rel='stylesheet'>
 {% endblock css %}
-
+{% block script %}
+    <script src={% static 'global/js/utils.js' %}></script>
+{% endblock script %}
 {% block conteudo %}
 
+    {% include 'global/partials/estatisticas.html' %}
     <h1> Alunos que responderam: </h1>
     {% if alunos %}
         <table class='respostas_alunos'>

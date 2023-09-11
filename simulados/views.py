@@ -221,6 +221,10 @@ def respostas_do_simulado(request):
         respostas = RespostaSimulado.objects.filter(
             simulado_respondido__simulado__id=id_simulado
         )
+        respostas_por_questao = RespostaQuestaoSimulado.objects.filter(
+            resposta_simulado__in=respostas
+        )
+        img_grafico = get_grafico(respostas_por_questao)
         qtd_perguntas_simulado = qtd_perguntas(id_simulado)
         alunos_que_responderam = []
         for resposta in respostas:
@@ -242,7 +246,10 @@ def respostas_do_simulado(request):
         return render(
             request,
             "simulados/respostas_do_simulado.html",
-            {"alunos": alunos_que_responderam},
+            {
+             "alunos": alunos_que_responderam,
+             "grafico": img_grafico
+             },
         )
     else:
         return Http404()
@@ -263,7 +270,6 @@ def resposta_aluno(request):
         dados_questao = []
         for questao in questoes_simulados:
             resposta_questao = respostas_questoes.filter(questao=questao)
-            print(resposta_questao)
             classe = ""
             key = ""
             if len(resposta_questao) > 0:
