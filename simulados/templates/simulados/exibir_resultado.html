@@ -3,13 +3,19 @@
 {% block css %}
   <link href="{% static 'simulados/css/simulado.css' %}" rel='stylesheet'>
   <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+  <link href="{% static 'css/estatisticas.css'%}" rel='stylesheet'>
 {% endblock css %}
+{% block script %}
+    <script src={% static 'global/js/utils.js' %}></script>
+{% endblock script %}
+
+
 {% block conteudo %}
 
-    {% csrf_token %}
+
     
 
-        
+        {% include 'global/partials/estatisticas.html' %}
         {% for dados in dados_questoes %}
         
         <div class="question">

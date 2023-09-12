@@ -262,7 +262,7 @@ def resposta_aluno(request):
         respostas_questoes = RespostaQuestaoSimulado.objects.filter(
             resposta_simulado__id=id
         )
-
+        img_grafico = get_grafico(respostas_questoes)
         simulado_respondido = RespostaSimulado.objects.filter(id=id)
         simulado_respondido = simulado_respondido.first().simulado_respondido
         questoes_simulados = simulado_respondido.simulado.questoes.all()
@@ -286,7 +286,10 @@ def resposta_aluno(request):
         return render(
             request,
             "simulados/exibir_resultado.html",
-            {"dados_questoes": dados_questao},
+            {
+             "dados_questoes": dados_questao,
+             "grafico": img_grafico
+             },
         )
     else:
         return Http404()
