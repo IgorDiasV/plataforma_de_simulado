@@ -135,12 +135,13 @@ def get_grafico_base64(dict_porcentagem):
     sns.set(style="whitegrid")
     cor = 'royalblue'
     plt.figure(figsize=(10, 6))
-    ax = sns.barplot(x=assuntos, y=acertos, color=cor)
-    
-    for p in ax.patches:
-        ax.annotate(f'{int(p.get_height())}%', (p.get_x() + p.get_width() / 2., p.get_height()),  # noqa: E501
-                    ha='center', va='center', fontsize=12, color='black', xytext=(0, 5),  # noqa: E501
-                    textcoords='offset points')
+    if len(dict_porcentagem) > 0:
+        ax = sns.barplot(x=assuntos, y=acertos, color=cor)
+        
+        for p in ax.patches:
+            ax.annotate(f'{int(p.get_height())}%', (p.get_x() + p.get_width() / 2., p.get_height()),  # noqa: E501
+                        ha='center', va='center', fontsize=12, color='black', xytext=(0, 5),  # noqa: E501
+                        textcoords='offset points')
 
     plt.title('Desempenho por Assunto')
 
