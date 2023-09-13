@@ -75,7 +75,7 @@ def lista_questoes_usuario(request):
 
     page = ''
     n_pagina = request.GET.get('page', '1')
-    questoes_paginacao = Paginator(questoes, 2)
+    questoes_paginacao = Paginator(questoes, 5)
     try:
         page = questoes_paginacao.page(n_pagina)
     except (EmptyPage, PageNotAnInteger):
