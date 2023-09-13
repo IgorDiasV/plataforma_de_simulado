@@ -298,7 +298,7 @@ def resposta_aluno(request):
 @login_required(login_url="usuarios:login", redirect_field_name="next")
 def lista_simulados(request):
     usuario = Usuario.objects.filter(user=request.user).first()
-    simulados = Simulado.objects.filter(autor=usuario)
+    simulados = Simulado.objects.filter(autor=usuario).order_by("-id")
     respostas = RespostaQuestaoSimulado.objects.all()
     respostas = respostas.filter(resposta_simulado__simulado_respondido__simulado__autor=usuario)  # noqa: E501
     img_grafico = get_grafico(respostas)
