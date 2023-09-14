@@ -304,6 +304,13 @@ def lista_simulados(request):
     img_grafico = get_grafico(respostas)
     simulados_e_link = []
 
+    n_pagina = request.GET.get('page', '1')
+    simulados_paginacao = Paginator(simulados, 5)
+    try:
+        simulados = simulados_paginacao.page(n_pagina)
+    except (EmptyPage, PageNotAnInteger):
+        simulados = simulados_paginacao.page(1)
+
     for simulado in simulados:
         simulado_compartilhado = SimuladoCompartilhado.objects.filter(
             simulado=simulado
@@ -369,7 +376,8 @@ def lista_simulados(request):
     return render(
         request, "simulados/lista_simulados.html",
         {"simulados_e_links": simulados_e_link,
-         "grafico": img_grafico
+         "grafico": img_grafico,
+         "simulados_paginacao": simulados
          }
     )
 

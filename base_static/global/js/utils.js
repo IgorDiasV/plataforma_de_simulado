@@ -47,11 +47,20 @@ function mudar_ocultar_questao(id_div_questao, id_seta_questao, tamanho='200px')
 }
 
 
-function mudar_pagina(pagina, criar_simulado=false){
-  let parametros_gerais = parametros_para_redirecionar(criar_simulado)
+function mudar_pagina(pagina, criar_simulado=false, tem_parametros_gerais=true){
   const parametros = new URLSearchParams();
   parametros.append('page', pagina)
   history.replaceState(null, null, window.location.pathname);
-  const url = window.location.href + '?' + parametros.toString() + '&' + parametros_gerais;
+
+  let url;
+
+  if (tem_parametros_gerais){
+
+    let parametros_gerais = parametros_para_redirecionar(criar_simulado)
+    url = window.location.href + '?' + parametros.toString() + '&' + parametros_gerais;
+  }else{
+    url = window.location.href + '?' + parametros.toString();
+  }
+
   window.location.href = url
 }

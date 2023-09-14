@@ -4,6 +4,7 @@
 {% block css %}
     <link href="{% static 'simulados/css/lista_simulados.css'%}" rel='stylesheet'>
     <link href="{% static 'css/estatisticas.css'%}" rel='stylesheet'>
+    <link href="{% static 'pagina_principal/css/listar_questoes.css' %}" rel='stylesheet'>
 {% endblock css %}
 
 {% block script %}
@@ -140,8 +141,25 @@
                     </div>
                 
             {% endfor%}
-        </div>       
+        </div>  
+        <ul class="paginacao">
+            {% if simulados_paginacao.has_previous %}
+            <li><a onclick="mudar_pagina('{{simulados_paginacao.previous_page_number}}, false, false')"> Anterior </a></li>
+            {% endif %}
+            {% for page in simulados_paginacao.paginator.page_range %}
+                {% if page == simulados_paginacao.number %}   
+                    <li><a  class="active" >{{page}}</a></li>
+                {% else %}
+                    <li><a onclick="mudar_pagina('{{page}}', false, false)">{{page}}</a></li>
+                {% endif %} 
+            {% endfor %}
+            {% if simulados_paginacao.has_next %}
+                <li><a onclick="mudar_pagina('{{simulados_paginacao.next_page_number}}', false, false)"> Próximo </a></li>
+            {% endif %}
+        </ul>    
         {% include 'simulados/partials/modal_dados_simulado.html' with id_modal='modal_questoes' action='simulados:gerar_link' tipo='criar'%}
         {% include 'simulados/partials/modal_dados_simulado.html' with id_modal='modal_questoes_edit' action='simulados:gerar_link' tipo='editar'%}
+        
+
 
 {% endblock conteudo %}
