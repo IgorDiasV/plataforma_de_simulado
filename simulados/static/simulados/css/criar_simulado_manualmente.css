@@ -19,32 +19,6 @@
   max-width: 600px;
 }
 
-
-.paginacao {
-list-style-type: none;
-padding: 0;
-display: flex;
-justify-content: center;
-align-items: center;
-}
-
-.paginacao li {
-display: inline-block;
-}
-
-.paginacao li a {
-padding: 5px 10px;
-text-decoration: none;
-border: 1px solid #333;
-color: #333;
-border-radius: 5px;
-}
-
-.paginacao li a.active {
-background-color: #007BFF;
-color: #fff;
-}
-
 .questao{
   border: 1px solid black;
   height: 200px;
