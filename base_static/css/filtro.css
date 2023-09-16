@@ -60,3 +60,7 @@
     border-radius: 5px;
     cursor: pointer;
 }
+
+.button-filter:hover{
+    background-color: #0158b6;
+}
