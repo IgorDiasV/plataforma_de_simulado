@@ -9,7 +9,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 def home(request):
-    return render(request, 'pagina_principal/home.html')
+    return render(request, 'questoes/home.html')
 
 
 def lista_questoes_geral(request):
@@ -39,7 +39,7 @@ def lista_questoes_geral(request):
     except (EmptyPage, PageNotAnInteger):
         page = questoes_paginacao.page(1)
 
-    return render(request, 'pagina_principal/lista_questoes.html',
+    return render(request, 'questoes/lista_questoes.html',
                   {'questoes': page,
                    'assuntos': assuntos,
                    'anos_questoes': anos_questoes,
@@ -81,7 +81,7 @@ def lista_questoes_usuario(request):
     except (EmptyPage, PageNotAnInteger):
         page = questoes_paginacao.page(1)
 
-    return render(request, 'pagina_principal/lista_questoes.html',
+    return render(request, 'questoes/lista_questoes.html',
                   {'questoes': page, 'assuntos': assuntos,
                    'editavel': True,
                    'anos_questoes': anos_questoes,
@@ -138,7 +138,7 @@ def cadastrar_questao(request):
             messages.success(request, "Questão Cadastrada com Sucesso")
             return redirect('home')
 
-        return render(request, 'pagina_principal/cadastrar_questao.html',
+        return render(request, 'questoes/cadastrar_questao.html',
                       {'assuntos': assuntos})
     else:
         mensagem = ('Seu perfil é de aluno, '
@@ -210,7 +210,7 @@ def editar_questao(request, questao_id):
             messages.success(request, "questão editada com Sucesso")
             return redirect('home')
 
-        return render(request, 'pagina_principal/editar_questao.html',
+        return render(request, 'questoes/editar_questao.html',
                       {'questao': questao,
                        'assuntos': assuntos_geral,
                        'assuntos_selecionados': assuntos_selecionados})

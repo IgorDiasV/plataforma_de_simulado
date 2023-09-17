@@ -1,5 +1,5 @@
 from simulados.models import Simulado, RespostaQuestaoSimulado
-from pagina_principal.models import Questao, Assunto
+from questoes.models import Questao, Assunto
 import seaborn as sns
 import matplotlib.pyplot as plt
 import io

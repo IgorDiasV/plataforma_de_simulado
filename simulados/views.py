@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from pagina_principal.models import Questao, Assunto
+from questoes.models import Questao, Assunto
 from .models import Simulado, SimuladoCompartilhado
 from .models import RespostaSimulado, RespostaQuestaoSimulado
 from random import sample

@@ -1,6 +1,6 @@
 from django.db import models
 from usuarios.models import Usuario
-from pagina_principal.models import Questao
+from questoes.models import Questao
 import uuid
 
 
