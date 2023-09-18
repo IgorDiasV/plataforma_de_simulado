@@ -105,7 +105,7 @@
                         <h2 > {{simulado_e_link.simulado.titulo}}</h2>
                                                 
                         {% if simulado_e_link.link %}
-                            <input  class='custom-input' type="text"  id="link{{simulado_e_link.simulado.id}}" placeholder="Digite alguma coisa" value="{{simulado_e_link.link}}" readonly/>
+                            <input class='input-link' type="text"  id="link{{simulado_e_link.simulado.id}}" placeholder="Digite alguma coisa" value="{{simulado_e_link.link}}" readonly/>
                             <button type='button' id="botaoCopiar{{simulado_e_link.simulado.id}}" onclick="copiarLink('link{{simulado_e_link.simulado.id}}')" class="green-button"> Copiar Link</button>
                             <div class="container-icon">
                                 <span class='span-edit'>Editar</span> <i onclick="exibir_modal_edit('modal_questoes_edit', '{{simulado_e_link.simulado.id}}')"class="fa-solid fa-pen-to-square"></i>
@@ -123,7 +123,7 @@
 
                             <input type="hidden" id='link_parcial{{simulado_e_link.simulado.id}}' value='{{simulado_e_link.link_parcial}}'>
                         {% else %}
-                            <input  class='custom-input' type="text" style='display: none' id="link{{simulado_e_link.simulado.id}}" placeholder="Digite alguma coisa" value="{{simulado_e_link.simulado.id}}" readonly/>
+                            <input class='input-link' type="text" style='display: none' id="link{{simulado_e_link.simulado.id}}" placeholder="Digite alguma coisa" value="{{simulado_e_link.simulado.id}}" readonly/>
                             <button style='display: none' type='button' onclick="copiarLink('link{{simulado_e_link.simulado.id}}')"  id="botaoCopiar{{simulado_e_link.simulado.id}}" class="green-button"> Copiar Link</button>
                             <button type='button' id="botaoGerar{{simulado_e_link.simulado.id}}" onclick="exibir_modal('modal_questoes','{{simulado_e_link.simulado.id}}')" class="green-button"> Gerar Link</button>
                         {% endif %}

@@ -64,3 +64,9 @@
   float: right;
   cursor: pointer;
 }
+
+.input-link{
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
