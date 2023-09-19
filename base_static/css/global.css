@@ -16,7 +16,9 @@ body {
 .margin-top{
   margin-top: 15px;
 }
-
+.margin-bottom{
+  margin-bottom: 10px;
+}
 .editor_quill{
   background: white;
 }
@@ -82,7 +84,6 @@ body {
 
 .custom-input{
   padding: 8px;
-  margin-bottom: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
 }
