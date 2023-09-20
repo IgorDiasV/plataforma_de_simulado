@@ -15,7 +15,7 @@
         <p><strong>Tentativas Restante: </strong>{{qtd_tentativas}}</p>
         <p><strong>Disponibilidade: </strong>{{disponibilidade}}</p>
         {% if disponivel_responder_simulado%}
-            <form action="{% url 'simulados:responder_simulado' %}" method='post'>
+            <form class='form-responder' action="{% url 'simulados:responder_simulado' %}" method='post'>
                 {% csrf_token %}
                 <input type="hidden" name='link' value='{{link}}' readonly/>
                 <button type='submit' class='green-button'>Responder</button>
