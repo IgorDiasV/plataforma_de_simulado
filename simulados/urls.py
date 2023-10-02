@@ -21,4 +21,5 @@ urlpatterns = [
     path('lista_simulado/', views.lista_simulados, name='lista_simulados'),
     path('criar_simulado/', views.criar_simulado, name='criar_simulado'),
     path('resposta_aluno/', views.resposta_aluno, name='resposta_aluno'),
+    path('desempenho/', views.desempenho, name='desempenho')
 ]

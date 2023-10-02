@@ -6,7 +6,7 @@ from random import sample
 from django.contrib.auth.decorators import login_required
 from usuarios.models import Usuario
 from django.contrib import messages
-from django.http.response import Http404
+from django.http.response import Http404, HttpResponse
 from django.urls import reverse
 from utils.utils import qtd_perguntas, qtd_acertos, formatar_tempo_str, formatar_tempo_int     # noqa: E501
 from datetime import datetime
@@ -563,3 +563,7 @@ def save(request, tipo):
                 messages.success(request, "Simulado Criado com Sucesso")
 
             return redirect("simulados:lista_simulados")
+        
+
+def desempenho(request):
+    return HttpResponse('Página com desemepnho do aluno')
