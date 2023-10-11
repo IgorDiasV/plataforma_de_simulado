@@ -12,6 +12,7 @@ from utils.utils import qtd_perguntas, qtd_acertos, formatar_tempo_str, formatar
 from datetime import datetime
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from utils.utils import lista_questoes, get_parametros_url, get_grafico
+from utils.utils_simulado import calcular_tempo_prova
 
 
 def simulado(request):
@@ -28,15 +29,8 @@ def simulado(request):
 
 def gerar_link(request):
     if request.method == "POST":
-        qtd_tentativas = 0
-        tempo_de_prova = 0
-        if request.POST.get("limite_de_tentativas"):
-            qtd_tentativas = obter_valor_ou_zero(
-                                request, ["qtd_tentativas"])[0]
-        if request.POST.get("tempo_limite"):
-            campos = ["horas", "minutos", "segundos"]
-            horas, minutos, segundos = obter_valor_ou_zero(request, campos)
-            tempo_de_prova = horas * 3600 + minutos * 60 + segundos
+        qtd_tentativas = int(request.POST.get("qtd_tentativas", 0))
+        tempo_de_prova = calcular_tempo_prova(request)
 
         id_simulado = request.POST["id_simulado"]
         data_hora_inicial = None
@@ -415,17 +409,6 @@ def criar_simulado(request):
         mensagem = "Seu perfil é de aluno, Apenas professores podem criar simulados"  # noqa: E501
         messages.error(request, mensagem)
         return redirect("home")
-
-
-def obter_valor_ou_zero(request, campos):
-    valores = []
-    for campo in campos:
-        valor = request.POST.get(campo)
-        if valor is None or valor == "":
-            valores.append(0)
-        else:
-            valores.append(int(valor))
-    return valores
 
 
 @login_required(login_url="usuarios:login", redirect_field_name="next")
