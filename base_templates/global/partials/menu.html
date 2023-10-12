@@ -2,11 +2,11 @@
     <ul><li><a href="{% url 'home' %}">Inicio</a></li>
         <li><a href="{% url 'cadastrar_questao' %}">Cadastrar Questão</a></li>
         <li><a href="{%url 'lista_questoes' %}">Listar Questões</a></li>
-        <li><a href="{%url 'simulados:criar_simulado' %}">Criar Simulado</a></li>
+        {% comment %} <li><a href="{%url 'simulados:criar_simulado' %}">Criar Simulado</a></li> {% endcomment %}
         <li>
             <form action="{%url 'simulados:criar_simulado_manualmente' 'criar' %}" method='POST'>
                 {% csrf_token %}
-                <a ><button>Criar Simulado Manualmente</button></a>
+                <a ><button>Criar Simulado</button></a>
             </form>
         </li>
     </ul>
