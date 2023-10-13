@@ -42,32 +42,34 @@
         let tempo_horas = document.getElementById('tempo_horas'+id_simulado).value
         let tempo_minutos = document.getElementById('tempo_minutos'+id_simulado).value
         let tempo_segundos = document.getElementById('tempo_segundos'+id_simulado).value
-        
-
-        div_modal.querySelector("[name='horas']").value = tempo_horas
-        div_modal.querySelector("[name='minutos']").value = tempo_minutos
-        div_modal.querySelector("[name='segundos']").value = tempo_segundos
-
+      
         if (tempo_horas!=''){
             div_modal.querySelector('#tempo_limite').checked = true
             div_modal.querySelector('.tempo_prova').style.display = 'block'
         }else{
             div_modal.querySelector('#tempo_limite').checked = false
             div_modal.querySelector('.tempo_prova').style.display = 'none'
+            tempo_horas = 0
+            tempo_minutos = 0
+            tempo_segundos = 0
         }
 
+        div_modal.querySelector("[name='horas']").value = tempo_horas
+        div_modal.querySelector("[name='minutos']").value = tempo_minutos
+        div_modal.querySelector("[name='segundos']").value = tempo_segundos
+
         let qtd_tentativas = document.getElementById('qtd_tentativas'+id_simulado).value
-        div_modal.querySelector("[name='qtd_tentativas']").value = qtd_tentativas
-
-
+        
         if (qtd_tentativas!=''){
             div_modal.querySelector('#limite_de_tentativas').checked = true
             div_modal.querySelector('.qtd_tentativas').style.display = 'block'
         }else{
             div_modal.querySelector('#limite_de_tentativas').checked = false
             div_modal.querySelector('.qtd_tentativas').style.display = 'none'
+            qtd_tentativas=0
         }
 
+        div_modal.querySelector("[name='qtd_tentativas']").value = qtd_tentativas
         let link = document.getElementById('link_parcial'+id_simulado).value
         div_modal.querySelector("[name='link_parcial']").value = link
         exibir_modal(id_modal, id_simulado)
