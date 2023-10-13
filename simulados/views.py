@@ -12,7 +12,7 @@ from utils.utils import qtd_perguntas, qtd_acertos, formatar_tempo_str, formatar
 from datetime import datetime
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from utils.utils import lista_questoes, get_parametros_url, get_grafico
-from utils.utils_simulado import calcular_tempo_prova
+from utils.utils_simulado import calcular_tempo_prova, calcular_data
 
 
 def simulado(request):
@@ -28,33 +28,14 @@ def simulado(request):
 
 
 def gerar_link(request):
+
     if request.method == "POST":
         qtd_tentativas = int(request.POST.get("qtd_tentativas", 0))
+
         tempo_de_prova = calcular_tempo_prova(request)
 
         id_simulado = request.POST["id_simulado"]
-        data_hora_inicial = None
-        data_hora_final = None
-        if request.POST.get("data_limite"):
-            formato = "%Y-%m-%d %H:%M"
-
-            try:
-                data_inicial = request.POST["data_inicial"]
-                hora_inicial = request.POST["horario_inicial"]
-
-                data_hora_inicial_str = f"{data_inicial} {hora_inicial}"
-                data_hora_inicial = datetime.strptime(
-                                        data_hora_inicial_str, formato)
-
-                data_final = request.POST["data_final"]
-                hora_final = request.POST["horario_final"]
-
-                data_hora_final_str = f"{data_final} {hora_final}"
-                data_hora_final = datetime.strptime(
-                                    data_hora_final_str, formato)
-            except ValueError:
-                data_hora_inicial = None
-                data_hora_final = None
+        data_hora_inicial, data_hora_final = calcular_data(request)
 
         simulado = Simulado.objects.filter(id=id_simulado).first()
         if request.POST['tipo'] == 'criar':
@@ -71,8 +52,8 @@ def gerar_link(request):
                                         link=link).first()
             simulado_compartilhado.tempo_de_prova = tempo_de_prova
             simulado_compartilhado.qtd_tentativas = qtd_tentativas
-            simulado_compartilhado.data_inicio = data_inicial
-            simulado_compartilhado.data_fim = data_final
+            simulado_compartilhado.data_inicio = data_hora_inicial
+            simulado_compartilhado.data_fim = data_hora_final
             simulado_compartilhado.save()
 
         return redirect("simulados:lista_simulados")
