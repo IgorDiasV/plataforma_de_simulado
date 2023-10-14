@@ -52,7 +52,7 @@
       <div class="container-filters">
         {% include 'global/partials/filtro.html' with titulo_filtro='Assuntos' itens_objeto=assuntos id_class='assunto' name='assuntos' selecionados=id_filtro_assunto %}  
         {% include 'global/partials/filtro.html' with titulo_filtro='Ano' itens_lista=anos_questoes id_class='ano' name='anos'%}  
-        {% include 'global/partials/filtro.html' with titulo_filtro='Fonte Da Questão' itens_lista=origem id_class='origem' name='origens' selecionados=origens_filtro %}  
+        {% comment %} {% include 'global/partials/filtro.html' with titulo_filtro='Fonte Da Questão' itens_lista=origem id_class='origem' name='origens' selecionados=origens_filtro %}   {% endcomment %}
       </div>
       <div class="container-button-filter">
           <button class='button-filter' type="button" onclick='filtrar(criar_simulado=true)'>Filtrar</button>

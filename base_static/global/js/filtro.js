@@ -12,8 +12,8 @@ function get_filtros_escolhidos(){
     let form = document.getElementById('form_filtro')
     let ids_filtro_assuntos = get_values_checked_filter(form, 'assuntos')
     let ids_filtro_anos = get_values_checked_filter(form, 'anos')
-    let ids_filtro_origens = get_values_checked_filter(form, 'origens')
-    return [ids_filtro_assuntos, ids_filtro_anos, ids_filtro_origens]
+    // let ids_filtro_origens = get_values_checked_filter(form, 'origens')
+    return [ids_filtro_assuntos, ids_filtro_anos]
   }
 
   function filtrar(criar_simulado=false){

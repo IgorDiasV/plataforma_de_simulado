@@ -30,15 +30,15 @@ function mudar_ocultar_questao(id_div_questao, id_seta_questao, tamanho='200px')
     let ids_filtro = get_filtros_escolhidos()
     let ids_filtro_assuntos = ids_filtro[0]
     let ids_filtro_anos = ids_filtro[1]
-    let ids_filtro_origens = ids_filtro[2]
+    // let ids_filtro_origens = ids_filtro[2]
 
     const parametroListaAssuntos = ids_filtro_assuntos.join(',');
     const parametroListaAnos = ids_filtro_anos.join(',');
-    const parametroListaOrigens = ids_filtro_origens.join(',');
+    // const parametroListaOrigens = ids_filtro_origens.join(',');
 
     parametros.append('id_assuntos_filtro', parametroListaAssuntos);
     parametros.append('id_anos_filtro', parametroListaAnos);
-    parametros.append('ids_filtro_origens', parametroListaOrigens);
+    // parametros.append('ids_filtro_origens', parametroListaOrigens);
 
 
     return parametros.toString();
