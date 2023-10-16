@@ -99,7 +99,6 @@ def cadastrar_questao(request):
         assuntos = Assunto.objects.all()
         if request.method == 'POST':
             nome_curso = request.POST['nome_curso']
-            origem = request.POST['origem']
             ano = request.POST['ano']
             assuntos_ids = request.POST.getlist('assuntos')
             pergunta = request.POST['pergunta']
@@ -111,7 +110,6 @@ def cadastrar_questao(request):
             resposta = request.POST['resposta']
             questao = Questao.objects.create(pergunta=pergunta,
                                              curso=nome_curso,
-                                             origem=origem,
                                              ano=ano,
                                              alternativa_a=alternativa_a,
                                              alternativa_b=alternativa_b,
