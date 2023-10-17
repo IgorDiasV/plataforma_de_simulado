@@ -14,7 +14,6 @@ class Questao(models.Model):
 
     id = models.AutoField(primary_key=True)
     curso = models.TextField(null=False, default="Não Cadastrado")
-    origem = models.TextField(null=False, default="Outros")
     ano = models.BigIntegerField(null=True, default=-1)
     assuntos = models.ManyToManyField(Assunto)
     pergunta = models.TextField(default='none')
