@@ -38,28 +38,23 @@ def assuntos_adicionados(assuntos_atingos: list, assuntos_novos: list) -> list:
     return valores_que_sairam_da_lista(assuntos_novos, assuntos_atingos)
 
 
-def lista_questoes(usuario=None, filtro_assunto=[], anos=[], origem=[]):
+def lista_questoes(usuario=None, filtro_assunto=[], anos=[]):
     questoes = Questao.objects.all()
     assuntos = Assunto.objects.all()
     anos_questoes = [questao.ano for questao in questoes]
     anos_questoes = list(set(anos_questoes))
 
-    origem_questoes = [questao.origem for questao in questoes]
-    origem_questoes = list(set(origem_questoes))
     if len(filtro_assunto) > 0:
         questoes = questoes.filter(assuntos__id__in=filtro_assunto)
     if usuario is not None:
         questoes = questoes.filter(autor=usuario)
     if len(anos) > 0:
         questoes = questoes.filter(ano__in=anos)
-    if len(origem) > 0:
-        questoes = questoes.filter(origem__in=origem)
 
     dados_questoes = {}
     dados_questoes['questoes'] = questoes
     dados_questoes['assuntos'] = assuntos
     dados_questoes['anos_questoes'] = anos_questoes
-    dados_questoes['origem'] = origem_questoes
     
     return dados_questoes
 

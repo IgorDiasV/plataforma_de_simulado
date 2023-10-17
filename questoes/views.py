@@ -14,22 +14,20 @@ def home(request):
 
 def lista_questoes_geral(request):
     lista_parametros = ['id_assuntos_filtro',
-                        'id_anos_filtro',
-                        'ids_filtro_origens']
+                        'id_anos_filtro'
+                        ]
     valores_parametros = get_parametros_url(request, lista_parametros)
 
     anos = valores_parametros['id_anos_filtro']
     assuntos_ids = valores_parametros['id_assuntos_filtro']
-    origens = valores_parametros['ids_filtro_origens']
-
+    
     dados_questoes = lista_questoes(filtro_assunto=assuntos_ids,
                                     anos=anos,
-                                    origem=origens)
+                                    )
 
     questoes = dados_questoes['questoes']
     assuntos = dados_questoes['assuntos']
     anos_questoes = dados_questoes['anos_questoes']
-    origem = dados_questoes['origem']
 
     page = ''
     n_pagina = request.GET.get('page', '1')
@@ -45,8 +43,7 @@ def lista_questoes_geral(request):
                    'anos_questoes': anos_questoes,
                    'id_filtro_assunto': assuntos_ids,
                    'anos_filtro': anos,
-                   'origens_filtro': origens,
-                   'origem': origem})
+                   })
 
 
 @login_required(login_url='usuarios:login', redirect_field_name='next')
@@ -56,22 +53,20 @@ def lista_questoes_usuario(request):
 
     lista_parametros = ['id_assuntos_filtro',
                         'id_anos_filtro',
-                        'ids_filtro_origens']
+                        ]
     valores_parametros = get_parametros_url(request, lista_parametros)
 
     anos = valores_parametros['id_anos_filtro']
     assuntos_ids = valores_parametros['id_assuntos_filtro']
-    origens = valores_parametros['ids_filtro_origens']
 
     dados_questoes = lista_questoes(usuario=usuario,
                                     filtro_assunto=assuntos_ids,
                                     anos=anos,
-                                    origem=origens)
+                                    )
 
     questoes = dados_questoes['questoes']
     assuntos = dados_questoes['assuntos']
     anos_questoes = dados_questoes['anos_questoes']
-    origem = dados_questoes['origem']
 
     page = ''
     n_pagina = request.GET.get('page', '1')
@@ -87,8 +82,6 @@ def lista_questoes_usuario(request):
                    'anos_questoes': anos_questoes,
                    'id_filtro_assunto': assuntos_ids,
                    'anos_filtro': anos,
-                   'origens_filtro': origens,
-                   'origem': origem
                    })
 
 
