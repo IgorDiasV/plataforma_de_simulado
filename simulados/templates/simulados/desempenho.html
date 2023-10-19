@@ -1,5 +1,8 @@
 {% extends 'global/pages/base.html' %}
 
 {% block conteudo %}
-Página com nota do aluno
+
+{% for simulado in simulados %}
+    <h1>{{simulado.titulo}}</h1>
+{% endfor %}
 {% endblock conteudo %}

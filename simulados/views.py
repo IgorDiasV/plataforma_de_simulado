@@ -523,4 +523,13 @@ def save(request, tipo):
         
 
 def desempenho(request):
-    return render(request, 'simulados/desempenho.html')
+    usuario = Usuario.objects.filter(user=request.user).first()
+    resp_simulados = RespostaSimulado.objects.filter(usuario=usuario).order_by("-id")
+    simulados = []
+    for resp in resp_simulados:
+        simulados.append(resp.simulado_respondido.simulado)
+
+    return render(request,
+                  'simulados/desempenho.html',
+                  {'simulados': simulados}
+                  )
