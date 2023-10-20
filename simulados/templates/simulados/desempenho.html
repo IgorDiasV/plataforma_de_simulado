@@ -2,7 +2,7 @@
 
 {% block conteudo %}
 
-{% for simulado in simulados %}
-    <h1>{{simulado.titulo}}</h1>
+{% for dados_simulado in dados_simulados %}
+    <h1>{{dados_simulado.simulado.titulo}} | {{dados_simulado.desempenho}}</h1>
 {% endfor %}
 {% endblock conteudo %}

@@ -204,7 +204,7 @@ def respostas_do_simulado(request):
         alunos_que_responderam = []
         for resposta in respostas:
             qtd_acertos_aluno = qtd_acertos(resposta.id)
-            desempenho = f"{qtd_acertos_aluno}/{qtd_perguntas_simulado}"
+            desempenho_str = f"{qtd_acertos_aluno}/{qtd_perguntas_simulado}"
             nome = (
                 f"{resposta.usuario.user.first_name} {resposta.usuario.user.last_name}"  # noqa: E501
             )
@@ -214,7 +214,7 @@ def respostas_do_simulado(request):
                     "id_resposta": resposta.id,
                     "nome": nome,
                     "email": email,
-                    "desempenho": desempenho,
+                    "desempenho": desempenho_str,
                 }
             )
 
@@ -525,11 +525,19 @@ def save(request, tipo):
 def desempenho(request):
     usuario = Usuario.objects.filter(user=request.user).first()
     resp_simulados = RespostaSimulado.objects.filter(usuario=usuario).order_by("-id")
-    simulados = []
+    dados_simulados = []
     for resp in resp_simulados:
-        simulados.append(resp.simulado_respondido.simulado)
+        simulado = resp.simulado_respondido.simulado
+        qtd_acertos_aluno = qtd_acertos(resp.id) 
+        qtd_perguntas_simulado = qtd_perguntas(simulado.id)
+        desempenho_str = f"{qtd_acertos_aluno}/{qtd_perguntas_simulado}"
+        dic_dados = {
+                     'simulado': simulado,
+                     'desempenho': desempenho_str
+                     }
+        dados_simulados.append(dic_dados)
 
     return render(request,
                   'simulados/desempenho.html',
-                  {'simulados': simulados}
+                  {'dados_simulados': dados_simulados}
                   )
