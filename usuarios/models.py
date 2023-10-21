@@ -9,4 +9,4 @@ class Usuario(models.Model):
     is_teacher = models.BooleanField(default=0)
 
     def __str__(self) -> str:
-        return self.user.email
+        return f"{self.user.first_name} {self.user.last_name}"

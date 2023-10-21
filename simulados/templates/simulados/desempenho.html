@@ -1,8 +1,26 @@
 {% extends 'global/pages/base.html' %}
-
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'simulados/css/respostas_do_simulado.css' %}">
+{% endblock css %}
 {% block conteudo %}
-
-{% for dados_simulado in dados_simulados %}
-    <h1>{{dados_simulado.simulado.titulo}} | {{dados_simulado.desempenho}}</h1>
+<table class='respostas_alunos'>
+    <thead>
+        <tr>
+            <th>Simulado</th>
+            <th>Professor</th>
+            <th class='desempenho'>Desempenho</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for dados_simulado in dados_simulados %}
+    <tr>
+        <td>{{dados_simulado.simulado.titulo}}</td>
+        <td>{{dados_simulado.simulado.autor}}</td>
+        <td class='desempenho'>{{dados_simulado.desempenho}}</td>
+    </tr>
 {% endfor %}
+
+</tbody>
+</table>
 {% endblock conteudo %}
