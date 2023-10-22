@@ -532,6 +532,7 @@ def desempenho(request):
         qtd_perguntas_simulado = qtd_perguntas(simulado.id)
         desempenho_str = f"{qtd_acertos_aluno}/{qtd_perguntas_simulado}"
         dic_dados = {
+                     'id_resposta': resp.id,
                      'simulado': simulado,
                      'desempenho': desempenho_str
                      }

@@ -10,6 +10,7 @@
             <th>Simulado</th>
             <th>Professor</th>
             <th class='desempenho'>Desempenho</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -18,6 +19,13 @@
         <td>{{dados_simulado.simulado.titulo}}</td>
         <td>{{dados_simulado.simulado.autor}}</td>
         <td class='desempenho'>{{dados_simulado.desempenho}}</td>
+        <td class='td-button'>
+            <form action="{% url 'simulados:resposta_aluno'%}" method='POST'>
+                {% csrf_token %}
+                <input type="hidden" name='id_resposta' value={{dados_simulado.id_resposta}}>
+                <button class='green-button' type='submit'>Ver Prova</button>
+            </form>
+        </td>  
     </tr>
 {% endfor %}
 
