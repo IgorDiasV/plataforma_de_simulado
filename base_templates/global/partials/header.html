@@ -7,15 +7,18 @@
         <i class="fas fa-user"></i>
         <div class="profile-menu" id="profileMenu">
             <ul>
-                <li>
-                    <a href="{%url 'lista_questoes_usuario'%}">Minhas Questões</a>
-                </li>
-                <li>
-                    <a href="{% url 'simulados:lista_simulados' %}">Lista Simulados</a>
-                </li>
-                <li>
-                    <a href="{% url 'simulados:desempenho' %}">Desempenho</a>
-                </li>
+                {% if  request.user.usuario.is_teacher %}
+                    <li>
+                        <a href="{%url 'lista_questoes_usuario'%}">Minhas Questões</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'simulados:lista_simulados' %}">Lista Simulados</a>
+                    </li>
+                {% else %}
+                    <li>
+                        <a href="{% url 'simulados:desempenho' %}">Desempenho</a>
+                    </li>
+                {% endif %}
                 <li>
                     <form action="{% url 'usuarios:logout' %}" method='POST'>
                         {% csrf_token %}
