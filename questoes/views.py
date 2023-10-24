@@ -48,7 +48,6 @@ def lista_questoes_geral(request):
 
 @login_required(login_url='usuarios:login', redirect_field_name='next')
 def lista_questoes_usuario(request):
-    # TODO falta adicionar a paginação
     usuario = Usuario.objects.filter(user=request.user).first()
 
     lista_parametros = ['id_assuntos_filtro',
