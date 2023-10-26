@@ -21,6 +21,7 @@ function adicionar_remover_questao(checkbox, id_questao){
       let conteudo_questao = document.getElementById('questao'+id).querySelector('.container-questao')
       
       let html = `<div id='questao_escolhida${id}' class='questao'>`
+      html += `<button onclick='remover_questao(${id})'>Remover Questão</button>`
       html += ` <i id="seta_questao_escolhida${id}" class="fa-solid fa-chevron-down" onclick="mudar_ocultar_questao('questao_escolhida${id}','seta_questao_escolhida${id}')"></i>`
       html +=  `${conteudo_questao.innerHTML}</div>`
       container_questoes_escolhidas.innerHTML+= html
@@ -29,10 +30,15 @@ function adicionar_remover_questao(checkbox, id_questao){
   function remover_questao(id)
   {
     document.getElementById('questao_escolhida'+id).remove()
-
+    
+    let checkbox = document.getElementById('input'+id)
+    checkbox.checked = false
+    
     id = "option" + id
     let option = document.getElementById(id)
     option.remove()
+
+
   
 
   }
