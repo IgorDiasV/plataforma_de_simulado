@@ -46,6 +46,21 @@ body {
   background-color: #008800; 
 }
 
+.red-button {
+  background-color: #ac0303;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+
+.red-button:hover {
+  background-color: #880000; 
+}
+
 .container_center {
   display: flex;
   flex-direction: row;
