@@ -86,6 +86,7 @@ function configuracao_toolbar(){
         [{ 'font': [] }],
         [{ 'align': [] }],
         ['image'],
+        ['formula'],
         ['clean']                                         // remove formatting button
     ];
 
