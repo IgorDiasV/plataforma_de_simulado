@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from utils.cadastro import senhar_forte
 
 
 class FormLogin(forms.Form):
@@ -18,13 +19,16 @@ class FormCadastro(forms.ModelForm):
     password = forms.CharField(
         required=True,
         widget=forms.PasswordInput(),
-        label='Senha'
+        validators=[senhar_forte],
+        label='Senha',
+        
     )
 
     password2 = forms.CharField(
         required=True,
         widget=forms.PasswordInput(),
-        label='Confirmar Senha'
+        label='Confirmar Senha',
+        validators=[senhar_forte],
     )
 
     class Meta:
