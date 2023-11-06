@@ -59,7 +59,7 @@
       {% for questao in questoes%}
         <div class="question">
             <h3>Questão {{forloop.counter}}:</h3>
-            <div class='ql-editor'>{{questao.pergunta | safe}}</div>
+            <div class='ql-editor pergunta'>{{questao.pergunta | safe}}</div>
             <div class="option">
               <input type="radio" id="q{{forloop.counter}}-option1" name="{{questao.id}}" class="option-radio" value="A" id_questao={{questao.id}}>
               <label for="q{{forloop.counter}}-option1" class="option-label">A </label> <div class='container-option ql-editor'>{{questao.alternativa_a | safe}}</div>

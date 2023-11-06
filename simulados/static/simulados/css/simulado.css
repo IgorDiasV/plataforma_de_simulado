@@ -5,6 +5,9 @@
     padding: 5px 15px;
 }
 
+.pergunta{
+    margin-bottom: 30px;
+}
 .option {
     margin-bottom: 10px;
     display: flex;
