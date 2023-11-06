@@ -41,6 +41,7 @@
       <i id="seta_questoes_escolhidas" class="fa-solid fa-chevron-down" onclick="mudar_ocultar_questao('container_questoes_escolhidas','seta_questoes_escolhidas', '28px')"></i>
       {% for questao_escolhida in questoes_escolhidas %}
         <div id="questao_escolhida{{questao_escolhida.id}}" class='questao'>
+          <button class='red-button' onclick='remover_questao({{questao_escolhida.id}})'>Remover Questão</button>
           <i id="seta_questao_escolhida{{questao_escolhida.id}}" class="fa-solid fa-chevron-down" onclick="mudar_ocultar_questao('questao_escolhida{{questao_escolhida.id}}','seta_questao_escolhida{{questao_escolhida.id}}')"></i>`
             {{questao_escolhida.pergunta | safe}}
         </div>
