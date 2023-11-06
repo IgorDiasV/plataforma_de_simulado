@@ -1,0 +1,123 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+  }
+
+.container {
+  width: 100%; 
+  max-width: 1200px; 
+  margin-left: auto; 
+  margin-right: auto; 
+  padding-left: 15px; 
+  padding-right: 15px; 
+}
+
+.margin-top{
+  margin-top: 15px;
+}
+.margin-bottom{
+  margin-bottom: 10px;
+}
+.editor_quill{
+  background: white;
+}
+
+.normal-button{
+  border: 1px solid black;
+  border-radius: 4px;
+  padding: 5px 16px;
+  font-size: 16px;
+  cursor: pointer;
+
+}
+.green-button {
+  background-color: #00aa00;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+
+.green-button:hover {
+  background-color: #008800; 
+}
+
+.red-button {
+  background-color: #ac0303;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+
+.red-button:hover {
+  background-color: #880000; 
+}
+
+.container_center {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+
+
+.message {
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  color: #fff;
+  font-weight: bold;
+  width: 40%;
+  text-align: center;
+}
+
+.message-error {
+  background-color: #F44336; 
+}
+
+.message-success {
+  background-color: #57BB8A; 
+}
+
+.plain-button{
+  border: none;
+  background-color: none;
+  padding: 10px ;
+  /* color: #333; */
+  cursor: pointer;
+  /* margin: 1px; */
+}
+
+.custom-input{
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.large-input{
+  width: 250px;
+}
+.container-icon{
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  cursor: pointer;
+}
+
+.container-icon span{
+  opacity: 0;
+}
+
+.container-icon:hover .span-edit{
+  opacity: 1;
+
+}

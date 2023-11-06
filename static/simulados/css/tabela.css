@@ -1,0 +1,18 @@
+.respostas_alunos {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.respostas_alunos th,
+.respostas_alunos td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: left;
+}
+
+.respostas_alunos th {
+    background-color: #a0a0a0;
+}
+.respostas_alunos .td-button, .respostas_alunos .desempenho{
+    text-align: center;
+}

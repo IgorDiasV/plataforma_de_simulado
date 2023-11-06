@@ -1,0 +1,45 @@
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.conteudo_modal {
+  background-color: #fefefe;
+  margin: 20% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 600px;
+}
+
+.questao{
+  border: 1px solid black;
+  height: 200px;
+  overflow: hidden;
+  padding: 5px 20px;
+  margin-bottom: 20px;
+  margin-top: 10px;
+}
+
+.questao i, #container_questoes_escolhidas i {
+  float: right;
+}
+
+#container_questoes_escolhidas{
+  border: 1px solid black;
+  padding: 5px;
+  overflow: hidden;
+  height: 28px;
+}
+
+#container_questoes_escolhidas h2{
+  display: inline-block;
+  margin: 0;
+}

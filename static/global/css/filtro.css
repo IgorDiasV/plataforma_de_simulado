@@ -1,0 +1,66 @@
+.container-filters{
+    display:flex;
+}
+.container-filter {
+
+    width: 250px;
+    border: 1px solid black;
+    display: flex;
+    justify-content: center;
+    flex-direction: column; 
+    padding: 2px 5px;
+    background-color: #f0f0f0;
+    margin-top: 5px;
+    margin-right: 5px;
+    height: 25px;
+}
+
+.button-filter{
+    margin-top: 5px;
+
+}
+
+.container-button-label{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.container-button-filter{
+    text-align: left;
+}
+
+.container-list-filter{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+    height: 150px; 
+}
+
+.campos-filtro{
+    display: none;
+    flex-direction: column;
+    align-items: center; 
+}
+
+.busca {
+    width: 90%;
+    padding: 5px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.button-filter, .container-button-label button {
+    padding: 5px 10px;
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.button-filter:hover{
+    background-color: #0158b6;
+}
