@@ -1,5 +1,8 @@
 .question {
     margin-bottom: 20px;
+    border: 1px solid #666666;
+    border-radius: 15px;
+    padding: 5px 15px;
 }
 
 .option {
@@ -53,3 +56,21 @@ background-color: red;
 .form-edit-simulado{
     position: relative;
 }
+
+.container-icon-simulado{
+    display: flex;
+    justify-content: flex-end;
+}
+.container-icon-simulado i {
+    top: -10px;
+    position: relative;
+}
+
+.container-icon-simulado span{
+    opacity: 0;
+  }
+  
+  .container-icon-simulado:hover .span-edit{
+    opacity: 1;
+  
+  }

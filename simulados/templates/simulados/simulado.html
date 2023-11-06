@@ -48,7 +48,7 @@
       <form class='form-edit-simulado' action="{% url 'simulados:criar_simulado_manualmente' 'editar' %}" method='POST'> 
         {% csrf_token %}
         <input type="hidden" name='id_simulado' value={{simulado.id}}>
-        <div class="container-icon">
+        <div class="container-icon-simulado">
           <span class='span-edit'>Editar</span> <button class='plain-button'><i class="fa-solid fa-pen-to-square"></i></button>
       </div>
       </form>
