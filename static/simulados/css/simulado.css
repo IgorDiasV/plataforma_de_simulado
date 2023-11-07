@@ -51,9 +51,11 @@
 
 .right_answer{
     background-color: green;
+    color: white;
 }
 .wrong_answer{
-background-color: red;
+    background-color: red;
+    color: white;
 }
 
 .form-edit-simulado{
