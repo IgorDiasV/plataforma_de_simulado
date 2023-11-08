@@ -19,7 +19,7 @@ def calcular_tempo_prova(request):
     return horas * 3600 + minutos * 60 + segundos
 
 
-def  calcular_data(request):
+def calcular_data(request):
     data_hora_inicial = None
     data_hora_final = None
     if request.POST.get("data_limite"):
