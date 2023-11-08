@@ -50,6 +50,14 @@ def gerar_link(request):
             link = request.POST['link_parcial']
             simulado_compartilhado = SimuladoCompartilhado.objects.filter(
                                         link=link).first()
+            tem_tempo_limite = request.POST.get('tempo_limite', False)
+            if not tem_tempo_limite:
+                tempo_de_prova = 0
+
+            tem_limite_tentativas = request.POST.get('limite_de_tentativas', False)
+            if not tem_limite_tentativas:
+                qtd_tentativas = 0
+                  
             simulado_compartilhado.tempo_de_prova = tempo_de_prova
             simulado_compartilhado.qtd_tentativas = qtd_tentativas
             simulado_compartilhado.data_inicio = data_hora_inicial
