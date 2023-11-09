@@ -139,10 +139,6 @@ def cadastrar_questao(request):
 
 @login_required(login_url='usuarios:login', redirect_field_name='next')
 def editar_questao(request, questao_id):
-    # TODO
-    # adicionar novos assuntos
-    # remover assuntos
-    # cadastrar novos assuntos
 
     questao = get_object_or_404(Questao, id=questao_id)
     usuario = Usuario.objects.filter(user=request.user).first()
