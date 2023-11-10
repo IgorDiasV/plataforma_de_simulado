@@ -12,38 +12,45 @@ def home(request):
     return render(request, 'questoes/home.html')
 
 
+@login_required(login_url='usuarios:login', redirect_field_name='next')
 def lista_questoes_geral(request):
-    lista_parametros = ['id_assuntos_filtro',
-                        'id_anos_filtro'
-                        ]
-    valores_parametros = get_parametros_url(request, lista_parametros)
+    usuario = Usuario.objects.filter(user=request.user).first()
+    if usuario.is_teacher:
+        lista_parametros = ['id_assuntos_filtro',
+                            'id_anos_filtro'
+                            ]
+        valores_parametros = get_parametros_url(request, lista_parametros)
 
-    anos = valores_parametros['id_anos_filtro']
-    assuntos_ids = valores_parametros['id_assuntos_filtro']
-    
-    dados_questoes = lista_questoes(filtro_assunto=assuntos_ids,
-                                    anos=anos,
-                                    )
+        anos = valores_parametros['id_anos_filtro']
+        assuntos_ids = valores_parametros['id_assuntos_filtro']
+        
+        dados_questoes = lista_questoes(filtro_assunto=assuntos_ids,
+                                        anos=anos,
+                                        )
 
-    questoes = dados_questoes['questoes']
-    assuntos = dados_questoes['assuntos']
-    anos_questoes = dados_questoes['anos_questoes']
+        questoes = dados_questoes['questoes']
+        assuntos = dados_questoes['assuntos']
+        anos_questoes = dados_questoes['anos_questoes']
 
-    page = ''
-    n_pagina = request.GET.get('page', '1')
-    questoes_paginacao = Paginator(questoes, 5)
-    try:
-        page = questoes_paginacao.page(n_pagina)
-    except (EmptyPage, PageNotAnInteger):
-        page = questoes_paginacao.page(1)
+        page = ''
+        n_pagina = request.GET.get('page', '1')
+        questoes_paginacao = Paginator(questoes, 5)
+        try:
+            page = questoes_paginacao.page(n_pagina)
+        except (EmptyPage, PageNotAnInteger):
+            page = questoes_paginacao.page(1)
 
-    return render(request, 'questoes/lista_questoes.html',
-                  {'questoes': page,
-                   'assuntos': assuntos,
-                   'anos_questoes': anos_questoes,
-                   'id_filtro_assunto': assuntos_ids,
-                   'anos_filtro': anos,
-                   })
+        return render(request, 'questoes/lista_questoes.html',
+                      {'questoes': page,
+                       'assuntos': assuntos,
+                       'anos_questoes': anos_questoes,
+                       'id_filtro_assunto': assuntos_ids,
+                       'anos_filtro': anos, })
+    else:
+        mensagem = ('Seu perfil é de aluno, '
+                    'apenas professores têm acesso a listagem de questões ')
+        messages.error(request, mensagem)
+        return redirect('home')
 
 
 @login_required(login_url='usuarios:login', redirect_field_name='next')
