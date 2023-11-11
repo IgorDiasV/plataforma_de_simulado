@@ -534,6 +534,7 @@ def save(request, tipo):
             return redirect("simulados:lista_simulados")
         
 
+@login_required(login_url="usuarios:login", redirect_field_name="next")
 def desempenho(request):
     usuario = Usuario.objects.filter(user=request.user).first()
     resp_simulados = RespostaSimulado.objects.filter(usuario=usuario).order_by("-id")
