@@ -11,7 +11,7 @@ class Simulado(models.Model):
     autor = models.ForeignKey(
         Usuario, on_delete=models.CASCADE, null=True
     )
-    compartilhado = models.BooleanField(default=False)
+    # compartilhado = models.BooleanField(default=False)
 
     def __str__(self):
         return self.titulo
