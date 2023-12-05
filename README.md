@@ -1,4 +1,4 @@
-# plataforma_de_simulado
+# Plataforma Colaborativa
 
 <!-- Shields Exemplo, existem N diferentes shield em https://shields.io/ -->
 ![GitHub last commit](https://img.shields.io/github/last-commit/IgorDiasV/plataforma_de_simulado)
@@ -39,6 +39,9 @@ This link can be found on the green `Code` button above.
 ```bash
 pip install -r requirements.txt
 ```
+### modify .env-example file.
+
+The system uses environment variables. To configure them, rename the .env-example file to .env and set the variables contained within it
 
 ### Run the project
 
