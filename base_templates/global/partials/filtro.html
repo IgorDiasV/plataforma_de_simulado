@@ -1,37 +1,34 @@
-<div class="container-filter">
-    <div class="container-button-label">
-        <span>{{titulo_filtro}}</span>   
-        <button type='button' onclick="mudar_visibilidade_filtro('campo_filtro_{{name}}', 'seta_{{name}}')"><i id="seta_{{name}}" class="fa-solid fa-chevron-down"></i></button>
-    </div>
-    <div class="campos-filtro" id="campo_filtro_{{name}}">
-        <input type="text" class='busca' id="busca_{{name}}" placeholder="Buscar assunto..." oninput="busca_filtrar('busca_{{name}}','.{{id_class}}')">
-            <div id="container_list_filter_{{name}}" class="container-list-filter">
-                {% if itens_objeto %}
-                    {% for campo_filtro in itens_objeto %}
-                        <div class="{{id_class}} container_name_item">
-           
-                            {% if campo_filtro.id|stringformat:"s" in selecionados %}
-                                <input type="checkbox" name="{{name}}" value="{{campo_filtro.id}}" id="{{id_class}}{{campo_filtro.id}}" checked>
-                            {% else %}
-                                <input type="checkbox" name="{{name}}" value="{{campo_filtro.id}}" id="{{id_class}}{{campo_filtro.id}}">
-                            {% endif %} 
-                            <label for="{{id_class}}{{campo_filtro.id}}">{{campo_filtro}}</label>
-                        </div>
-                    {% endfor %}
-                {% elif itens_lista %}
-                    {% for campo_filtro in itens_lista %}
-                        <div class="{{id_class}} container_name_item">
-                     
-                            {% if campo_filtro|stringformat:"s" in selecionados %}
-                                <input type="checkbox" name="{{name}}" value="{{campo_filtro}}" id="{{id_class}}{{campo_filtro}}" checked>
-                            {% else %}
-                                <input type="checkbox" name="{{name}}" value="{{campo_filtro}}" id="{{id_class}}{{campo_filtro}}">
-                            {% endif %}
-                            <label for="{{id_class}}{{campo_filtro}}">{{campo_filtro}}</label>
-                        </div>
-                    {% endfor %}
-                {% endif %}
-            </div>
-
-    </div>
+<div class="dropdown">
+    <button class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        {{titulo_filtro}}
+    </button>
+    <ul class="dropdown-menu">
+        <li class="d-flex justify-content-center">
+            <input type="text" class='busca' id="busca_{{name}}" placeholder="Buscar assunto..." oninput="busca_filtrar('busca_{{name}}','.{{id_class}}')">
+        </li>
+            {% if itens_objeto %}
+            {% for campo_filtro in itens_objeto %}
+                <li class="dropdown-item {{id_class}}"> 
+                {% if campo_filtro.id|stringformat:"s" in selecionados %}
+                
+                    <input type="checkbox" name="{{name}}" value="{{campo_filtro.id}}" id="{{id_class}}{{campo_filtro.id}}" checked>
+                {% else %}
+                    <input type="checkbox" name="{{name}}" value="{{campo_filtro.id}}" id="{{id_class}}{{campo_filtro.id}}">
+                {% endif %} 
+                <label for="{{id_class}}{{campo_filtro.id}}">{{campo_filtro}}</label>
+                </li>
+            {% endfor %}
+        {% elif itens_lista %}
+            {% for campo_filtro in itens_lista %}
+                <li class="dropdown-item {{id_class}}"> 
+                    {% if campo_filtro|stringformat:"s" in selecionados %}
+                        <input type="checkbox" name="{{name}}" value="{{campo_filtro}}" id="{{id_class}}{{campo_filtro}}" checked>
+                    {% else %}
+                        <input type="checkbox" name="{{name}}" value="{{campo_filtro}}" id="{{id_class}}{{campo_filtro}}">
+                    {% endif %}
+                    <label for="{{id_class}}{{campo_filtro}}">{{campo_filtro}}</label>
+                </li>
+            {% endfor %}
+        {% endif %}
+    </ul>
 </div>
