@@ -20,7 +20,7 @@
       {% csrf_token %}
       <input type="hidden" id="id_simulado" name='id_simulado' value="{{id_simulado}}">
       <label for'titulo'>Título:  </label>
-      <input class='custom-input' id='titulo' name='titulo' value='{{titulo}}' required>
+      <input class='form-control w-50' id='titulo' name='titulo' value='{{titulo}}' required>
       </br>
       <select
         style='display: none;'
@@ -32,7 +32,7 @@
           <option id='option{{id_questao_escolhida}}' value='{{id_questao_escolhida}}' selected>{{id_questao_escolhida}}</option>
         {% endfor %}
       </select>
-      <button type="submit" class='green-button margin-top'>Cadastrar Simulado</button>
+      <button type="submit" class='btn btn-success mb-2'>Cadastrar Simulado</button>
     </form>
     <script src="{% static 'questoes/js/utils.js'%}"></script>
     
@@ -50,20 +50,20 @@
     <h2> Lista de Questões</h2>
     <form method="get" id='form_filtro' >
       <input type="hidden" name='form_filtro'> 
-      <div class="container-filters">
+      <div class="container-filters d-flex gap-1">
         {% include 'global/partials/filtro.html' with titulo_filtro='Assuntos' itens_objeto=assuntos id_class='assunto' name='assuntos' selecionados=id_filtro_assunto %}  
         {% include 'global/partials/filtro.html' with titulo_filtro='Ano' itens_lista=anos_questoes id_class='ano' name='anos'%}  
       
       </div>
       <div class="container-button-filter">
-          <button class='button-filter' type="button" onclick='filtrar(criar_simulado=true)'>Filtrar</button>
+          <button class='btn btn-primary mt-2' type="button" onclick='filtrar(criar_simulado=true)'>Filtrar</button>
       </div>  
     </form>
     {% for questao in questoes %}
       <div class='ql-editor'>
         
         <div class='questao' id='questao{{questao.id}}'>
-          <input type='checkbox' id='input{{questao.id}}'class='pergunta_selecionada' onchange='adicionar_remover_questao(this, "{{questao.id}}")' value='{{questao.id}}'>
+          <input type='checkbox' id='input{{questao.id}}'class='form-check-input' onchange='adicionar_remover_questao(this, "{{questao.id}}")' value='{{questao.id}}'>
           <i id="seta_questao{{questao.id}}" class="fa-solid fa-chevron-down" onclick="mudar_ocultar_questao('questao{{questao.id}}','seta_questao{{questao.id}}')"></i>
           <div class="container-questao">
             {{questao.pergunta | safe}}
