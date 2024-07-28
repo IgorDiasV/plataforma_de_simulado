@@ -107,8 +107,8 @@
                         <h2 > {{simulado_e_link.simulado.titulo}}</h2>
                                                 
                         {% if simulado_e_link.link %}
-                            <input class='custom-input' type="text"  id="link{{simulado_e_link.simulado.id}}" placeholder="Digite alguma coisa" value="{{simulado_e_link.link}}" readonly/>
-                            <button type='button' id="botaoCopiar{{simulado_e_link.simulado.id}}" onclick="copiarLink('link{{simulado_e_link.simulado.id}}')" class="green-button"> Copiar Link</button>
+                            <input class='form-control w-25' type="text"  id="link{{simulado_e_link.simulado.id}}" placeholder="Digite alguma coisa" value="{{simulado_e_link.link}}" readonly/>
+                            <button type='button' id="botaoCopiar{{simulado_e_link.simulado.id}}" onclick="copiarLink('link{{simulado_e_link.simulado.id}}')" class="btn btn-success"> Copiar Link</button>
                             <div class="container-icon">
                                 <span class='span-edit'>Editar</span> <i onclick="exibir_modal_edit('modal_questoes_edit', '{{simulado_e_link.simulado.id}}')"class="fa-solid fa-pen-to-square"></i>
                             </div>
@@ -126,19 +126,19 @@
                             <input type="hidden" id='link_parcial{{simulado_e_link.simulado.id}}' value='{{simulado_e_link.link_parcial}}'>
                         {% else %}
                             <input class='custom-input' type="text" style='display: none' id="link{{simulado_e_link.simulado.id}}" placeholder="Digite alguma coisa" value="{{simulado_e_link.simulado.id}}" readonly/>
-                            <button style='display: none' type='button' onclick="copiarLink('link{{simulado_e_link.simulado.id}}')"  id="botaoCopiar{{simulado_e_link.simulado.id}}" class="green-button"> Copiar Link</button>
-                            <button type='button' id="botaoGerar{{simulado_e_link.simulado.id}}" onclick="exibir_modal('modal_questoes','{{simulado_e_link.simulado.id}}')" class="green-button"> Gerar Link</button>
+                            <button style='display: none' type='button' onclick="copiarLink('link{{simulado_e_link.simulado.id}}')"  id="botaoCopiar{{simulado_e_link.simulado.id}}" class="btn btn-success"> Copiar Link</button>
+                            <button type='button' id="botaoGerar{{simulado_e_link.simulado.id}}" onclick="exibir_modal('modal_questoes','{{simulado_e_link.simulado.id}}')" class="btn btn-success"> Gerar Link</button>
                         {% endif %}
                         
                         <form method='POST' action="{% url 'simulados:simulado' %}">
                             {% csrf_token %} 
                             <input type="hidden" name="simulado_id" value="{{ simulado_e_link.simulado.id }}"> 
-                            <button class="green-button" type="submit"> Visualizar Simulado</button>
+                            <button class="btn btn-success" type="submit"> Visualizar Simulado</button>
                         </form>
                         <form method='POST' action="{% url 'simulados:respostas_do_simulado' %}">
                             {% csrf_token %} 
                             <input type="hidden" name="id_simulado" value="{{ simulado_e_link.simulado.id }}"> 
-                            <button class="green-button" type="submit"> Visualizar Respostas</button>
+                            <button class="btn btn-success" type="submit"> Visualizar Respostas</button>
                         </form>
                     </div>
                 
